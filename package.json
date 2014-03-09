@@ -4,10 +4,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "node-uuid": "1.4.0",
-    "sinon": "~1.7.3",
     "requirejs": "~2.1.8",
     "assert": "~0.4.9",
-    "underscore": "~1.5.2",
+    "underscore": "~1.5.2"
   }
 }

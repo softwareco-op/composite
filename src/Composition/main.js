@@ -23,10 +23,9 @@ require.config({
     }
 });
 
-require(['jquery', 'File/FileContext', 'Video/VideoContext', 'SportVid/SportVidContext'], function($, FileContext, VideoContext, SportVidContext){
-    var fileContext = new FileContext;
-    var videoContext = new VideoContext;
-
+require(['Composition/CompositionContext'], function(CompositionContext){
     var compositionElement = document.getElementById('composition');
+    var compositionContext = new CompositionContext();
+
     compositionContext.run(compositionElement, document);
 });

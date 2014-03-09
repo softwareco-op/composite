@@ -6,13 +6,9 @@
 /**
  * ViewSupplier is a collection of models with an associated type.
  **/
-define(['UI/ListView',
-        'UI/UIContext',
-        'UI/View',
+define(['UI/View',
         'underscore'],
-       function(ListView,
-                UIContext,
-                View,
+       function(View,
                 _) {
 
     /**

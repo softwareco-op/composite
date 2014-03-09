@@ -23,5 +23,6 @@
     "jquery": "~2.0.3",
     "underscore-amd": "~1.5.2",
     "backbone.localstorage": "~1.1.7",
+      "node-uuid":"~1.4.1"
   }
 }
