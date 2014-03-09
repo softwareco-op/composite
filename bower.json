@@ -1,0 +1,27 @@
+{
+  "name": "Composite",
+  "version": "0.0.1",
+  "authors": [
+    "Team <team@softwareco-op.com>"
+  ],
+  "description": "A javascript UI composition framework",
+  "main": "src/main.js",
+  "keywords": [
+    "UI"
+  ],
+  "license": "GPLv2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone-amd": "~1.1.0",
+    "jquery": "~2.0.3",
+    "underscore-amd": "~1.5.2",
+    "backbone.localstorage": "~1.1.7",
+  }
+}
