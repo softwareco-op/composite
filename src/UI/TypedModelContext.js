@@ -9,7 +9,7 @@
 define(['Model/ModelContext','node-uuid'], function(ModelContext, uuid) {
 
     function TypedModelContext() {
-        this.modelContext = new ModelContext;
+        this.modelContext = new ModelContext();
     }
 
     TypedModelContext.prototype.model = function() {

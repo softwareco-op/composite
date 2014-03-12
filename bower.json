@@ -25,5 +25,11 @@
       "underscore-amd": "~1.5.2",
       "backbone.localstorage": "~1.1.7",
       "node-uuid":"~1.4.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "requirejs": "~2.1.6",
+    "chai": "~1.6.0"
   }
+
 }

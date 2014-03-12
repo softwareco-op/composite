@@ -16,7 +16,7 @@ function(CompositeView,
          Backbone) {
 
     function CompositionContext() {
-        this.typedModelContext = new TypedModelContext;
+        this.typedModelContext = new TypedModelContext();
         var Collection = this.typedModelContext.collection();
 
         //initialize an empty view supplier
@@ -27,7 +27,7 @@ function(CompositeView,
         views['File/URLView'] = this.urlView(document);
         views['Composition/CompositeView'] = this.compositeView(document);
 
-        this.collection = new Collection;
+        this.collection = new Collection();
     }
 
     CompositionContext.prototype.compositeView = function() {

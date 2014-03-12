@@ -34,7 +34,7 @@ define(['UI/View',
             });
         }
         return viewFactory(model);
-    }
+    };
 
     return ViewSupplier;
 
