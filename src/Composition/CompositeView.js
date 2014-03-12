@@ -28,6 +28,15 @@ define(['UI/View', 'underscore'], function(View, _) {
         return _.where(this.collection, {parent: this.model.id});
     }
 
+    /**
+     * Remove all children of this CompositeView.
+     */
+    CompositeView.prototype.removeChildren = function() {
+        this.getChildren().map(function(child) {
+            child.destroy();
+        });
+    }
+
     CompositeView.prototype.setParent = function(parent) {
         this.model.parent = parent;
     }
@@ -37,21 +46,18 @@ define(['UI/View', 'underscore'], function(View, _) {
      * @return {CompositeView} this CompositeView
      */
     CompositeView.prototype.render = function(dom) {
-        this.clear();
-        var wrap = this.getWrap(dom);
-
+        var wrap = this.clearWrap(dom);
         var children = this.getChildren();
         var self = this;
         children.forEach(function(child) {
             var view = self.viewSupplier.view(child);
             wrap.appendChild(view.render(dom).wrap);
         });
-        return this;
+        return wrap;
     }
 
     CompositeView.prototype.getModel = function() {
         return this.model;
-        //return {view:'UI/CompositeView', id:this.id, parent:this.parent};
     }
 
     CompositeView.prototype.getView = function(model) {

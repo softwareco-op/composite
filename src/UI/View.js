@@ -44,6 +44,16 @@ define(['node-uuid'], function(uuid) {
         return this;
     }
 
+    /**
+     * A helper method that clears the view and returns the wrapper.
+     * @param {Document} dom to insert the wrapper.
+     * @return {Element} the wrapper
+     */
+    View.prototype.clearWrap = function(dom) {
+        this.clear();
+        return this.getWrap(dom);
+    }
+
     return View;
 
 });
