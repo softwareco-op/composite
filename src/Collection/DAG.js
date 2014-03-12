@@ -6,7 +6,7 @@
 /**
  * DAG is directed acyclic graph on a backbone collection.
  **/
-define(['underscore'], function(View, _) {
+define(['underscore'], function(_) {
 
     /**
      * @param {Backbone.Collection} collection used to store the nodes
@@ -20,7 +20,7 @@ define(['underscore'], function(View, _) {
      * @return the {Backbone.Model}s with parent set to this.id or an empty list.
      */
     DAG.prototype.getChildren = function(model) {
-        return _.where(this.collection, {parent: this.model.id});
+        return this.collection.where({parent: model.get('id')});
     }
 
     /**
