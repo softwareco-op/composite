@@ -17,3 +17,6 @@ Similar Projects
 1. codiqa
 2. backbone-ui
 
+Blog
+====
+http://softwareco-op.com
