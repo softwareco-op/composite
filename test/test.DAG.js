@@ -35,7 +35,7 @@ define(['src/Collection/DAG', 'backbone', 'underscore', 'chai'], function(DAG, B
             collection = new NodeCollection([p, c]);
             var dag = new DAG(collection);
             var children = dag.getChildren(p);
-            assert.equal(children.length, 0);
+            assert.equal(children.length, 1);
 
             done();
         });
