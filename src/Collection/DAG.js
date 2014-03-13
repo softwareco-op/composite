@@ -34,15 +34,41 @@ define(['underscore'], function(_) {
     }
 
     /**
+     * Add a node to this DAG
+     * @param {Backbone.Model} model to add
+     */
+    DAG.prototype.add = function(model) {
+        this.collection.add(model);
+    }
+
+    /**
      * Add a child to this model
      * @param {Backbone.Model} model parent of child.
      * @param {Backbone.Model} child to add to parent.
      */
     DAG.prototype.addChild = function(model, child) {
+        this.collection.add(child);
         child.save({parent: model.get('id')});
     }
 
-    return DAG;
+    /**
+     * Tests if a node exists in the DAG.
+     * Note: collection should only contain DAG nodes, or model ids should be uuids.
+     *
+     * @param {Backbone.Model} model in question.
+     * @return true if the model exists in the DAG, else false.
+     */
+    DAG.prototype.exists = function(model) {
+        return this.collection.get(model) !== undefined;
+    }
 
+    /**
+     * Make a copy of the tree at the given node.
+     */
+    DAG.prototype.copyTree = function(model) {
+        //todo
+    }
+
+    return DAG;
 
 });

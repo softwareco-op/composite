@@ -21,15 +21,17 @@ module.exports = function(grunt) {
       'mocha-phantomjs': {
         command: 'mocha-phantomjs -R spec http://localhost:' + port + '/testrunner.html',
         options: {
-          stdout: true,
-          stderr: true
+            stdout: true,
+            stderr: true,
+            failOnError:true
         }
       },
       'ci': {
         command: 'mocha-phantomjs -R spec http://localhost:' + port +'/testrunner.html',
         options: {
-          stdout: true,
-          stderr: true
+            stdout: true,
+            stderr: true,
+            failOnError:true
         }
       },
       'travis': {
@@ -74,7 +76,7 @@ module.exports = function(grunt) {
     watch: {
       jsFiles: {
         files: ['**/*.js'],
-        tasks: ['connect', 'shell:ci', 'jshint']
+        tasks: ['jshint', 'connect', 'shell:ci']
       }
     }
   });
