@@ -31,6 +31,14 @@ module.exports = function(grunt) {
           stdout: true,
           stderr: true
         }
+      },
+      'travis': {
+        command: 'mocha-phantomjs testrunner.html',
+        options: {
+            stdout: true,
+            stderr: true,
+            failOnError:true
+        }
       }
     },
     nodemon: {
