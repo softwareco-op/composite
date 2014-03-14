@@ -6,7 +6,7 @@
 /**
  * DAG is directed acyclic graph on a backbone collection.
  **/
-define(['UI/ViewDAG', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'chai'], function(ViewDAG, DAG, uuid, BackboneLocalStorage, Backbone, chai) {
+define(['UI/ViewDAG', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'chai'], function(ViewDAG, View, DAG, uuid, BackboneLocalStorage, Backbone, chai) {
 
     var assert = chai.assert;
 
@@ -23,20 +23,29 @@ define(['UI/ViewDAG', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone',
     });
 
     describe('ViewDAG', function() {
-        it('maintains volatile objects', function(done) {
+        it('calls render when an model is added to the DAG', function(done) {
 
             var testDiv = document.getElementById('testdiv');
 
-            var dag = new DAG(new NodeCollection());
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
 
-            var viewDAG = new ViewDAG(dag);
+            var viewDAG = new ViewDAG(dag, document);
+
             var p = new Node({id:1});
-            viewDAG.add(p, {dom: testDiv});
-            p.set('name', 'parent');
-            p.set('view', 'File/URLView');
-            var c = new Node({id:2});
-            dag.addChild(p, c);
-            done();
+            var view = new View(function() {done()});
+
+            viewDAG.add(p, view);
+
+            dag.add(p);
+
+            //p.set('name', 'parent');
+            //p.set('view', 'File/URLView');
+
+            //var c = new Node({id:2});
+            //dag.addChild(p, c);
+            //done();
+
         });
     })
 

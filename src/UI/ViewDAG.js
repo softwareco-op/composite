@@ -8,14 +8,24 @@
  **/
 define(['Collection/DAG'], function(DAG) {
 
-
-    function ViewDAG(dag) {
+    /**
+     * @param {DAG} dag storing the view models
+     * @param {Document} dom where views are rendered.
+     */
+    function ViewDAG(dag, dom) {
         this.dag = dag;
+        this.dom = dom;
         this.map = {};
+
+        var self = this;
+        this.dag.collection.on('add', function(model) {
+            var view = self.map[model.get('id')];
+            view.render(dom);
+        });
     }
 
-    ViewDAG.prototype.add = function(model, object) {
-        this.map[model.get('id')] = object;
+    ViewDAG.prototype.add = function(model, view) {
+        this.map[model.get('id')] = view;
     }
 
     return ViewDAG;
