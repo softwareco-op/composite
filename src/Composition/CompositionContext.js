@@ -7,27 +7,49 @@
 define(['Composition/CompositeView',
         'UI/ViewSupplier',
         'UI/TypedModelContext',
-        'backboneLocalstorage',
+        'UI/UIContext',
+        'Collection/DAG',
+        'UI/ViewDAG',
+        'UI/View',
+        'localstorage',
         'backbone'],
 function(CompositeView,
          ViewSupplier,
          TypedModelContext,
-         BackboneLocalstorage,
+         UIContext,
+         DAG,
+         ViewDAG,
+         View,
+         BackboneLocalStorage,
          Backbone) {
 
+    var Node = Backbone.Model.extend({
+        sayId: function() {
+            console.log(this.get('id'));
+        }
+    });
+
+
+    var NodeCollection = Backbone.Collection.extend({
+        model: Node,
+        localStorage:new BackboneLocalStorage('ViewDAG-test')
+    });
+
     function CompositionContext() {
-        this.typedModelContext = new TypedModelContext();
-        var Collection = this.typedModelContext.collection();
+        this.uiContext = new UIContext();
 
-        //initialize an empty view supplier
-        this.views = {};
-        this.viewSupplier = new ViewSupplier(views);
+        //this.typedModelContext = new TypedModelContext();
+        //var Collection = this.typedModelContext.collection();
 
-        //Add to the view map
-        views['File/URLView'] = this.urlView(document);
-        views['Composition/CompositeView'] = this.compositeView(document);
+        // //initialize an empty view supplier
+        // this.views = {};
+        // this.viewSupplier = new ViewSupplier(this.views);
 
-        this.collection = new Collection();
+        // //Add to the view map
+        // this.views['File/URLView'] = this.urlView(document);
+        // this.views['Composition/CompositeView'] = this.compositeView(document);
+
+        // this.collection = new Collection();
     }
 
     CompositionContext.prototype.compositeView = function() {
@@ -38,10 +60,22 @@ function(CompositeView,
     }
 
     CompositionContext.prototype.run = function(element, document) {
+        var collection = new NodeCollection();
+        var dag = new DAG(collection);
 
-        var compositeView = new CompositeView();
+        var viewDAG = new ViewDAG(dag, document);
 
-        element.appendChild(compositeView.render(document));
+        var p = new Node({id:1});
+        self = this;
+
+        var view = self.uiContext.makeButton('Hello', 'Hello World', function() {
+            alert('hi');
+        });
+
+        element.appendChild(view.getWrap(document));
+
+        viewDAG.add(p, view);
+
     }
 
     return CompositionContext;

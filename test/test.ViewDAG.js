@@ -37,7 +37,6 @@ define(['UI/ViewDAG', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 
 
             viewDAG.add(p, view);
 
-            dag.add(p);
 
             //p.set('name', 'parent');
             //p.set('view', 'File/URLView');

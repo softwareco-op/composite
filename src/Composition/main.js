@@ -3,7 +3,7 @@ require.config({
     baseUrl : 'src',
     paths: {
         'jquery':'../bower_components/jquery/jquery',
-        'backboneLocalstorage':'../bower_components/backbone.localstorage/backbone.localStorage',
+        'localstorage':'../bower_components/backbone.localstorage/backbone.localStorage',
         'backbone': '../bower_components/backbone-amd/backbone',
         'underscore':'../bower_components/underscore-amd/underscore',
         'node-uuid':'../bower_components/node-uuid/uuid'
