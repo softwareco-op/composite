@@ -33,15 +33,13 @@ function(NodeView, View, DAG, uuid, BackboneLocalStorage, Backbone, chai, sinon)
             var dag = new DAG(collection);
 
 
-            var viewSupplier = sinon.spy();
+            var view = sinon.stub().returns(function(model) {return new View(function() {done()})});
+            var viewSupplier = {view: view};
 
             var viewDAG = new NodeView(0, viewSupplier, dag, document);
 
             var p = new Node({id:1});
-            var view = new View(function() {done()});
-
-            viewDAG.add(p, view);
-
+            dag.add(p);
 
             //p.set('name', 'parent');
             //p.set('view', 'File/URLView');

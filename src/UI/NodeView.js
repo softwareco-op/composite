@@ -20,6 +20,7 @@ define(['UI/View', 'underscore'], function(View, _) {
             var viewBuilder = self.viewSupplier.view(model);
             var view = viewBuilder(model);
             self.map[model.get('id')] = view;
+            view.render(self.dom);
         });
     }
     _.extend(NodeView.prototype, View.prototype);
