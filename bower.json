@@ -19,17 +19,16 @@
     "tests"
   ],
   "dependencies": {
-      "requirejs":"~2.1.11",
-      "backbone-amd": "~1.1.0",
-      "jquery": "~2.0.3",
-      "underscore-amd": "~1.5.2",
-      "backbone.localstorage": "~1.1.7",
-      "node-uuid":"~1.4.1"
+    "requirejs": "~2.1.11",
+    "backbone-amd": "~1.1.0",
+    "jquery": "~2.0.3",
+    "underscore-amd": "~1.5.2",
+    "backbone.localstorage": "~1.1.7",
+    "node-uuid": "~1.4.1"
   },
   "devDependencies": {
     "mocha": "~1.9.0",
     "requirejs": "~2.1.6",
     "chai": "~1.6.0"
   }
-
 }

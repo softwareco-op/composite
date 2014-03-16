@@ -68,6 +68,14 @@ function(CompositeView,
         var p = new Node({id:1});
         self = this;
 
+        //This needs to change to something like
+        var viewSupplier = new ViewSupplier({'Button':'Components/Button'});
+
+        var parent = -1;
+        var rootNode = new NodeView(viewSupplier, parent, dag);
+
+
+
         var view = self.uiContext.makeButton('Hello', 'Hello World', function() {
             alert('hi');
         });

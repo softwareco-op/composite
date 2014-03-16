@@ -4,9 +4,11 @@
 
 
 /**
- * DAG is directed acyclic graph on a backbone collection.
+ * Tests NodeView functionality.
  **/
-define(['UI/ViewDAG', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'chai'], function(ViewDAG, View, DAG, uuid, BackboneLocalStorage, Backbone, chai) {
+define(
+['UI/NodeView', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'chai', 'sinon'],
+function(NodeView, View, DAG, uuid, BackboneLocalStorage, Backbone, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -22,7 +24,7 @@ define(['UI/ViewDAG', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 
         localStorage:new BackboneLocalStorage('ViewDAG-test')
     });
 
-    describe('ViewDAG', function() {
+    describe('NodeView', function() {
         it('calls render when an model is added to the DAG', function(done) {
 
             var testDiv = document.getElementById('testdiv');
@@ -30,7 +32,10 @@ define(['UI/ViewDAG', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 
             var collection = new NodeCollection();
             var dag = new DAG(collection);
 
-            var viewDAG = new ViewDAG(dag, document);
+
+            var viewSupplier = sinon.spy();
+
+            var viewDAG = new NodeView(0, viewSupplier, dag, document);
 
             var p = new Node({id:1});
             var view = new View(function() {done()});

@@ -19,6 +19,14 @@ define(['underscore'], function(_) {
      * @param {Backbone.Model} model containing children.
      * @return the {Backbone.Model}s with parent set to this.id or an empty list.
      */
+    DAG.prototype.getParent = function(model) {
+        return this.collection.findWhere({id: model.get('parent')});
+    }
+
+    /**
+     * @param {Backbone.Model} model containing children.
+     * @return the {Backbone.Model}s with parent set to this.id or an empty list.
+     */
     DAG.prototype.getChildren = function(model) {
         return this.collection.where({parent: model.get('id')});
     }
