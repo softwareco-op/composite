@@ -7,8 +7,8 @@
  * Tests NodeView functionality.
  **/
 define(
-['UI/NodeView', 'UI/View', 'Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(NodeView, View, DAG, uuid, BackboneLocalStorage, Backbone, chai, sinon) {
+['UI/NodeView', 'Model/ObjectSupplier', 'UI/View', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
+function(NodeView, ObjectSupplier, View, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -33,10 +33,15 @@ function(NodeView, View, DAG, uuid, BackboneLocalStorage, Backbone, chai, sinon)
             var dag = new DAG(collection);
 
 
-            var view = sinon.stub().returns(function(model) {return new View(function() {done()})});
-            var viewSupplier = {view: view};
+            var view = new View(function() {done()});
 
-            var viewDAG = new NodeView(0, viewSupplier, dag, document);
+            var promise = new RSVP.Promise(function(resolve, reject) {
+                resolve(view);
+            });
+
+            var viewSupplier = {object: function() {return promise}};
+
+            var viewDAG = new NodeView(0, viewSupplier, dag, testDiv, document);
 
             var p = new Node({id:1});
             dag.add(p);
@@ -49,6 +54,27 @@ function(NodeView, View, DAG, uuid, BackboneLocalStorage, Backbone, chai, sinon)
             //done();
 
         });
+
+
+        it('integrates with ObjectSupplier', function(done) {
+            var testDiv = document.getElementById('testdiv');
+
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
+            var objectSupplier = new ObjectSupplier();
+
+            var viewDAG = new NodeView(0, objectSupplier, dag, testDiv, document);
+
+            var p = new Node({id:1});
+
+            p.set('type', 'Components/Button');
+            p.set('name', 'Hello World');
+            p.set('text', 'Hello World');
+            p.set('action', 'Actions/SayHello');
+
+            dag.add(p);
+            done();
+        })
     })
 
 });
