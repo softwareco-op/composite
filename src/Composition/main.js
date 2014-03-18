@@ -6,7 +6,8 @@ require.config({
         'localstorage':'../bower_components/backbone.localstorage/backbone.localStorage',
         'backbone': '../bower_components/backbone-amd/backbone',
         'underscore':'../bower_components/underscore-amd/underscore',
-        'node-uuid':'../bower_components/node-uuid/uuid'
+        'node-uuid':'../bower_components/node-uuid/uuid',
+        'rsvp':'../bower_components/rsvp/rsvp.amd'
     },
     shim: {
         underscore: {

@@ -5,20 +5,18 @@
 
 
 define(['Composition/CompositeView',
-        'UI/ViewSupplier',
-        'UI/TypedModelContext',
+        'Model/ObjectSupplier',
         'UI/UIContext',
+        'UI/NodeView',
         'Collection/DAG',
-        'UI/ViewDAG',
         'UI/View',
         'localstorage',
         'backbone'],
 function(CompositeView,
-         ViewSupplier,
-         TypedModelContext,
+         ObjectSupplier,
          UIContext,
+         NodeView,
          DAG,
-         ViewDAG,
          View,
          BackboneLocalStorage,
          Backbone) {
@@ -29,28 +27,12 @@ function(CompositeView,
         }
     });
 
-
     var NodeCollection = Backbone.Collection.extend({
         model: Node,
         localStorage:new BackboneLocalStorage('ViewDAG-test')
     });
 
-    function CompositionContext() {
-        this.uiContext = new UIContext();
-
-        //this.typedModelContext = new TypedModelContext();
-        //var Collection = this.typedModelContext.collection();
-
-        // //initialize an empty view supplier
-        // this.views = {};
-        // this.viewSupplier = new ViewSupplier(this.views);
-
-        // //Add to the view map
-        // this.views['File/URLView'] = this.urlView(document);
-        // this.views['Composition/CompositeView'] = this.compositeView(document);
-
-        // this.collection = new Collection();
-    }
+    function CompositionContext() {}
 
     CompositionContext.prototype.compositeView = function() {
         var self = this;
@@ -60,31 +42,31 @@ function(CompositeView,
     }
 
     CompositionContext.prototype.run = function(element, document) {
+        
         var collection = new NodeCollection();
         var dag = new DAG(collection);
+        var objectSupplier = new ObjectSupplier();
 
-        var viewDAG = new ViewDAG(dag, document);
+        var nodeView = new NodeView(0, objectSupplier, dag, element, document);
 
         var p = new Node({id:1});
+        p.set('type', 'Components/Button');
+        p.set('name', 'Hello World');
+        p.set('text', 'Hello World');
+        p.set('action', 'Actions/SayHello');
+
+        var p2 = new Node({id:2, parent:1});
+        p2.set('type', 'Components/Button');
+        p2.set('name', 'Hello World');
+        p2.set('text', 'Hello World');
+        p2.set('action', 'Actions/SayHello');
+
         self = this;
 
-        //This needs to change to something like
-        var viewSupplier = new ViewSupplier({'Button':'Components/Button'});
-
-        var parent = -1;
-        var rootNode = new NodeView(viewSupplier, parent, dag);
-
-
-
-        var view = self.uiContext.makeButton('Hello', 'Hello World', function() {
-            alert('hi');
-        });
-
-        element.appendChild(view.getWrap(document));
-
-        viewDAG.add(p, view);
-
+        dag.add(p);
+        dag.add(p2);
     }
 
     return CompositionContext;
+
 });

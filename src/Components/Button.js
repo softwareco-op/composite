@@ -28,7 +28,7 @@ define(['UI/UIContext', 'Model/ObjectSupplier', 'UI/View', 'underscore'], functi
         var self = this;
         this.promise.then(function(action) {
             var clickListener = function (clickEvent) { action.sayHello() }
-            var view = uiContext.makeButton(this.name, this.text, clickListener);
+            var view = uiContext.makeButton(self.name, self.text, clickListener);
             wrap.appendChild(view.render(dom));
         });
         return wrap;

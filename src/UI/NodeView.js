@@ -20,18 +20,19 @@ define(['UI/View', 'underscore'], function(View, _) {
         this.dag.collection.on('add', function(model) {
             var moduleName = model.get('type');
             var promise = self.objectSupplier.object(model, moduleName);
+
             promise.then(function(view) {
                 self.map[model.get('id')] = view;
-                //render into parent, if available
-                var modelParent = model.get('parent');
-                var parentView = self.map[modelParent];
+                var parentView = self.map[model.get('parent')];
+                var element = view.render(self.dom);
+                element.setAttribute('id', model.get('id'));
                 if (parentView !== undefined) {
-                    parentView.getWrap(dom).appendChild(view.render(self.dom));
+                    parentView.getWrap(dom).appendChild(element);
                 } else {
-                    //should only occur at the root, needs to be fixed.
-                    view.render(self.dom)
-                    //parentElement.appendChild(view.render(self.dom));
+                    //should only occur at the root.
+                    parentElement.appendChild(element);
                 }
+
             }).catch(function(error) {
                 console.log(error);
             });
