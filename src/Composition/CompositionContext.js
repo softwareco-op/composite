@@ -9,6 +9,7 @@ define(['Composition/CompositeView',
         'UI/UIContext',
         'UI/NodeView',
         'Collection/DAG',
+        'Composition/Global',
         'UI/View',
         'localstorage',
         'backbone'],
@@ -17,15 +18,12 @@ function(CompositeView,
          UIContext,
          NodeView,
          DAG,
+         Global,
          View,
          BackboneLocalStorage,
          Backbone) {
 
-    var Node = Backbone.Model.extend({
-        sayId: function() {
-            console.log(this.get('id'));
-        }
-    });
+    var Node = Backbone.Model.extend({});
 
     var NodeCollection = Backbone.Collection.extend({
         model: Node,
@@ -42,9 +40,10 @@ function(CompositeView,
     }
 
     CompositionContext.prototype.run = function(element, document) {
-        
+
         var collection = new NodeCollection();
         var dag = new DAG(collection);
+        Global.dag = dag;
         var objectSupplier = new ObjectSupplier();
 
         var nodeView = new NodeView(0, objectSupplier, dag, element, document);
@@ -53,18 +52,10 @@ function(CompositeView,
         p.set('type', 'Components/Button');
         p.set('name', 'Hello World');
         p.set('text', 'Hello World');
-        p.set('action', 'Actions/SayHello');
-
-        var p2 = new Node({id:2, parent:1});
-        p2.set('type', 'Components/Button');
-        p2.set('name', 'Hello World');
-        p2.set('text', 'Hello World');
-        p2.set('action', 'Actions/SayHello');
-
-        self = this;
+        p.set('action', 'Actions/AddButton');
 
         dag.add(p);
-        dag.add(p2);
+
     }
 
     return CompositionContext;

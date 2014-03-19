@@ -14,7 +14,7 @@ function() {
 
     }
 
-    SayHello.prototype.sayHello = function() {
+    SayHello.prototype.perform = function() {
         alert("Hello World");
     }
 

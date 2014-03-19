@@ -7,8 +7,8 @@
  * Tests NodeView functionality.
  **/
 define(
-['UI/NodeView', 'Model/ObjectSupplier', 'UI/View', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(NodeView, ObjectSupplier, View, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
+['UI/NodeView', 'Model/ObjectSupplier', 'Composition/Global', 'UI/View', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
+function(NodeView, ObjectSupplier, Global, View, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -25,36 +25,6 @@ function(NodeView, ObjectSupplier, View, DAG, uuid, RSVP, BackboneLocalStorage, 
     });
 
     describe('NodeView', function() {
-        it('calls render when an model is added to the DAG', function(done) {
-
-            var testDiv = document.getElementById('testdiv');
-
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-
-
-            var view = new View(function() {done()});
-
-            var promise = new RSVP.Promise(function(resolve, reject) {
-                resolve(view);
-            });
-
-            var viewSupplier = {object: function() {return promise}};
-
-            var viewDAG = new NodeView(0, viewSupplier, dag, testDiv, document);
-
-            var p = new Node({id:1});
-            dag.add(p);
-
-            //p.set('name', 'parent');
-            //p.set('view', 'File/URLView');
-
-            //var c = new Node({id:2});
-            //dag.addChild(p, c);
-            //done();
-
-        });
-
 
         it('integrates with ObjectSupplier', function(done) {
             var testDiv = document.getElementById('testdiv');
@@ -70,10 +40,12 @@ function(NodeView, ObjectSupplier, View, DAG, uuid, RSVP, BackboneLocalStorage, 
             p.set('type', 'Components/Button');
             p.set('name', 'Hello World');
             p.set('text', 'Hello World');
-            p.set('action', 'Actions/SayHello');
+            p.set('action', 'Actions/GlobalAction');
+
+            Global.action = function() { done() };
 
             dag.add(p);
-            done();
+
         })
     })
 
