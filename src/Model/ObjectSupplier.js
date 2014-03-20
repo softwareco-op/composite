@@ -14,8 +14,12 @@ define(['rsvp'], function(RSVP) {
         if (moduleName === undefined) {
             moduleName = model.get('type');
         }
+
         var promise = new RSVP.Promise(function(resolve, reject) {
             requirejs([moduleName], function(Module) {
+                if (Module === undefined) {
+                    throw "Module not found or module isn't returning an object";
+                }
                 resolve(new Module(model));
             }, function (error) {
                 reject(error);

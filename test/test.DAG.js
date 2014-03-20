@@ -31,7 +31,7 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
             var p = new Node(p);
             var c = new Node(c);
 
-            collection = new NodeCollection([p, c]);
+            var collection = new NodeCollection([p, c]);
             var dag = new DAG(collection);
 
             var floating = new Node({id: 1});
@@ -52,7 +52,7 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
             p = new Node(p);
             c = new Node(c);
 
-            collection = new NodeCollection([p, c]);
+            var collection = new NodeCollection([p, c]);
             var dag = new DAG(collection);
             var parent = dag.getParent(c);
             assert.equal(parent.get('id'), p.get('id'));
@@ -69,7 +69,7 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
             p = new Node(p);
             c = new Node(c);
 
-            collection = new NodeCollection([p]);
+            var collection = new NodeCollection([p]);
 
             var dag = new DAG(collection);
             dag.addChild(p, c);
@@ -81,7 +81,7 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
         });
 
         it('passes events', function(done) {
-            collection = new NodeCollection([]);
+            var collection = new NodeCollection([]);
 
             var dag = new DAG(collection);
 
@@ -91,6 +91,39 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
 
             p = new Node({id: 1});
             dag.add(p);
+        })
+
+        it('copies nodes', function(done) {
+            var collection = new NodeCollection([]);
+
+            var dag = new DAG(collection);
+            var node = new Node({id: 1, parent: 2});
+            var copy = dag.copy(node);
+
+            assert.notEqual(node, copy);
+            assert.equal(node.get('parent'), copy.get('parent'));
+            assert.notEqual(node.get('id'), copy.get('id'));
+
+            done();
+        })
+
+        it('copies trees', function(done) {
+            var collection = new NodeCollection([]);
+
+            var dag = new DAG(collection);
+            var parent = new Node({id: 1});
+            var child = new Node({id: 2, parent: 1, color: 'blue'});
+            dag.add(parent);
+            dag.add(child);
+
+            var parentCopy = dag.copyTree(parent);
+            var childCopy = dag.getChildren(parentCopy)[0];
+
+            assert.notEqual(child.get('parent'), childCopy.get('parent'));
+            assert.equal(parentCopy.get('id'), childCopy.get('parent'));
+            assert.equal(child.get('color'), childCopy.get('color'));
+
+            done();
         })
     });
 

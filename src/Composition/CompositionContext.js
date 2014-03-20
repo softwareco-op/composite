@@ -48,13 +48,20 @@ function(CompositeView,
 
         var nodeView = new NodeView(0, objectSupplier, dag, element, document);
 
-        var p = new Node({id:1});
-        p.set('type', 'Components/Button');
-        p.set('name', 'Hello World');
-        p.set('text', 'Hello World');
-        p.set('action', 'Actions/AddButton');
+        var p1 = new Node({id:1});
+        p1.set('type', 'Components/Button');
+        p1.set('name', 'Hello World');
+        p1.set('text', 'Hello World');
+        p1.set('action', 'Actions/AddButton');
 
-        dag.add(p);
+        var p2 = new Node({id:2, parent: 1});
+        p2.set('type', 'Components/Button');
+        p2.set('name', 'Hello World');
+        p2.set('text', 'Hello World');
+        p2.set('action', 'Actions/CopyTree');
+
+        dag.add(p1);
+        dag.add(p2);
 
     }
 

@@ -6,7 +6,7 @@
 /**
  * DAG is directed acyclic graph on a backbone collection.
  **/
-define(['underscore'], function(_) {
+define(['underscore', 'node-uuid'], function(_, uuid) {
 
     /**
      * @param {Backbone.Collection} collection used to store the nodes
@@ -71,10 +71,28 @@ define(['underscore'], function(_) {
     }
 
     /**
+     * Copy the given model.
+     * @return a copy of the given model with a new id.
+     */
+    DAG.prototype.copy = function(model) {
+        var copy = model.clone();
+        copy.set('id', uuid.v1());
+        this.add(copy);
+        return copy;
+    }
+
+    /**
      * Make a copy of the tree at the given node.
      */
     DAG.prototype.copyTree = function(model) {
-        //todo
+        var copy = this.copy(model);
+        var self = this;
+        this.getChildren(model).map(function(child) {
+            var copiedChild = self.copyTree(child);
+            copiedChild.set('parent', copy.get('id'));
+        });
+
+        return copy;
     }
 
     return DAG;

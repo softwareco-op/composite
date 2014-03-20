@@ -16,8 +16,7 @@ define(['Composition/Global', 'backbone', 'node-uuid'], function(Global, Backbon
         p.set('type', 'Components/Button');
         p.set('name', 'Hello World');
         p.set('text', 'Hello World');
-        p.set('action', 'Actions/SayHello');
-
+        p.set('action', 'Actions/CopyTree');
         dag.add(p);
 
     }
