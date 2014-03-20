@@ -4,8 +4,7 @@
 
 
 
-define(['Composition/CompositeView',
-        'Model/ObjectSupplier',
+define(['Model/ObjectSupplier',
         'UI/UIContext',
         'UI/NodeView',
         'Collection/DAG',
@@ -13,8 +12,7 @@ define(['Composition/CompositeView',
         'UI/View',
         'localstorage',
         'backbone'],
-function(CompositeView,
-         ObjectSupplier,
+function(ObjectSupplier,
          UIContext,
          NodeView,
          DAG,
