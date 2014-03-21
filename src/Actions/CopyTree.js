@@ -9,7 +9,9 @@ define(['Composition/Global'], function(Global) {
     CopyTree.prototype.perform = function() {
 
         var dag = Global.dag;
-        dag.copyTree(this.model);
+        var parent = dag.getParent(this.model);
+        var copy = dag.copyTree(parent);
+        dag.addChild(parent, copy);
 
     }
 

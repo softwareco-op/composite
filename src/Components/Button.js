@@ -12,7 +12,6 @@ define(['UI/UIContext', 'Model/ObjectSupplier', 'UI/View', 'underscore'], functi
     var objectSupplier = new ObjectSupplier();
 
     function Button(model) {
-        this.model = model;
         this.name = model.get('name');
         this.text = model.get('text');
         this.action = model.get('action');

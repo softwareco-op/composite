@@ -24,13 +24,14 @@ function(ObjectSupplier, BackboneLocalStorage, Backbone, chai, sinon) {
             var node = new Node();
             var type = 'Components/Button';
             node.set('type', type);
+            node.set('name', 'testButton');
             var objectSupplier = new ObjectSupplier();
             var promise = objectSupplier.object(node);
             promise.then(function(module) {
 
-                var mtype = module.model.get('type');
+                var name = module.name;
 
-                assert.equal(mtype, type);
+                assert.equal(name, 'testButton');
                 done();
             }).catch(function(error) {
                 done(error);
