@@ -10,6 +10,7 @@ define(['Model/ObjectSupplier',
         'Collection/DAG',
         'Composition/Global',
         'UI/View',
+        'backbone.io',
         'localstorage',
         'backbone'],
 function(ObjectSupplier,
@@ -18,15 +19,10 @@ function(ObjectSupplier,
          DAG,
          Global,
          View,
+         Backboneio,
          BackboneLocalStorage,
          Backbone) {
 
-    var Node = Backbone.Model.extend({});
-
-    var NodeCollection = Backbone.Collection.extend({
-        model: Node,
-        localStorage:new BackboneLocalStorage('ViewDAG-test')
-    });
 
     function CompositionContext() {}
 
@@ -38,6 +34,16 @@ function(ObjectSupplier,
     }
 
     CompositionContext.prototype.run = function(element, document) {
+
+        Backbone.io.connect();
+
+        var Node = Backbone.Model.extend({});
+
+        var NodeCollection = Backbone.Collection.extend({
+            model: Node,
+            //localStorage:new BackboneLocalStorage('ViewDAG-test')
+            backend: 'mybackend'
+        });
 
         var collection = new NodeCollection();
         var dag = new DAG(collection);
