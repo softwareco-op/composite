@@ -47,6 +47,7 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      */
     DAG.prototype.add = function(model) {
         this.collection.add(model);
+        model.save();
     }
 
     /**

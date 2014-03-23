@@ -1,4 +1,11 @@
-require.config({
+var requirejs = require('requirejs');
+var path = require('path');
+
+var servePath = path.dirname(path.dirname(__dirname));
+
+global.define = requirejs;
+
+requirejs.config({
     nodeRequire: require,
     baseUrl : 'src',
     paths: {
@@ -7,14 +14,9 @@ require.config({
         'backbone': '../bower_components/backbone-amd/backbone',
         'underscore':'../bower_components/underscore-amd/underscore',
         'node-uuid':'../bower_components/node-uuid/uuid',
-        'rsvp':'../bower_components/rsvp/rsvp.amd',
-        'backbone.io':'../node_modules/backbone.io/lib/browser',
-        'socketio':'../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io'
+        'rsvp':'../bower_components/rsvp/rsvp.amd'
     },
     shim: {
-        socketio: {
-            exports: 'io'
-        },
         underscore: {
             exports: "_"
         },
@@ -26,15 +28,15 @@ require.config({
             deps: ['backbone'],
             exports: 'Backbone'
         },
-        'backbone.io': {
-            deps: ['backbone', 'socketio']
+        'backboneio': {
+            deps: ["backbone", "socketio"]
         }
     }
 });
 
-require(['Composition/CompositionContext'], function(CompositionContext){
-    var compositionElement = document.getElementById('composition');
-    var compositionContext = new CompositionContext();
+requirejs(['Server/Server'], function(Server) {
 
-    compositionContext.run(compositionElement, document);
+    var server = new Server(servePath);
+    server.backboneio();
+
 });

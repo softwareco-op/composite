@@ -6,6 +6,9 @@ requirejs.config({
     shim: {
         underscore: {
             exports: '_'
+        },
+        'backboneio': {
+            deps: ["backbone", "socketio"]
         }
     }
 });
