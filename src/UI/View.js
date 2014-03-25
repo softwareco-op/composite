@@ -54,6 +54,21 @@ define(['node-uuid'], function(uuid) {
         return this.getWrap(dom);
     }
 
+    //
+    // If the dom element hasn't been created, then create the element.
+    // @param {Function} elementSupplier
+    // @param {Document} dom
+    // @return the element
+    //
+    View.prototype.initialize = function(dom, elementSupplier) {
+        if (this.element === undefined) {
+            this.wrap = this.clearWrap(dom);
+            this.element = elementSupplier(dom)
+            this.wrap.appendChild(this.element);
+        }
+        return this.element;
+    }
+
     return View;
 
 });

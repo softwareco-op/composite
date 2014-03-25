@@ -7,7 +7,7 @@ define(
 function(Global) {
 
     function GlobalAction(model) {
-        Global.action()
+        Global.action();
     }
 
     GlobalAction.prototype.perform = function() {

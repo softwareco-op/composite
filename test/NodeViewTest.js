@@ -18,7 +18,6 @@ function(NodeView, ObjectSupplier, Global, View, DAG, uuid, RSVP, BackboneLocalS
         }
     });
 
-
     var NodeCollection = Backbone.Collection.extend({
         model: Node,
         localStorage:new BackboneLocalStorage('ViewDAG-test')
@@ -40,9 +39,14 @@ function(NodeView, ObjectSupplier, Global, View, DAG, uuid, RSVP, BackboneLocalS
             p.set('type', 'Components/Button');
             p.set('name', 'Hello World');
             p.set('text', 'Hello World');
-            p.set('action', 'Actions/GlobalAction');
-
-            Global.action = function() { done() };
+            p.set('click', 'Actions/GlobalAction');
+            
+            Global.action = function(model, view) {
+                if (this.called === undefined) {
+                    done();
+                }
+                this.called = true;
+            };
 
             dag.add(p);
 

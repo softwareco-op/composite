@@ -24,7 +24,7 @@ define(['UI/View', 'underscore'], function(View, _) {
             promise.then(function(view) {
                 self.map[model.get('id')] = view;
                 var parentView = self.map[model.get('parent')];
-                var element = view.render(self.dom);
+                var element = view.render(model, self.dom);
                 element.setAttribute('id', model.get('id'));
                 if (parentView !== undefined) {
                     parentView.getWrap(dom).appendChild(element);
@@ -37,8 +37,35 @@ define(['UI/View', 'underscore'], function(View, _) {
                 console.log(error);
             });
         });
+
+        this.dag.collection.on('update', function(model) {
+            var moduleName = model.get('type');
+            //var promise = self.objectSupplier.object(model, moduleName);
+            var view = self.map[model.get('id')];
+            view.render(self.dom);
+
+            // promise.then(function(view) {
+            //     self.map[model.get('id')] = view;
+            //     var parentView = self.map[model.get('parent')];
+            //     var element = view.render(self.dom);
+            //     element.setAttribute('id', model.get('id'));
+            //     // if (parentView !== undefined) {
+            //     //     parentView.getWrap(dom).appendChild(element);
+            //     // } else {
+            //     //     //should only occur at the root.
+            //     //     parentElement.appendChild(element);
+            //     // }
+
+            // }).catch(function(error) {
+            //     console.log(error);
+            // });
+        });
     }
     _.extend(NodeView.prototype, View.prototype);
+
+    NodeView.prototype.getView = function(id) {
+        return this.map[id];
+    }
 
     NodeView.prototype.viewSupplier = function() {
         if (viewSupplier === undefined) {

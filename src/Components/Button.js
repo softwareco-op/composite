@@ -1,36 +1,58 @@
-/**
-* Copyright (C) 2014 SoftwareCo-oP
-*/
+//
+// Copyright (C) 2014 SoftwareCo-oP
+//
 
-
-/**
- * A simple button.
- */
 define(['UI/UIContext', 'Model/ObjectSupplier', 'UI/View', 'underscore'], function(UIContext, ObjectSupplier, View, _) {
 
     var uiContext = new UIContext();
     var objectSupplier = new ObjectSupplier();
 
+    //
+    // A simple button.
+    // @param {Backbone.Model} model to render
+    //
     function Button(model) {
-        this.name = model.get('name');
-        this.text = model.get('text');
-        this.action = model.get('action');
-        this.promise = objectSupplier.object(model, this.action);
+        this.setFields(model)
     }
     _.extend(Button.prototype, View.prototype);
 
-    /**
-     * Renders the button as soon as the action is available
-     */
-    Button.prototype.render = function(dom) {
-        var wrap = this.clearWrap(dom);
+    //
+    // Read the attributes required to render the component
+    // @param {Backbone.Model} model used to read attributes
+    //
+    Button.prototype.setFields = function(model) {
+        this.name = model.get('name');
+        this.text = model.get('text');
+        this.action = model.get('click');
+        this.promise = objectSupplier.object(model, this.action);
+    }
+
+    //
+    // Renders the button
+    // @param {Backbone.Model} model used to read attributes
+    // @param {Document} dom to use for rendering
+    // @return {Element} dom element representing the button
+    //
+    Button.prototype.render = function(model, dom) {
+        this.setFields(model);
+
+        this.initialize(dom, function(dom) {
+            return dom.createElement('button')
+        });
+
         var self = this;
         this.promise.then(function(action) {
-            var clickListener = function (clickEvent) { action.perform() }
-            var view = uiContext.makeButton(self.name, self.text, clickListener);
-            wrap.appendChild(view.render(dom));
+            action.button = self;
+            var clickListener = function (clickEvent) { action.perform(model) }
+            self.button.name = self.name;
+            self.button.className = self.name;
+            self.button.textContent = self.textContent;
+            self.button.addEventListener('click', function(clickEvent) {
+                clickListener(clickEvent);
+            });
         });
-        return wrap;
+
+        return self.wrap;
     }
 
     return Button;

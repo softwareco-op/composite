@@ -28,9 +28,7 @@ function(ObjectSupplier, BackboneLocalStorage, Backbone, chai, sinon) {
             var objectSupplier = new ObjectSupplier();
             var promise = objectSupplier.object(node);
             promise.then(function(module) {
-
                 var name = module.name;
-
                 assert.equal(name, 'testButton');
                 done();
             }).catch(function(error) {

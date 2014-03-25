@@ -70,17 +70,17 @@ function(ObjectSupplier,
                     console.log('got add');
                     self.add(model);
                 });
-
                 this.bind('backend:update', function(model) {
                     console.log('got update');
-                    self.get(model.id).set(model);
+                    var colModel = self.get(model.id);
+                    console.log(JSON.stringify(colModel));
+                    colModel.set(model);
+                    console.log(JSON.stringify(colModel));
+                    self.trigger('update', colModel);
                 });
                 this.bind('backend:delete', function(model) {
                     console.log('got delete');
                     self.remove(model.id);
-                });
-                this.bind('backend', function(method, model) {
-                    console.log('backend event');
                 });
             }
         });

@@ -8,6 +8,7 @@ define([], function() {
 
     StoreValue.prototype.perform = function(input) {
         this.model.set('value', input.value);
+        this.model.save();
     }
 
     return StoreValue;
