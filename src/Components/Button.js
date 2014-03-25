@@ -2,9 +2,8 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['UI/UIContext', 'Model/ObjectSupplier', 'UI/View', 'underscore'], function(UIContext, ObjectSupplier, View, _) {
+define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplier, View, _) {
 
-    var uiContext = new UIContext();
     var objectSupplier = new ObjectSupplier();
 
     //
