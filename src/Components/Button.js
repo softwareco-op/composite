@@ -22,8 +22,6 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     Button.prototype.setFields = function(model) {
         this.name = model.get('name');
         this.text = model.get('text');
-        this.action = model.get('click');
-        this.promise = objectSupplier.object(model, this.action);
     }
 
     //
@@ -35,24 +33,36 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     Button.prototype.render = function(model, dom) {
         this.setFields(model);
 
-        this.initialize(dom, function(dom) {
+        this.button = this.initialize(dom, function(dom) {
             return dom.createElement('button')
         });
 
         var self = this;
-        this.promise.then(function(action) {
-            action.button = self;
-            var clickListener = function (clickEvent) { action.perform(model) }
-            self.button.name = self.name;
-            self.button.className = self.name;
-            self.button.textContent = self.textContent;
-            self.button.addEventListener('click', function(clickEvent) {
-                clickListener(clickEvent);
+        var clickListener = function (clickEvent) {
+            var click = _.filter(self.objdag.getChildren(model.get('id')), function(object) {
+                return object.name == 'click';
+            })
+            _.map(click, function(object) {
+                object.perform();
             });
+        }
+
+        this.button.name = self.name;
+        this.button.className = self.name;
+        this.button.textContent = self.textContent;
+        this.button.addEventListener('click', function(clickEvent) {
+            clickListener(clickEvent);
         });
 
         return self.wrap;
     }
+
+    Button.prototype.add = function(model, objdag, dag, dom) {
+        this.objdag = objdag;
+        this.dag = dag;
+        this.render(model, dom);
+    }
+
 
     return Button;
 

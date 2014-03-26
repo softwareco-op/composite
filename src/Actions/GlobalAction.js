@@ -7,11 +7,16 @@ define(
 function(Global) {
 
     function GlobalAction(model) {
-        Global.action();
+        this.name = 'click';
     }
 
     GlobalAction.prototype.perform = function() {
-        Global.action();
+        Global.action.perform();
+    }
+
+    GlobalAction.prototype.add = function(model, objdag, dag) {
+        this.objdag = objdag;
+        Global.action.onadd(this, model, objdag, dag);
     }
 
     return GlobalAction;
