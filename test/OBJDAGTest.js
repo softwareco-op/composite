@@ -31,11 +31,11 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
             var objdag = new OBJDAG(objectSupplier, dag);
             var testObj = {id: 1, parent: 0};
             objdag.setObject(testObj);
-            var result = objdag.getObject(1);
+            var result = objdag.getObject(testObj.id);
             assert.equal(result, testObj);
 
-            objdag.deleteObject(1);
-            result = objdag.getObject(1);
+            objdag.deleteObject(testObj);
+            result = objdag.getObject(testObj.id);
             assert.equal(result, undefined);
 
             var badObj = {}
@@ -57,9 +57,9 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
 
             objdag.setObject(parent);
             objdag.setObject(testObj);
-            var result = objdag.getParent(1);
+            var result = objdag.getParent(testObj);
             assert.equal(result, parent);
-            result = objdag.getParent(0);
+            result = objdag.getParent(parent);
             assert.equal(result, null);
 
             done();
@@ -77,7 +77,7 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
             objdag.setObject(parent);
             objdag.setObject(testObj);
             objdag.setObject(testObj2);
-            var result = objdag.getChildren(0);
+            var result = objdag.getChildren(parent);
             assert.equal(result.length, 2);
             assert.equal(testObj, result[0]);
             assert.equal(testObj2, result[1]);
@@ -110,7 +110,7 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
                     //simulate a click on the button
                     var event = document.createEvent('Event');
                     event.initEvent('click', true, true);
-                    var parent = objdag.getParent(model.get('id'));
+                    var parent = objdag.getParent(objdag.getObject(model.get('id')));
                     parent.button.dispatchEvent(event);
                 }
             }

@@ -39,7 +39,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
         var self = this;
         var clickListener = function (clickEvent) {
-            var click = _.filter(self.objdag.getChildren(model.get('id')), function(object) {
+            var click = _.filter(self.objdag.getChildren(self.objdag.getObject(model.get('id'))), function(object) {
                 return object.name == 'click';
             })
             _.map(click, function(object) {

@@ -60,21 +60,20 @@ define(['underscore'], function(_) {
     //
     // @return the parent of the object with the given id
     //
-    OBJDAG.prototype.getParent = function(id) {
-        var obj = this.getObject(id);
-        return this.getObject(obj.parent);
+    OBJDAG.prototype.getParent = function(object) {
+        return this.getObject(object.parent);
     }
 
     //
     // Deletes the object with the given id
     //
-    OBJDAG.prototype.deleteObject = function(id) {
-        delete this.dagObjects[id];
+    OBJDAG.prototype.deleteObject = function(object) {
+        delete this.dagObjects[object.id];
     }
 
-    OBJDAG.prototype.getChildren = function(id) {
-        return _.filter(this.dagObjects, function(object) {
-            return object.parent == id;
+    OBJDAG.prototype.getChildren = function(object) {
+        return _.filter(this.dagObjects, function(dagObject) {
+            return dagObject.parent == object.id;
         });
     }
 
