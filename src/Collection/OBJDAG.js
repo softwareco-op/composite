@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 //
 
-define(['underscore'], function(_) {
+define(['underscore','backbone'], function(_, Backbone) {
 
     function OBJDAG(objectSupplier, dag, context) {
         this.objectSupplier = objectSupplier;
@@ -37,6 +37,7 @@ define(['underscore'], function(_) {
         });
 
     }
+    _.extend(OBJDAG.prototype, Backbone.Events);
 
     //
     // Add object to OBJDAG

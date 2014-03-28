@@ -14,7 +14,7 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
     function InputField(model) {
         this.setFields(model)
     }
-    _.extend(TextField.prototype, View.prototype)
+    _.extend(InputField.prototype, View.prototype)
 
     //
     // Read the attributes required to render the component
@@ -40,7 +40,7 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
         this.setFields(model);
 
         var input = this.initialize(dom, function(dom) {
-            return dom.createElement('input')
+            return dom.createElement('input');
         });
 
         var self = this;
@@ -52,6 +52,14 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
         });
 
         return self.wrap;
+    }
+
+    InputField.prototype.add = function(model, objdag, dag, dom) {
+        this.objdag = objdag;
+        this.dag = dag;
+        var wrap = this.render(model, dom);
+        var parent = objdag.getParent(this);
+        parent.getWrap(dom).appendChild(wrap);
     }
 
     return InputField;

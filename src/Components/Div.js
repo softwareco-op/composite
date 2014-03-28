@@ -10,11 +10,24 @@ define(['UI/View'], function(View) {
     }
     _.extend(DIV.prototype, View.prototype)
 
-    DIV.prototype.render = function(dom) {
+    DIV.prototype.render = function(model, dom) {
         var wrap = this.clearWrap(dom);
+
+        var input = this.initialize(dom, function(dom) {
+            return dom.createElement('div');
+        });
+
         wrap.setAttribute('id', this.id);
         wrap.setAttribute('class', this.clazz);
         return wrap;
+    }
+
+    DIV.prototype.add = function(model, objdag, dag, dom) {
+        this.objdag = objdag;
+        this.dag = dag;
+        var wrap = this.render(model, dom);
+        var parent = objdag.getParent(this);
+        parent.getWrap(dom).appendChild(wrap);
     }
 
     return DIV;

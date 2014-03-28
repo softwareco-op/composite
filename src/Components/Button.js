@@ -60,7 +60,10 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     Button.prototype.add = function(model, objdag, dag, dom) {
         this.objdag = objdag;
         this.dag = dag;
-        this.render(model, dom);
+        var wrap = this.render(model, dom);
+        var parent = objdag.getParent(this);
+        //When OBJDAG has getParent working, then uncomment
+        //parent.getWrap(dom).appendChild(wrap);
     }
 
 

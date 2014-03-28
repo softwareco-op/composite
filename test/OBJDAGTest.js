@@ -118,6 +118,39 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
             dag.add(p1);
         });
 
+        it('manages out of order object instantation', function(done) {
+            var promise1 = new RSVP.Promise(function(resolve, reject) {
+                var onTimeout = function() {
+                    resolve(true);
+                }
+                var timeout = 1000*Math.random();
+                window.setTimeout(onTimeout, timeout);
+            }, function (error) {
+                console.log(error);
+                reject(error);
+            });
+            promise1.then(function() {
+                console.log('executing on promise1');
+            });
+
+
+            var promise2 = new RSVP.Promise(function(resolve, reject) {
+                var onTimeout = function() {
+                    resolve(true);
+                }
+                var timeout = 1000*Math.random();
+                window.setTimeout(onTimeout, timeout);
+            }, function (error) {
+                console.log(error);
+                reject(error);
+            });
+
+            promise2.then(function() {
+                console.log('executing on promise2');
+                done()
+            });
+        });
+
     })
 
 });
