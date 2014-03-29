@@ -22,7 +22,7 @@ define([], function()  {
             promise.then(function(dagObject) {
                 dagObject.id = model.get('id');
                 dagObject.parent = model.get('parent');
-                self.objDag.setObject(dagObject);
+                self.objDag.add(dagObject);
                 dagObject.add(model, self.objDag, self.dag, self.context);
             }).catch(function(error) {
                 console.log(error);

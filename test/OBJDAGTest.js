@@ -25,58 +25,76 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
 
     describe('OBJDAG', function() {
         it('gets and sets objects', function(done) {
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-            var objectSupplier = new ObjectSupplier();
-            var objdag = new OBJDAG(objectSupplier, dag);
+            var objdag = new OBJDAG();
             var testObj = {id: 1, parent: 0};
-            objdag.setObject(testObj);
-            var result = objdag.getObject(testObj.id);
-            assert.equal(result, testObj);
+            objdag.add(testObj);
 
-            objdag.deleteObject(testObj);
-            result = objdag.getObject(testObj.id);
-            assert.equal(result, undefined);
+            var testResult = function(expected) {
+                return function(result) {
+                    assert.equal(result, expected);
+                }
+            }
+
+            objdag.get(testObj.id).then(function(object) {
+                assert.equal(object, testObj);
+            }).then(function(object) {
+                objdag.remove(testObj);
+                return objdag.get(testObj.id, 1500);
+            }).catch(function(error) {
+                assert.equal(error, testObj.id);
+            }).then(function(object) {
+                throw 'We should not have succeeded'
+            })
 
             var badObj = {}
 
             try {
-                objdag.setObject(badObj);
+                objdag.add(badObj);
             } catch (error) {
                 done();
             }
+
         });
 
-        it('retrieves parents', function(done) {
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-            var objectSupplier = new ObjectSupplier();
-            var objdag = new OBJDAG(objectSupplier, dag);
+        it('retrieves valid parents', function(done) {
+            var objdag = new OBJDAG();
             var parent = {id: 0, parent: null};
             var testObj = {id: 1, parent: 0};
 
-            objdag.setObject(parent);
-            objdag.setObject(testObj);
-            var result = objdag.getParent(testObj);
-            assert.equal(result, parent);
-            result = objdag.getParent(parent);
-            assert.equal(result, null);
+            objdag.add(parent);
+            objdag.add(testObj);
+            objdag.getParent(testObj, 100).then(function(result) {
+                assert.equal(result, parent);
+                done();
+            });
 
-            done();
+        })
+
+        it('handles missing parents', function(done) {
+            var objdag = new OBJDAG();
+            var parent = {id: 0, parent: null};
+            var testObj = {id: 1, parent: 0};
+
+            objdag.add(parent);
+            objdag.add(testObj);
+            objdag.getParent(parent).then(function(result) {
+                throw 'Should not succeed here';
+            }).catch(function(error) {
+                assert.equal(error, parent.parent);
+                done();
+            });
+
         })
 
         it('retrieves children', function(done) {
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-            var objectSupplier = new ObjectSupplier();
-            var objdag = new OBJDAG(objectSupplier, dag);
+            var objdag = new OBJDAG();
             var parent = {id: 0, parent: null};
             var testObj = {id: 1, parent: 0};
             var testObj2 = {id: 2, parent: 0};
 
-            objdag.setObject(parent);
-            objdag.setObject(testObj);
-            objdag.setObject(testObj2);
+            objdag.add(parent);
+            objdag.add(testObj);
+            objdag.add(testObj2);
             var result = objdag.getChildren(parent);
             assert.equal(result.length, 2);
             assert.equal(testObj, result[0]);
@@ -85,91 +103,30 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             done();
         })
 
-        it('integrates with ObjectSupplier', function(done) {
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-            var objectSupplier = new ObjectSupplier();
+        it('triggers add event', function(done) {
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, document);
-            objDagController.manage(collection);
 
-            var p0 = new Node({id:0, parent: null});
-            p0.set('type', 'Components/Button');
-            p0.set('name', 'test');
-            p0.set('text', 'test');
-
-            var p1 = new Node({id:1, parent: 0});
-            p1.set('type', 'Actions/GlobalAction');
-
-            Global.action = {
-                perform : function() {
-                    if (this.called === undefined) {
-                        done();
-                    }
-                    this.called = true;
-                },
-                onadd : function(action, model, objdag, dag) {
-                    //simulate a click on the button
-                    var event = document.createEvent('Event');
-                    event.initEvent('click', true, true);
-                    var parent = objdag.getParent(objdag.getObject(model.get('id')));
-                    parent.button.dispatchEvent(event);
-                }
-            }
-            dag.add(p0);
-            dag.add(p1);
-        });
-
-        it('manages out of order object instantation', function(done) {
-            var collection = new NodeCollection();
-            var dag = new DAG(collection);
-            var objectSupplier = new ObjectSupplier();
-            var objdag = new OBJDAG(objectSupplier, dag, document);
-
-            var p0 = new Node({id:0, parent: null});
-            p0.set('type', 'Components/Button');
-            p0.set('name', 'test');
-            p0.set('text', 'test');
-
-            var p1 = new Node({id:1, parent: 0});
-            p1.set('type', 'Actions/GlobalAction');
-            dag.add(p1);
-            dag.add(p0);
-            done();
-        });
-
-        it('manages out of order object instantation', function(done) {
-            var promise1 = new RSVP.Promise(function(resolve, reject) {
-                var onTimeout = function() {
-                    resolve(true);
-                }
-                var timeout = 1000*Math.random();
-                window.setTimeout(onTimeout, timeout);
-            }, function (error) {
-                console.log(error);
-                reject(error);
-            });
-            promise1.then(function() {
-                console.log('executing on promise1');
+            objdag.on('add', function(object) {
+                done();
             });
 
+            var parent = {id: 0, parent: null};
 
-            var promise2 = new RSVP.Promise(function(resolve, reject) {
-                var onTimeout = function() {
-                    resolve(true);
-                }
-                var timeout = 1000*Math.random();
-                window.setTimeout(onTimeout, timeout);
-            }, function (error) {
-                console.log(error);
-                reject(error);
+            objdag.add(parent);
+        })
+
+        it('triggers remove event', function(done) {
+            var objdag = new OBJDAG();
+
+            objdag.on('remove', function(object) {
+                done();
             });
 
-            promise2.then(function() {
-                console.log('executing on promise2');
-                done()
-            });
-        });
+            var parent = {id: 0, parent: null};
+
+            objdag.add(parent);
+            objdag.remove(parent);
+        })
 
     })
 

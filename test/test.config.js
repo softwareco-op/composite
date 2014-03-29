@@ -35,7 +35,8 @@ require.config({
 require([
     '../test/test.DAG',
     '../test/ObjectSupplierTest',
-    '../test/OBJDAGTest'
+    '../test/OBJDAGTest',
+    '../test/OBJDAGControllerTest'
 ], function() {
 
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
