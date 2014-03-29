@@ -7,8 +7,8 @@
 // Tests OBJDAG functionality
 //
 define(
-['Collection/OBJDAG', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
+['Collection/OBJDAG', 'Collection/OBJDAGController', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
+function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -89,7 +89,9 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
             var collection = new NodeCollection();
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
-            var objdag = new OBJDAG(objectSupplier, dag, document);
+            var objdag = new OBJDAG();
+            var objDagController = new OBJDAGController(objectSupplier, objdag, document);
+            objDagController.manage(collection);
 
             var p0 = new Node({id:0, parent: null});
             p0.set('type', 'Components/Button');
@@ -116,6 +118,24 @@ function(OBJDAG, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, 
             }
             dag.add(p0);
             dag.add(p1);
+        });
+
+        it('manages out of order object instantation', function(done) {
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
+            var objectSupplier = new ObjectSupplier();
+            var objdag = new OBJDAG(objectSupplier, dag, document);
+
+            var p0 = new Node({id:0, parent: null});
+            p0.set('type', 'Components/Button');
+            p0.set('name', 'test');
+            p0.set('text', 'test');
+
+            var p1 = new Node({id:1, parent: 0});
+            p1.set('type', 'Actions/GlobalAction');
+            dag.add(p1);
+            dag.add(p0);
+            done();
         });
 
         it('manages out of order object instantation', function(done) {

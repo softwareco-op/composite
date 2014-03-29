@@ -4,38 +4,8 @@
 
 define(['underscore','backbone'], function(_, Backbone) {
 
-    function OBJDAG(objectSupplier, dag, context) {
-        this.objectSupplier = objectSupplier;
-        this.dag = dag;
-        this.context = context;
+    function OBJDAG() {
         this.dagObjects = {};
-
-        var self = this;
-        this.dag.collection.on('add', function(model) {
-            var moduleName = model.get('type');
-            var promise = self.objectSupplier.object(model, moduleName);
-
-            promise.then(function(dagObject) {
-                dagObject.id = model.get('id');
-                dagObject.parent = model.get('parent');
-                self.setObject(dagObject);
-                dagObject.add(model, self, self.dag, context);
-            }).catch(function(error) {
-                console.log(error);
-            });
-        });
-
-        this.dag.collection.on('update', function(model) {
-            var dagObject = self.getObject(model.get('id'));
-            dagObject.update(model, self, self.dag, context);
-        });
-
-        this.dag.collection.on('delete', function(model) {
-            var dagObject = self.getObject(model.get('id'));
-            dagObject.destroy(model, self, self.dag, context);
-            delete self.dagObjects[model.get('id')];
-        });
-
     }
     _.extend(OBJDAG.prototype, Backbone.Events);
 
