@@ -38,12 +38,19 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
         });
 
         var self = this;
+        var objdag = this.objdag;
         var clickListener = function (clickEvent) {
-            var click = _.filter(self.objdag.getChildren(self.objdag.getObject(model.get('id'))), function(object) {
-                return object.name == 'click';
-            })
-            _.map(click, function(object) {
-                object.perform();
+            objdag.get(model.get('id')).then(function(object) {
+                return objdag.getChildren(object);
+            }).then(function(children) {
+                var click = _.filter(children, function(object) {
+                    return object.name == 'click';
+                })
+                _.map(click, function(object) {
+                    object.perform();
+                });
+            }).catch(function(error) {
+                console.log(error);
             });
         }
 

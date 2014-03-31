@@ -80,9 +80,9 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
     }
 
     OBJDAG.prototype.getChildren = function(object) {
-        return _.filter(this.dagObjects, function(dagObject) {
-            return dagObject.parent == object.id;
-        });
+        var get = _.bind(this.get, this);
+        var promises = object.children.map(get);
+        return RSVP.all(promises);
     }
 
     return OBJDAG;

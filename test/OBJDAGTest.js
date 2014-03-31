@@ -7,8 +7,8 @@
 // Tests OBJDAG functionality
 //
 define(
-['Collection/OBJDAG', 'Collection/OBJDAGController', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
+['Collection/OBJDAG', 'Collection/OBJDAGController', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon', 'underscore'],
+function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon, underscore) {
 
     var assert = chai.assert;
 
@@ -83,24 +83,27 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
                 assert.equal(error, parent.parent);
                 done();
             });
-
         })
 
         it('retrieves children', function(done) {
             var objdag = new OBJDAG();
-            var parent = {id: 0, parent: null};
+            var parent = {id: 0, parent: null, children: [1, 2]};
             var testObj = {id: 1, parent: 0};
             var testObj2 = {id: 2, parent: 0};
 
             objdag.add(parent);
             objdag.add(testObj);
             objdag.add(testObj2);
-            var result = objdag.getChildren(parent);
-            assert.equal(result.length, 2);
-            assert.equal(testObj, result[0]);
-            assert.equal(testObj2, result[1]);
 
-            done();
+            objdag.getChildren(parent).then(function(children) {
+                assert.equal(children.length, 2);
+                assert.equal(testObj, children[0]);
+                assert.equal(testObj2, children[1]);
+
+                done();
+            }).catch(function(error) {
+                console.log(error);
+            });
         })
 
         it('triggers add event', function(done) {
