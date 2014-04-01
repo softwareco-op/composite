@@ -127,24 +127,24 @@ function(ObjectSupplier,
         // var p6 = new Node({id:6, parent: 2});
         // p6.set('type', 'Actions/CopyTree');
 
-        // var p3 = new Node({id:3, parent: 1});
-        // p3.set('type', 'Components/InputField');
-        // p3.set('name', 'username');
-        // p3.set('fieldType', 'text');
-        // p3.set('value', 'username');
-        // dag.add(p3);
+        var p3 = new Node({id:3, parent: 1});
+        p3.set('type', 'Components/InputField');
+        p3.set('name', 'username');
+        p3.set('fieldType', 'text');
+        p3.set('value', 'username');
+        dag.add(p3);
 
         // var p7 = new Node({id:7, parent: 3});
         // p7.set('type', 'Actions/StoreValue');
         // p7.set('event', 'onchange');
         // dag.add(p7);
 
-        // var p4 = new Node({id:4, parent: 1});
-        // p4.set('type', 'Components/InputField');
-        // p4.set('name', 'password');
-        // p4.set('fieldType', 'password');
-        // p4.set('value', '');
-        // dag.add(p4);
+        var p4 = new Node({id:4, parent: 1});
+        p4.set('type', 'Components/InputField');
+        p4.set('name', 'password');
+        p4.set('fieldType', 'password');
+        p4.set('value', '');
+        dag.add(p4);
 
         // var p8 = new Node({id:8, parent: 4});
         // p8.set('type', 'Actions/StoreValue');

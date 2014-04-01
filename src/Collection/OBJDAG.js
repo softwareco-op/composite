@@ -47,11 +47,14 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
                 resolve(self.dagObjects[id]);
             }
 
-            self.once('add', function(object) {
+            var callback = function(object) {
                 if (object.id === id) {
+                    self.off('add', callback);
                     resolve(self.dagObjects[id]);
                 }
-            });
+            }
+
+            self.on('add', callback);
 
             //We call reject if more time elapsed than some threshold.
             var onTimeout = function() {
