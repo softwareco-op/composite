@@ -5,6 +5,7 @@
 
 
 define(['Model/ObjectSupplier',
+        'Collection/OBJDAGController',
         'Collection/OBJDAG',
         'Collection/DAG',
         'Composition/Global',
@@ -13,6 +14,7 @@ define(['Model/ObjectSupplier',
         'localstorage',
         'backbone'],
 function(ObjectSupplier,
+         OBJDAGController,
          OBJDAG,
          DAG,
          Global,
@@ -89,12 +91,15 @@ function(ObjectSupplier,
         var objectSupplier = new ObjectSupplier();
 
         var objdag = new OBJDAG(objectSupplier, dag, document);
+        var objDagController = new OBJDAGController(objectSupplier, objdag, document);
+        objDagController.manage(collection);
+
         var parent = new View();
         parent.id = 1000
         parent.parent = null;
         parent.add = function() {};
 
-        objdag.setObject(parent);
+        objdag.add(parent);
 
         element.appendChild(parent.getWrap(document));
 
@@ -109,42 +114,43 @@ function(ObjectSupplier,
         p1.set('text', 'Add Button');
         dag.add(p1);
 
-        var p5 = new Node({id:5, parent: 1});
-        p5.set('type', 'Actions/AddButton');
-        dag.add(p5);
+        // var p5 = new Node({id:5, parent: 1});
+        // p5.set('type', 'Actions/AddButton');
+        // dag.add(p5);
 
-        var p2 = new Node({id:2, parent: 1});
+        var p2 = new Node({id:2, parent: 0});
         p2.set('type', 'Components/Button');
         p2.set('name', 'Copy Component');
         p2.set('text', 'Copy Component');
         dag.add(p2);
 
-        var p6 = new Node({id:6, parent: 2});
-        p6.set('type', 'Actions/CopyTree');
+        // var p6 = new Node({id:6, parent: 2});
+        // p6.set('type', 'Actions/CopyTree');
 
-        var p3 = new Node({id:3, parent: 1});
-        p3.set('type', 'Components/InputField');
-        p3.set('name', 'username');
-        p3.set('fieldType', 'text');
-        p3.set('value', 'username');
-        dag.add(p3);
+        // var p3 = new Node({id:3, parent: 1});
+        // p3.set('type', 'Components/InputField');
+        // p3.set('name', 'username');
+        // p3.set('fieldType', 'text');
+        // p3.set('value', 'username');
+        // dag.add(p3);
 
-        var p7 = new Node({id:7, parent: 3});
-        p7.set('type', 'Actions/StoreValue');
-        p7.set('event', 'onchange');
-        dag.add(p7);
+        // var p7 = new Node({id:7, parent: 3});
+        // p7.set('type', 'Actions/StoreValue');
+        // p7.set('event', 'onchange');
+        // dag.add(p7);
 
-        var p4 = new Node({id:4, parent: 1});
-        p4.set('type', 'Components/InputField');
-        p4.set('name', 'password');
-        p4.set('fieldType', 'password');
-        p4.set('value', '');
-        dag.add(p4);
+        // var p4 = new Node({id:4, parent: 1});
+        // p4.set('type', 'Components/InputField');
+        // p4.set('name', 'password');
+        // p4.set('fieldType', 'password');
+        // p4.set('value', '');
+        // dag.add(p4);
 
-        var p8 = new Node({id:8, parent: 4});
-        p8.set('type', 'Actions/StoreValue');
-        p8.set('event', 'onchange');
-        dag.add(p8);
+        // var p8 = new Node({id:8, parent: 4});
+        // p8.set('type', 'Actions/StoreValue');
+        // p8.set('event', 'onchange');
+        // dag.add(p8);
+
 
     }
 

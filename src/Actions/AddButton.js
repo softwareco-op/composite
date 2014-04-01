@@ -21,6 +21,10 @@ define(['Composition/Global', 'backbone', 'node-uuid'], function(Global, Backbon
 
     }
 
+    AddButton.prototype.add = function(model, objdag, dag, dom) {
+        return;
+    }
+
     return AddButton;
 
 });

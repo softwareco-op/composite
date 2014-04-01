@@ -27,7 +27,7 @@ define(['node-uuid'], function(uuid) {
      * @return {Element} an element containing sub view elements.
      */
     View.prototype.getWrap = function(dom) {
-        if (typeof this.wrap != 'undefined') {return this.wrap;}
+        if (this.wrap !== undefined) {return this.wrap;}
         this.wrap = dom.createElement('div');
         return this.wrap;
     }

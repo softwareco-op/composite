@@ -11,6 +11,10 @@ define([], function() {
         this.model.save();
     }
 
+    StoreValue.prototype.add = function(model, objdag, dag, dom) {
+        return;
+    }
+
     return StoreValue;
 
 });

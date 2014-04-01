@@ -56,7 +56,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
         this.button.name = self.name;
         this.button.className = self.name;
-        this.button.textContent = self.textContent;
+        this.button.textContent = self.text;
         this.button.addEventListener('click', function(clickEvent) {
             clickListener(clickEvent);
         });
@@ -68,9 +68,9 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
         this.objdag = objdag;
         this.dag = dag;
         var wrap = this.render(model, dom);
-        var parent = objdag.getParent(this);
-        //When OBJDAG has getParent working, then uncomment
-        //parent.getWrap(dom).appendChild(wrap);
+        objdag.getParent(this).then(function(parent) {
+            parent.getWrap(dom).appendChild(wrap);
+        });
     }
 
 

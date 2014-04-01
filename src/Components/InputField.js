@@ -26,7 +26,7 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
         this.fieldType = model.get('fieldType');
         this.value = model.get('value');
         this.onchange = model.get('onchange');
-        this.promise = objectSupplier.object(model, this.onchange);
+
     }
 
     //
@@ -43,13 +43,24 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
             return dom.createElement('input');
         });
 
+        var onChange = function() {
+            objdag.get(model.get('children')).then(function(children) {
+                var changeFns = _.filter(children, function(object) {
+                    return object.name == 'onchange';
+                });
+                _.map(changeFns, function(object) {
+                    object.perform();
+                });
+            }).catch(function(error) {
+                console.log(error);
+            })
+                }
+
         var self = this;
-        this.promise.then(function(action) {
-            input.setAttribute('type', self.fieldType);
-            input.setAttribute('name', self.name);
-            input.value = self.value;
-            input.onchange = function() { action.perform(input) }
-        });
+        input.setAttribute('type', self.fieldType);
+        input.setAttribute('name', self.name);
+        input.value = self.value;
+        input.onchange = onChange;
 
         return self.wrap;
     }
@@ -58,8 +69,8 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
         this.objdag = objdag;
         this.dag = dag;
         var wrap = this.render(model, dom);
-        var parent = objdag.getParent(this);
-        parent.getWrap(dom).appendChild(wrap);
+        //var parent = objdag.getParent(this);
+        //parent.getWrap(dom).appendChild(wrap);
     }
 
     return InputField;

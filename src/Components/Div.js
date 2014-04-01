@@ -26,8 +26,9 @@ define(['UI/View'], function(View) {
         this.objdag = objdag;
         this.dag = dag;
         var wrap = this.render(model, dom);
-        var parent = objdag.getParent(this);
-        parent.getWrap(dom).appendChild(wrap);
+        objdag.getParent(this).then(function(parent) {
+            parent.getWrap(dom).appendChild(wrap);
+        });
     }
 
     return DIV;
