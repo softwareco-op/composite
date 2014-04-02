@@ -80,7 +80,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             objdag.getParent(parent).then(function(result) {
                 throw 'Should not succeed here';
             }).catch(function(error) {
-                assert.equal(error, parent.parent);
+                assert.equal(error, 'timed out waiting for object with id ' + parent.parent);
                 done();
             });
         })

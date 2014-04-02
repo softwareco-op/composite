@@ -6,7 +6,7 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
 
     function OBJDAG() {
         this.dagObjects = {};
-        this.defaultTimeout = 1000;
+        this.defaultTimeout = 400;
     }
     _.extend(OBJDAG.prototype, Backbone.Events);
 
@@ -58,7 +58,7 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
 
             //We call reject if more time elapsed than some threshold.
             var onTimeout = function() {
-                reject(id);
+                reject('timed out waiting for object with id ' + id);
             }
             var timeToWait = timeout || self.defaultTimeout;
             setTimeout(onTimeout, timeToWait);

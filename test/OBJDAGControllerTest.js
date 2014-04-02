@@ -40,6 +40,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
 
             var p1 = new Node({id:1, parent: 0});
             p1.set('type', 'Actions/GlobalAction');
+            p1.set('event', 'click');
 
             Global.action = {
                 perform : function() {

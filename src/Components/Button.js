@@ -4,8 +4,6 @@
 
 define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplier, View, _) {
 
-    var objectSupplier = new ObjectSupplier();
-
     //
     // A simple button.
     // @param {Backbone.Model} model to render
@@ -44,7 +42,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
                 return objdag.getChildren(object);
             }).then(function(children) {
                 var click = _.filter(children, function(object) {
-                    return object.name == 'click';
+                    return object.event == 'click';
                 })
                 _.map(click, function(object) {
                     object.perform();

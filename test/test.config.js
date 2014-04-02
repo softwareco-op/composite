@@ -36,7 +36,8 @@ require([
     '../test/test.DAG',
     '../test/ObjectSupplierTest',
     '../test/OBJDAGTest',
-    '../test/OBJDAGControllerTest'
+    '../test/OBJDAGControllerTest',
+    '../test/InputFieldTest'
 ], function() {
 
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

@@ -67,20 +67,27 @@ function(ObjectSupplier,
                     self.add(model);
                 });
                 this.bind('backend:add', function(model) {
-                    console.log('got add');
+                    console.log('backend:add');
                     self.add(model);
                 });
                 this.bind('backend:update', function(model) {
-                    console.log('got update');
+
+                    console.log('backend:update');
                     var colModel = self.get(model.id);
-                    console.log(JSON.stringify(colModel));
-                    colModel.set(model);
-                    console.log(JSON.stringify(colModel));
-                    self.trigger('update', colModel);
+                    if (colModel !== undefined) {
+                        console.log(JSON.stringify(colModel));
+                        colModel.set(model);
+                        console.log(JSON.stringify(colModel));
+                    } else {
+                        self.set(model);
+                    }
                 });
                 this.bind('backend:delete', function(model) {
-                    console.log('got delete');
+                    console.log('backend:delete');
                     self.remove(model.id);
+                });
+                this.bind('backend', function(model, other) {
+                    console.log('backend event');
                 });
             }
         });
@@ -108,48 +115,43 @@ function(ObjectSupplier,
         p0.set('class', 'panel');
         dag.add(p0);
 
-        var p1 = new Node({id:1, parent: 0});
-        p1.set('type', 'Components/Button');
-        p1.set('name', 'Add Button');
-        p1.set('text', 'Add Button');
-        dag.add(p1);
-
-        // var p5 = new Node({id:5, parent: 1});
-        // p5.set('type', 'Actions/AddButton');
-        // dag.add(p5);
-
         var p2 = new Node({id:2, parent: 0});
         p2.set('type', 'Components/Button');
         p2.set('name', 'Copy Component');
         p2.set('text', 'Copy Component');
+        p2.set('children', [6]);
         dag.add(p2);
 
-        // var p6 = new Node({id:6, parent: 2});
-        // p6.set('type', 'Actions/CopyTree');
+        var p6 = new Node({id:6, parent: 2});
+        p6.set('type', 'Actions/CopyTree');
+        p6.set('event', 'click');
+        dag.add(p6);
 
-        var p3 = new Node({id:3, parent: 1});
+        var p3 = new Node({id:3, parent: 0});
         p3.set('type', 'Components/InputField');
         p3.set('name', 'username');
         p3.set('fieldType', 'text');
         p3.set('value', 'username');
+        p3.set('children', [7]);
         dag.add(p3);
 
-        // var p7 = new Node({id:7, parent: 3});
-        // p7.set('type', 'Actions/StoreValue');
-        // p7.set('event', 'onchange');
-        // dag.add(p7);
+        var p7 = new Node({id:7, parent: 3});
+        p7.set('type', 'Actions/StoreValue');
+        p7.set('event', 'onchange');
+        dag.add(p7);
 
-        var p4 = new Node({id:4, parent: 1});
+        var p4 = new Node({id:4, parent: 0});
         p4.set('type', 'Components/InputField');
         p4.set('name', 'password');
         p4.set('fieldType', 'password');
         p4.set('value', '');
+        p4.set('children', [8]);
         dag.add(p4);
 
-        // var p8 = new Node({id:8, parent: 4});
-        // p8.set('type', 'Actions/StoreValue');
-        // p8.set('event', 'onchange');
-        // dag.add(p8);
+        var p8 = new Node({id:8, parent: 4});
+        p8.set('type', 'Actions/StoreValue');
+        p8.set('event', 'onchange');
+        dag.add(p8);
 
 
     }

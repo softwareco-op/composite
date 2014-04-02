@@ -4,8 +4,6 @@
 
 define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
 
-    var objectSupplier = new ObjectSupplier();
-
     //
     // A text field
     //
@@ -36,44 +34,49 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
     // @param {Document} dom to use for rendering
     // @return {Element} dom element representing the button
     //
-    InputField.prototype.render = function(model, dom) {
+    InputField.prototype.render = function(model, objdag, dom) {
         this.setFields(model);
 
         var input = this.initialize(dom, function(dom) {
             return dom.createElement('input');
         });
 
+        var self = this;
         var onChange = function() {
-            objdag.get(model.get('children')).then(function(children) {
+            objdag.getChildren(self).then(function(children) {
                 var changeFns = _.filter(children, function(object) {
-                    return object.name == 'onchange';
+                    return object.event === 'onchange';
                 });
                 _.map(changeFns, function(object) {
-                    object.perform();
+                    object.perform(input, model);
                 });
             }).catch(function(error) {
                 console.log(error);
             })
-                }
+        }
 
-        var self = this;
+
         input.setAttribute('type', self.fieldType);
         input.setAttribute('name', self.name);
         input.value = self.value;
         input.onchange = onChange;
 
-        return self.wrap;
+        return this.wrap;
     }
 
     InputField.prototype.add = function(model, objdag, dag, dom) {
         this.objdag = objdag;
         this.dag = dag;
-        var wrap = this.render(model, dom);
+        var wrap = this.render(model, objdag, dom);
         objdag.getParent(this).then(function(parent) {
 
             parent.getWrap(dom).appendChild(wrap);
 
         });
+    }
+
+    InputField.prototype.update = function(model, objdag, dag, dom) {
+        this.render(model, objdag, dom);
     }
 
     return InputField;
