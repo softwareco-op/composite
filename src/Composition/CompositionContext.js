@@ -115,43 +115,40 @@ function(ObjectSupplier,
         p0.set('class', 'panel');
         dag.add(p0);
 
-        var p2 = new Node({id:2, parent: 0});
+        var p2 = new Node({id:2});
         p2.set('type', 'Components/Button');
         p2.set('name', 'Copy Component');
         p2.set('text', 'Copy Component');
-        p2.set('children', [6]);
-        dag.add(p2);
+        dag.addChild(p0, p2);
 
-        var p6 = new Node({id:6, parent: 2});
+        var p6 = new Node({id:6});
         p6.set('type', 'Actions/CopyTree');
         p6.set('event', 'click');
-        dag.add(p6);
+        dag.addChild(p2, p6);
 
-        var p3 = new Node({id:3, parent: 0});
+        var p3 = new Node({id:3});
         p3.set('type', 'Components/InputField');
         p3.set('name', 'username');
         p3.set('fieldType', 'text');
         p3.set('value', 'username');
-        p3.set('children', [7]);
-        dag.add(p3);
+        dag.addChild(p0, p3);
 
-        var p7 = new Node({id:7, parent: 3});
+        var p7 = new Node({id:7});
         p7.set('type', 'Actions/StoreValue');
         p7.set('event', 'onchange');
-        dag.add(p7);
+        dag.addChild(p3, p7);
 
-        var p4 = new Node({id:4, parent: 0});
+        var p4 = new Node({id:4});
         p4.set('type', 'Components/InputField');
         p4.set('name', 'password');
         p4.set('fieldType', 'password');
         p4.set('value', '');
-        p4.set('children', [8]);
-        dag.add(p4);
+        dag.addChild(p0, p4);
 
-        var p8 = new Node({id:8, parent: 4});
+        var p8 = new Node({id:8});
         p8.set('type', 'Actions/StoreValue');
         p8.set('event', 'onchange');
-        dag.add(p8);
+        dag.addChild(p4, p8);
 
 
     }

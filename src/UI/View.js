@@ -6,10 +6,9 @@
 /**
  * View is the base class from which all Views extend.
  **/
-define(['node-uuid'], function(uuid) {
+define(['underscore'], function(_) {
 
     function View(renderer) {
-        this.uuid = uuid.v1();
         this.renderer = renderer;
     }
 
@@ -68,6 +67,18 @@ define(['node-uuid'], function(uuid) {
         }
         return this.element;
     }
+
+    /**
+     * Set attributes
+     * @param {Object} attributes
+     */
+    View.prototype.setAttributes = function(dom, attributes) {
+        var wrap = this.getWrap(dom);
+        _.map(attributes, function(value, key) {
+            wrap.setAttribute(key, value);
+        })
+    }
+
 
     return View;
 

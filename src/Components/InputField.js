@@ -55,7 +55,7 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
             })
         }
 
-
+        this.setAttributes(dom, {id: model.get('id')});
         input.setAttribute('type', self.fieldType);
         input.setAttribute('name', self.name);
         input.value = self.value;
@@ -65,14 +65,7 @@ define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
     }
 
     InputField.prototype.add = function(model, objdag, dag, dom) {
-        this.objdag = objdag;
-        this.dag = dag;
-        var wrap = this.render(model, objdag, dom);
-        objdag.getParent(this).then(function(parent) {
-
-            parent.getWrap(dom).appendChild(wrap);
-
-        });
+        this.render(model, objdag, dom);
     }
 
     InputField.prototype.update = function(model, objdag, dag, dom) {

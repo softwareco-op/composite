@@ -6,6 +6,8 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
     //
     // A simple button.
+    //
+    // @class
     // @param {Backbone.Model} model to render
     //
     function Button(model) {
@@ -15,6 +17,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
     //
     // Read the attributes required to render the component
+    //
     // @param {Backbone.Model} model used to read attributes
     //
     Button.prototype.setFields = function(model) {
@@ -24,6 +27,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
     //
     // Renders the button
+    //
     // @param {Backbone.Model} model used to read attributes
     // @param {Document} dom to use for rendering
     // @return {Element} dom element representing the button
@@ -34,6 +38,8 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
         this.button = this.initialize(dom, function(dom) {
             return dom.createElement('button')
         });
+
+        this.setAttributes(dom, {id: model.get('id')});
 
         var self = this;
         var objdag = this.objdag;
@@ -64,11 +70,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
 
     Button.prototype.add = function(model, objdag, dag, dom) {
         this.objdag = objdag;
-        this.dag = dag;
         var wrap = this.render(model, dom);
-        objdag.getParent(this).then(function(parent) {
-            parent.getWrap(dom).appendChild(wrap);
-        });
     }
 
 

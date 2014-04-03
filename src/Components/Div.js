@@ -17,8 +17,16 @@ define(['UI/View'], function(View) {
             return dom.createElement('div');
         });
 
-        wrap.setAttribute('id', this.id);
-        wrap.setAttribute('class', this.clazz);
+        this.objdag.getChildren(this).then(function(children) {
+            children.map(function(child) {
+                input.appendChild(child.getWrap(dom));
+            })
+        }).catch(function(error) {
+            console.log(error);
+            throw error;
+        });
+
+        this.setAttributes(dom, {id: this.id, 'class': this.clazz});
         return wrap;
     }
 
@@ -29,6 +37,10 @@ define(['UI/View'], function(View) {
         objdag.getParent(this).then(function(parent) {
             parent.getWrap(dom).appendChild(wrap);
         });
+    }
+
+    DIV.prototype.update = function(model, objdag, dag, dom) {
+        this.render(model, dom);
     }
 
     return DIV;

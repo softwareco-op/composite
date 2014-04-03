@@ -6,7 +6,7 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
 
     function OBJDAG() {
         this.dagObjects = {};
-        this.defaultTimeout = 400;
+        this.defaultTimeout = 1000;
     }
     _.extend(OBJDAG.prototype, Backbone.Events);
 

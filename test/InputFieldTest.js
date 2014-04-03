@@ -17,6 +17,7 @@ function(InputField, OBJDAG, RSVP, Backbone, chai, sinon) {
 
         it('renders as expected', function(done) {
             var model = new Node({
+                id: '1',
                 parent: null,
                 name: 'testName',
                 fieldType: 'text',
@@ -25,7 +26,7 @@ function(InputField, OBJDAG, RSVP, Backbone, chai, sinon) {
             var inputField = new InputField(model);
             var objdag = new OBJDAG();
             var element = inputField.render(model, objdag, document);
-            assert.equal(element.outerHTML, '<div><input type="text" name="testName"></div>');
+            assert.equal(element.outerHTML, '<div id="1"><input type="text" name="testName"></div>');
             done();
         })
 

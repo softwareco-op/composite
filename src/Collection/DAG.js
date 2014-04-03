@@ -52,12 +52,16 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
 
     /**
      * Add a child to this model
-     * @param {Backbone.Model} model parent of child.
+     * @param {Backbone.Model} parent of child.
      * @param {Backbone.Model} child to add to parent.
      */
-    DAG.prototype.addChild = function(model, child) {
+    DAG.prototype.addChild = function(parent, child) {
         this.collection.add(child);
-        child.save({parent: model.get('id')});
+        child.save({parent: parent.get('id')});
+        var children = parent.get('children') || [];
+        children.push(child.get('id'));
+        parent.set('children', children);
+        parent.save();
     }
 
     /**
@@ -77,7 +81,7 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      */
     DAG.prototype.copy = function(model) {
         var copy = model.clone();
-        copy.set('id', uuid.v1());
+        copy.set('id', uuid.v4());
         this.add(copy);
         return copy;
     }
@@ -87,10 +91,13 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      */
     DAG.prototype.copyTree = function(model) {
         var copy = this.copy(model);
+        copy.set('children', []);
+
         var self = this;
         this.getChildren(model).map(function(child) {
             var copiedChild = self.copyTree(child);
             copiedChild.set('parent', copy.get('id'));
+            
         });
 
         return copy;

@@ -63,19 +63,26 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
         it('retrieves children', function(done) {
             var pid = uuid.v1();
             var cid = uuid.v1();
+            var cid2 = uuid.v1();
+
             var p = {id: pid}
             var c = {id: cid,  parent: 1, name: 'child'};
-
+            var c2 = {id: cid2, parent: 1, name: 'child2'};
             p = new Node(p);
             c = new Node(c);
+            c2 = new Node(c2);
 
             var collection = new NodeCollection([p]);
 
             var dag = new DAG(collection);
             dag.addChild(p, c);
+            dag.addChild(p, c2);
 
             var children = dag.getChildren(p);
-            assert.equal(children.length, 1);
+            assert.equal(children.length, 2);
+            assert.equal(p.get('children').length, 2);
+            assert.equal(p.get('children')[0], cid);
+            assert.equal(p.get('children')[1], cid2);
 
             done();
         });

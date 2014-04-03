@@ -24,9 +24,10 @@ define([], function()  {
                     dagObject[pair[0]] = pair[1];
                 })
                 self.objDag.add(dagObject);
-                if (dagObject.add !== undefined) {
-                    dagObject.add(model, self.objDag, self.dag, self.context);
-                }
+                self.add(dagObject, model);
+                self.objDag.get(dagObject.parent).then(function(parent) {
+                    self.update(parent, model);
+                });
             }).catch(function(error) {
                 console.log(error);
             });
@@ -54,6 +55,18 @@ define([], function()  {
             })
         })
 
+    }
+
+    OBJDAGController.prototype.add = function(dagObject, model) {
+        if (dagObject.add !== undefined) {
+            dagObject.add(model, this.objDag, this.dag, this.context);
+        }
+    }
+
+    OBJDAGController.prototype.update = function(dagObject) {
+        if (dagObject.update !== undefined) {
+            dagObject.update(model, this.objDag, this.dag, this.context);
+        }
     }
 
     return OBJDAGController;
