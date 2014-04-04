@@ -26,7 +26,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
     describe('OBJDAG', function() {
         it('gets and sets objects', function(done) {
             var objdag = new OBJDAG();
-            var testObj = {id: 1, parent: 0};
+            var testObj = {id: 1, parent: 0, children: []};
             objdag.add(testObj);
 
             var testResult = function(expected) {
@@ -58,8 +58,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
 
         it('retrieves valid parents', function(done) {
             var objdag = new OBJDAG();
-            var parent = {id: 0, parent: null};
-            var testObj = {id: 1, parent: 0};
+            var parent = {id: 0, parent: null, children: [1]};
+            var testObj = {id: 1, parent: 0, children: []};
 
             objdag.add(parent);
             objdag.add(testObj);
@@ -72,8 +72,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
 
         it('handles missing parents', function(done) {
             var objdag = new OBJDAG();
-            var parent = {id: 0, parent: null};
-            var testObj = {id: 1, parent: 0};
+            var parent = {id: 0, parent: null, children: [1]};
+            var testObj = {id: 1, parent: 0, children: []};
 
             objdag.add(parent);
             objdag.add(testObj);
@@ -88,8 +88,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
         it('retrieves children', function(done) {
             var objdag = new OBJDAG();
             var parent = {id: 0, parent: null, children: [1, 2]};
-            var testObj = {id: 1, parent: 0};
-            var testObj2 = {id: 2, parent: 0};
+            var testObj = {id: 1, parent: 0, children: []};
+            var testObj2 = {id: 2, parent: 0, children: []};
 
             objdag.add(parent);
             objdag.add(testObj);
@@ -113,7 +113,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
                 done();
             });
 
-            var parent = {id: 0, parent: null};
+            var parent = {id: 0, parent: null, children: []};
 
             objdag.add(parent);
         })
@@ -125,7 +125,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
                 done();
             });
 
-            var parent = {id: 0, parent: null};
+            var parent = {id: 0, parent: null, children: []};
 
             objdag.add(parent);
             objdag.remove(parent);

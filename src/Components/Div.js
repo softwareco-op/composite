@@ -26,7 +26,8 @@ define(['UI/View'], function(View) {
             throw error;
         });
 
-        this.setAttributes(dom, {id: this.id, 'class': this.clazz});
+        input.setAttribute('class', this.clazz);
+        this.setAttributes(dom, {id: this.id});
         return wrap;
     }
 
@@ -34,9 +35,6 @@ define(['UI/View'], function(View) {
         this.objdag = objdag;
         this.dag = dag;
         var wrap = this.render(model, dom);
-        objdag.getParent(this).then(function(parent) {
-            parent.getWrap(dom).appendChild(wrap);
-        });
     }
 
     DIV.prototype.update = function(model, objdag, dag, dom) {

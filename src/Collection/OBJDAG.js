@@ -15,9 +15,11 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
     //
     OBJDAG.prototype.add = function(object) {
         if (object.id === undefined) {
-            throw 'object missing id'
+            throw new Error('object missing id');
         } else if (object.parent === undefined) {
-            throw 'parent id undefined'
+            throw new Error('parent id undefined');
+        } else if (object.children === undefined) {
+            throw new Error('children list undefined');
         }
         this.dagObjects[object.id] = object;
         this.trigger('add', object);

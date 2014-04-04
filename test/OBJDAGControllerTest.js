@@ -38,7 +38,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             p0.set('text', 'test');
             p0.set('children', [1]);
 
-            var p1 = new Node({id:1, parent: 0});
+            var p1 = new Node({id:1, parent: 0, children:[]});
             p1.set('type', 'Actions/GlobalAction');
             p1.set('event', 'click');
 
@@ -63,6 +63,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             dag.add(p0);
             dag.add(p1);
         });
+
     })
+
 
 });
