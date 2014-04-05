@@ -7,6 +7,7 @@ define(function() {
     return {
         initialize : function() {
             this.dag = undefined;
+            this.objdag = undefined;
         }
     }
 

@@ -123,13 +123,19 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             p6.set('event', 'click');
             page.getDAG().addChild(p2, p6);
 
+            page.getOBJDAG().get(2).then(function(button) {
+                var event = document.createEvent('Event');
+                event.initEvent('click', true, true);
+                button.button.dispatchEvent(event);
+            })
+
             //Should do this asynchronously
             setTimeout(function() {
+                assert.equal(page.getDAG().collection.length, 6);
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
             }, 1000);
         })
-
 
     })
 

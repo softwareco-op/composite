@@ -9,12 +9,14 @@ define(['Model/ObjectSupplier',
         'Collection/OBJDAGController',
         'Collection/OBJDAG',
         'Collection/DAG',
+        'Composition/Global',
         'localstorage',
         'backbone'],
 function(ObjectSupplier,
          OBJDAGController,
          OBJDAG,
          DAG,
+         Global,
          BackboneLocalStorage,
          Backbone) {
 
@@ -50,6 +52,8 @@ function(ObjectSupplier,
         this.objdag = new OBJDAG(this.objectSupplier, this.dag, this.document);
         this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.document);
         this.objDagController.manage(this.collection);
+        Global.dag = this.dag;
+        Global.objdag = this.objdag;
     }
 
     Page.prototype.getNode = function() {
@@ -58,6 +62,10 @@ function(ObjectSupplier,
 
     Page.prototype.getDAG = function() {
         return this.dag;
+    }
+
+    Page.prototype.getOBJDAG = function() {
+        return this.objdag;
     }
 
     Page.prototype.addNode = function(node) {
