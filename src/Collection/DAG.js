@@ -57,6 +57,15 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      */
     DAG.prototype.addChild = function(parent, child) {
         this.collection.add(child);
+        this.setChild(parent, child);
+    }
+
+    /**
+     * Add a child to a parent.
+     * @param {Backbone.Model} parent of child.
+     * @param {Backbone.Model} child to add to parent.
+     */
+    DAG.prototype.setChild = function(parent, child) {
         child.save({parent: parent.get('id')});
         var children = parent.get('children') || [];
         children.push(child.get('id'));
@@ -97,7 +106,6 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
         this.getChildren(model).map(function(child) {
             var copiedChild = self.copyTree(child);
             copiedChild.set('parent', copy.get('id'));
-            
         });
 
         return copy;

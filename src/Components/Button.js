@@ -55,6 +55,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
                 });
             }).catch(function(error) {
                 console.log(error);
+                throw new Error(error);
             });
         }
 

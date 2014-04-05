@@ -30,6 +30,7 @@ define([], function()  {
                 });
             }).catch(function(error) {
                 console.log(error);
+                throw new Error(error);
             });
         });
 

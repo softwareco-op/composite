@@ -81,13 +81,16 @@ function(ObjectSupplier,
      * Constructs a page(let) consisting of composite nodes.
      *
      * @constructor
-     * @param {Element} div where we put our composition.
-     * @param {Document} document containing our composition.
+     * @param {Element} div where we put our composition
+     * @param {Document} document containing our composition
+     * @param {Backbone.Collection} collection containing node models
+     * @param {String} rootNodeID references the node to add to the given div
      */
-    function Page(div, document, collection) {
+    function Page(div, document, rootNodeID, collection) {
         this.div = div;
         this.document = document;
         this.collection = collection;
+        this.rootNodeID = rootNodeID;
     }
 
     Page.prototype.install = function() {
@@ -103,8 +106,12 @@ function(ObjectSupplier,
         return Node;
     }
 
+    Page.prototype.getDAG = function() {
+        return this.dag;
+    }
+
     Page.prototype.addNode = function(node) {
-        if (this.collection.length === 0) {
+        if (node.id === this.rootNodeID) {
             var self = this;
             this.objdag.get(node.get('id')).then(function(object) {
                 self.div.appendChild(object.getWrap(this.document));
@@ -117,28 +124,22 @@ function(ObjectSupplier,
     }
 
     Page.prototype.addNodes = function() {
-        var p0 = new Node({id:0, parent:null});
+        var p0 = new Node({id:0, parent:null, children: []});
         p0.set('type', 'Components/Div');
         p0.set('class', 'panel');
-        this.dag.add(p0);
+        this.addNode(p0);
 
-        this.objdag.get(0).then(function(object) {
-            this.div.appendChild(object.getWrap(this.document));
-        }).catch(function(error) {
-            console.log(error);
-            throw new Error('Error getting object from  objdag');
-        });
 
-        // var p2 = new Node({id:2});
-        // p2.set('type', 'Components/Button');
-        // p2.set('name', 'Copy Component');
-        // p2.set('text', 'Copy Component');
-        // this.dag.addChild(p0, p2);
+        var p2 = new Node({id:2, children: []});
+        p2.set('type', 'Components/Button');
+        p2.set('name', 'Copy Component');
+        p2.set('text', 'Copy Component');
+        this.dag.addChild(p0, p2);
 
-        // var p6 = new Node({id:6});
-        // p6.set('type', 'Actions/CopyTree');
-        // p6.set('event', 'click');
-        // this.dag.addChild(p2, p6);
+        var p6 = new Node({id:6, children: []});
+        p6.set('type', 'Actions/CopyTree');
+        p6.set('event', 'click');
+        this.dag.addChild(p2, p6);
 
         // var p3 = new Node({id:3});
         // p3.set('type', 'Components/InputField');

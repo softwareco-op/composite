@@ -4,21 +4,11 @@
 
 
 
-define(['Model/ObjectSupplier',
-        'Collection/OBJDAGController',
-        'Collection/OBJDAG',
-        'Collection/DAG',
-        'Composition/Global',
-        'UI/View',
+define(['UI/Page',
         'backbone.io',
         'localstorage',
         'backbone'],
-function(ObjectSupplier,
-         OBJDAGController,
-         OBJDAG,
-         DAG,
-         Global,
-         View,
+function(Page,
          Backboneio,
          BackboneLocalStorage,
          Backbone) {
@@ -26,18 +16,11 @@ function(ObjectSupplier,
 
     function CompositionContext() {}
 
-    CompositionContext.prototype.compositeView = function() {
-        var self = this;
-        return function(model) {
-            return new CompositeView(self.collection, self.viewSupplier, model);
-        }
-    }
-
     CompositionContext.prototype.run = function(element, document) {
 
         Backbone.io.connect();
 
-        var page = new Page(element, document);
+        var page = new Page(element, document, 0);
 
         page.install();
 
