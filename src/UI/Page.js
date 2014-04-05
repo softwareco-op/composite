@@ -9,14 +9,12 @@ define(['Model/ObjectSupplier',
         'Collection/OBJDAGController',
         'Collection/OBJDAG',
         'Collection/DAG',
-        'backbone.io',
         'localstorage',
         'backbone'],
 function(ObjectSupplier,
          OBJDAGController,
          OBJDAG,
          DAG,
-         Backboneio,
          BackboneLocalStorage,
          Backbone) {
 
@@ -29,53 +27,6 @@ function(ObjectSupplier,
         }
     });
 
-    // Nodes exist in a Backbone collection
-    var NodeCollection = Backbone.Collection.extend({
-        backend: 'mybackend',
-
-        model: Node,
-        //localStorage:new BackboneLocalStorage('ViewDAG-test')
-
-        initialize: function() {
-            var self = this;
-            this.bind('create', function(model) {
-                console.log('create');
-            });
-            this.bind('add', function(model) {
-                console.log('add');
-            });
-            this.bind('update', function(model) {
-                console.log('update');
-            });
-            this.bind('backend:create', function(model) {
-                console.log('got create');
-                self.add(model);
-            });
-            this.bind('backend:add', function(model) {
-                console.log('backend:add');
-                self.add(model);
-            });
-            this.bind('backend:update', function(model) {
-
-                console.log('backend:update');
-                var colModel = self.get(model.id);
-                if (colModel !== undefined) {
-                    console.log(JSON.stringify(colModel));
-                    colModel.set(model);
-                    console.log(JSON.stringify(colModel));
-                } else {
-                    self.set(model);
-                }
-            });
-            this.bind('backend:delete', function(model) {
-                console.log('backend:delete');
-                self.remove(model.id);
-            });
-            this.bind('backend', function(model, other) {
-                console.log('backend event');
-            });
-        }
-    });
 
     /**
      * Constructs a page(let) consisting of composite nodes.
@@ -94,7 +45,6 @@ function(ObjectSupplier,
     }
 
     Page.prototype.install = function() {
-        this.collection = this.collection || new NodeCollection();
         this.dag = new DAG(this.collection);
         this.objectSupplier = new ObjectSupplier();
         this.objdag = new OBJDAG(this.objectSupplier, this.dag, this.document);
