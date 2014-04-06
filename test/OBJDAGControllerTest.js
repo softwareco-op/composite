@@ -24,6 +24,28 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
     });
 
     describe('OBJDAGController', function() {
+        it('listens for changes to node children', function(done) {
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
+            var objectSupplier = new ObjectSupplier();
+            var objdag = new OBJDAG();
+            var objDagController = new OBJDAGController(objectSupplier, objdag, document);
+            objDagController.manage(collection);
+
+            var p0 = new Node({id:0});
+            p0.set('type', 'Components/Button');
+            p0.set('name', 'test');
+            p0.set('text', 'test');
+            dag.add(p0);
+
+            var p1 = new Node({id:1});
+            p1.set('type', 'Actions/GlobalAction');
+            p1.set('event', 'click');
+
+            dag.addChild(p0, p1);
+            done();
+        })
+
         it('integrates with ObjectSupplier', function(done) {
             var collection = new NodeCollection();
             var dag = new DAG(collection);

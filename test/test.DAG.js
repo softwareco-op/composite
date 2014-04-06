@@ -132,6 +132,66 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
 
             done();
         })
+
+        it('creates valid edges between nodes', function(done) {
+            var collection = new NodeCollection([]);
+
+            var dag = new DAG(collection);
+            var parent = new Node();
+            var child = new Node({color: 'blue'});
+            dag.add(parent);
+            dag.addChild(parent, child);
+
+            var parentCopy = dag.copyTree(parent);
+            var childCopy = dag.getChildren(parentCopy)[0];
+
+            assert.isNull(parent.get('parent'));
+            assert.notEqual(child.get('parent'), childCopy.get('parent'));
+            assert.equal(parentCopy.get('id'), childCopy.get('parent'));
+            assert.equal(child.get('color'), childCopy.get('color'));
+
+            done();
+        })
+
+        it('copies a tree and adds branches properly', function(done) {
+            var collection = new NodeCollection([]);
+
+            var dag = new DAG(collection);
+
+            var p0 = new Node({id:0});
+            p0.set('type', 'Components/Div');
+            p0.set('class', 'panel');
+            dag.add(p0);
+
+            var p2 = new Node();
+            p2.set('type', 'Components/Button');
+            p2.set('name', 'Copy Component');
+            p2.set('text', 'Copy Component');
+            dag.addChild(p0, p2);
+
+            var p6 = new Node();
+            p6.set('type', 'Actions/CopyTree');
+            p6.set('event', 'click');
+            dag.addChild(p2, p6);
+
+            var parent = dag.getParent(p6);
+            var grandparent = dag.getParent(parent);
+            var copy = dag.copyTree(grandparent);
+            dag.setChild(grandparent, copy);
+            console.log(JSON.stringify(dag.collection));
+
+            var grandchildren = grandparent.get('children');
+            assert.equal(2, grandchildren.length);
+            assert.equal(2, grandchildren.length);
+
+            assert.notEqual(copy.get('id'), grandparent.get('id'));
+            var children = dag.getChildren(copy);
+            assert.equal(children[0].get('type'), 'Components/Button');
+
+            done();
+
+        })
+
     });
 
 });

@@ -69,6 +69,8 @@ function(ObjectSupplier,
     }
 
     Page.prototype.addNode = function(node) {
+        this.dag.add(node);
+
         if (node.id === this.rootNodeID) {
             var self = this;
             this.objdag.get(node.get('id')).then(function(object) {
@@ -78,23 +80,22 @@ function(ObjectSupplier,
                 throw new Error('error appending first node to page element');
             });
         }
-        this.dag.add(node);
     }
 
     Page.prototype.addNodes = function() {
-        var p0 = new Node({id:0, parent:null, children: []});
+        var p0 = new Node({id:0});
         p0.set('type', 'Components/Div');
         p0.set('class', 'panel');
         this.addNode(p0);
 
 
-        var p2 = new Node({id:2, children: []});
+        var p2 = new Node();
         p2.set('type', 'Components/Button');
         p2.set('name', 'Copy Component');
         p2.set('text', 'Copy Component');
         this.dag.addChild(p0, p2);
 
-        var p6 = new Node({id:6, children: []});
+        var p6 = new Node();
         p6.set('type', 'Actions/CopyTree');
         p6.set('event', 'click');
         this.dag.addChild(p2, p6);

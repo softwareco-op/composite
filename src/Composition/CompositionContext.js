@@ -40,7 +40,6 @@ function(Page,
                 self.add(model);
             });
             this.bind('backend:update', function(model) {
-
                 console.log('backend:update');
                 var colModel = self.get(model.id);
                 if (colModel !== undefined) {

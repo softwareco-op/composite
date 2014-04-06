@@ -107,18 +107,18 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
 
             page.install();
 
-            var p0 = new Node({id:0, parent:null, children: [2]});
+            var p0 = new Node({id:0});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel');
             page.addNode(p0);
 
-            var p2 = new Node({id:2, parent:0, children: []});
+            var p2 = new Node({id:2})
             p2.set('type', 'Components/Button');
             p2.set('name', 'Copy Component');
             p2.set('text', 'Copy Component');
             page.getDAG().addChild(p0, p2);
 
-            var p6 = new Node({id:6, children: []});
+            var p6 = new Node({id:6})
             p6.set('type', 'Actions/CopyTree');
             p6.set('event', 'click');
             page.getDAG().addChild(p2, p6);

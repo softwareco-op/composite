@@ -46,8 +46,25 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      * @param {Backbone.Model} model to add
      */
     DAG.prototype.add = function(model) {
+        this.validateNode(model);
         this.collection.add(model);
         model.save();
+    }
+
+    /*
+     * Validates a model's node attributes.  If attributes are missing, valid defaults are set.
+     * @param {Backbone.Model} model to validate
+     */
+    DAG.prototype.validateNode = function(model) {
+        if (model.get('id') === undefined || model.get('id') === null) {
+            model.set('id', uuid.v4());
+        }
+        if (model.get('parent') === undefined) {
+            model.set('parent', null);
+        }
+        if (model.get('children') === undefined) {
+            model.set('children', []);
+        }
     }
 
     /**
@@ -56,8 +73,11 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      * @param {Backbone.Model} child to add to parent.
      */
     DAG.prototype.addChild = function(parent, child) {
+        this.validateNode(parent);
+        this.validateNode(child);
         this.collection.add(child);
         this.setChild(parent, child);
+        parent.save();
     }
 
     /**
@@ -66,12 +86,15 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      * @param {Backbone.Model} child to add to parent.
      */
     DAG.prototype.setChild = function(parent, child) {
-        child.save({parent: parent.get('id')});
+        child.save({'parent': parent.get('id')});
         var children = parent.get('children') || [];
-        children.push(child.get('id'));
-        parent.set('children', children);
-        parent.save();
+        //Make a copy of the list so that Backbone fires a change event.  This ought to be
+        //accomplished in a better way.
+        var copy = _.map(children, function(child) {return child;});
+        copy.push(child.get('id'));
+        parent.save({'children': copy});
     }
+
 
     /**
      * Tests if a node exists in the DAG.
@@ -105,7 +128,7 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
         var self = this;
         this.getChildren(model).map(function(child) {
             var copiedChild = self.copyTree(child);
-            copiedChild.set('parent', copy.get('id'));
+            self.addChild(copy, copiedChild);
         });
 
         return copy;
