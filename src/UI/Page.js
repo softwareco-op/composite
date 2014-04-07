@@ -88,7 +88,6 @@ function(ObjectSupplier,
         p0.set('class', 'panel');
         this.addNode(p0);
 
-
         var p2 = new Node();
         p2.set('type', 'Components/Button');
         p2.set('name', 'Copy Component');

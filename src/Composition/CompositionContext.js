@@ -25,12 +25,6 @@ function(Page,
             this.bind('create', function(model) {
                 console.log('create');
             });
-            this.bind('add', function(model) {
-                console.log('add');
-            });
-            this.bind('update', function(model) {
-                console.log('update');
-            });
             this.bind('backend:create', function(model) {
                 console.log('got create');
                 self.add(model);

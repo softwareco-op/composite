@@ -40,7 +40,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             setTimeout(function() {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"></div></div></div>');
                 done();
-            }, 1000);
+            }, 100);
 
         })
 
@@ -51,12 +51,12 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
 
             page.install();
 
-            var p0 = new Node({id:0, parent:null, children: [2]});
+            var p0 = new Node({id:0});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel');
             page.addNode(p0);
 
-            var p2 = new Node({id:2, parent:0, children: []});
+            var p2 = new Node({id:2});
             p2.set('type', 'Components/Button');
             p2.set('name', 'Copy Component');
             p2.set('text', 'Copy Component');
@@ -66,7 +66,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             setTimeout(function() {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 1000);
+            }, 100);
 
         })
 
@@ -97,7 +97,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             setTimeout(function() {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 1000);
+            }, 200);
         });
 
         it('can handle copy tree operation', function(done) {
@@ -134,7 +134,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
                 assert.equal(page.getDAG().collection.length, 6);
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 1000);
+            }, 200);
         })
 
     })

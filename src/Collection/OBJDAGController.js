@@ -16,7 +16,7 @@ define([], function()  {
     OBJDAGController.prototype.manage = function(collection) {
         var self = this;
         collection.on('add', function(model) {
-            console.log('add on ' + model.get('id'));
+            console.debug('add on ' + model.get('id'));
             var moduleName = model.get('type');
             var promise = self.objectSupplier.object(model, moduleName);
 
@@ -36,7 +36,7 @@ define([], function()  {
         });
 
         collection.on('update', function(model) {
-            console.log('update on ' + model.get('id'));
+            console.debug('update on ' + model.get('id'));
             self.objDag.get(model.get('id')).then(function(dagObject) {
                 if (dagObject.update !== undefined) {
                     dagObject.update(model, self.objDag, self.dag, self.context);
@@ -51,7 +51,7 @@ define([], function()  {
         });
 
         collection.on('change', function(model) {
-            console.log('change on ' + model.get('id'));
+            console.debug('change on ' + model.get('id'));
             self.objDag.get(model.get('id')).then(function(dagObject) {
                 if (dagObject.update !== undefined) {
                     dagObject.update(model, self.objDag, self.dag, self.context);

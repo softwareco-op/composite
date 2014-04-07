@@ -39,6 +39,7 @@ require([
     '../test/OBJDAGTest',
     '../test/OBJDAGControllerTest',
     '../test/InputFieldTest',
+    '../test/DIVTest',
     '../test/PageTest'
 ], function() {
 
