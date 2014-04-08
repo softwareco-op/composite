@@ -21,9 +21,7 @@ define([], function()  {
             var promise = self.objectSupplier.object(model, moduleName);
 
             promise.then(function(dagObject) {
-                model.pairs().map(function(pair) {
-                    dagObject[pair[0]] = pair[1];
-                })
+                self.decorate(model, dagObject);
                 self.objDag.add(dagObject);
                 self.add(dagObject, model);
                 self.objDag.get(dagObject.parent).then(function(parent) {
@@ -38,6 +36,7 @@ define([], function()  {
         collection.on('update', function(model) {
             console.debug('update on ' + model.get('id'));
             self.objDag.get(model.get('id')).then(function(dagObject) {
+                self.decorate(model, dagObject);
                 if (dagObject.update !== undefined) {
                     dagObject.update(model, self.objDag, self.dag, self.context);
                 }
@@ -53,6 +52,7 @@ define([], function()  {
         collection.on('change', function(model) {
             console.debug('change on ' + model.get('id'));
             self.objDag.get(model.get('id')).then(function(dagObject) {
+                self.decorate(model, dagObject);
                 if (dagObject.update !== undefined) {
                     dagObject.update(model, self.objDag, self.dag, self.context);
                 }
@@ -63,6 +63,12 @@ define([], function()  {
             //console.log('event ' + name + ' on ' + model.get('id'));
         });
 
+    }
+
+    OBJDAGController.prototype.decorate = function(model, object) {
+        model.pairs().map(function(pair) {
+            object[pair[0]] = pair[1];
+        })
     }
 
     OBJDAGController.prototype.add = function(dagObject, model) {

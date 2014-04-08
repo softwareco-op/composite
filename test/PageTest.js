@@ -101,7 +101,8 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
         });
 
         it('can handle copy tree operation', function(done) {
-            var div = document.createElement('div');
+            //var div = document.createElement('div');
+            var div = document.getElementById('testdiv');
             var collection = new NodeCollection();
             var page = new Page(div, document, 0, collection);
 
@@ -129,12 +130,13 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
                 button.button.dispatchEvent(event);
             })
 
+
             //Should do this asynchronously
             setTimeout(function() {
                 assert.equal(page.getDAG().collection.length, 6);
-                assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
+                assert.equal(div.outerHTML, '<div id="testdiv"><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 200);
+            }, 1200);
         })
 
     })
