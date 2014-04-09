@@ -63,6 +63,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             p1.set('text', 'test2');
 
 
+
             objDagController.add(p0).then(function(button) {
                 assert.equal(button.getWrap(document).outerHTML,
                               '<div id="0"><button name="test">test</button></div>');

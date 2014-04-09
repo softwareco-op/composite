@@ -54,7 +54,6 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             p0.set('class', 'panel');
             page.getDAG().add(p0);
 
-
             var p2 = new Node({id:2});
             p2.set('type', 'Components/Button');
             p2.set('name', 'Copy Component');
@@ -64,8 +63,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             var promise1 = page.addNode(p0);
             var promise2 = page.addNode(p2);
             RSVP.all([promise1,promise2]).then(function(components) {
-                
-                assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
+                assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
             }).catch(function(error) {
                 done(error);
@@ -92,8 +90,6 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
                 page.addNode(p0);
                 page.getDAG().setChild(p0, p2);
             }, 100);
-
-
 
             //Should do this asynchronously
             setTimeout(function() {

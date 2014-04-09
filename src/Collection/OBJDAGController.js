@@ -4,9 +4,10 @@
 
 define([], function()  {
 
-    function OBJDAGController(objectSupplier, objDag, context) {
+    function OBJDAGController(objectSupplier, objDag, dag, context) {
         this.objectSupplier = objectSupplier;
         this.objDag = objDag;
+        this.dag = dag;
         this.context = context;
     }
 
@@ -23,8 +24,9 @@ define([], function()  {
             self.decorate(model, dagObject);
             self.objDag.add(dagObject);
             self.call('add', dagObject, model);
+            var parentModel = self.dag.getParent(model);
             self.objDag.get(dagObject.parent).then(function(parent) {
-                self.call('update', parent, model);
+                self.call('update', parent, parentModel);
             });
             return dagObject;
         }).catch(function(error) {
@@ -39,8 +41,9 @@ define([], function()  {
         return self.objDag.get(model.get('id')).then(function(dagObject) {
             self.decorate(model, dagObject);
             self.call('update', dagObject, model);
+            var parentModel = self.dag.getParent(model);
             self.objDag.get(dagObject.parent).then(function(parent) {
-                self.call('update', parent, model);
+                self.call('update', parent, parentModel);
             });
             return dagObject;
         })
