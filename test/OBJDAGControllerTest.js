@@ -24,26 +24,56 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
     });
 
     describe('OBJDAGController', function() {
-        it('listens for changes to node children', function(done) {
+
+        it('can add objects to an objdag', function(done) {
             var collection = new NodeCollection();
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, document);
-            objDagController.manage(collection);
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
 
-            var p0 = new Node({id:0});
+            var p0 = new Node({id:0, parent:null, children:[]});
             p0.set('type', 'Components/Button');
             p0.set('name', 'test');
             p0.set('text', 'test');
-            dag.add(p0);
+            objDagController.add(p0).then(function(button) {
+                assert.equal(button.getWrap(document).outerHTML,
+                              '<div id="0"><button name="test">test</button></div>');
+                done();
+            }).catch(function(error) {
+                done(error);
+            });
+        })
 
-            var p1 = new Node({id:1});
-            p1.set('type', 'Actions/GlobalAction');
-            p1.set('event', 'click');
+        it('can update object', function(done) {
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
+            var objectSupplier = new ObjectSupplier();
+            var objdag = new OBJDAG();
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
 
-            dag.addChild(p0, p1);
-            done();
+            var p0 = new Node({id:0, parent:null, children:[]});
+            p0.set('type', 'Components/Button');
+            p0.set('name', 'test');
+            p0.set('text', 'test');
+
+            var p1 = new Node({id:0, parent:null, children:[]});
+            p1.set('type', 'Components/Button');
+            p1.set('name', 'test2');
+            p1.set('text', 'test2');
+
+
+            objDagController.add(p0).then(function(button) {
+                assert.equal(button.getWrap(document).outerHTML,
+                              '<div id="0"><button name="test">test</button></div>');
+                return objDagController.update(p1);
+            }).then(function(button) {
+                assert.equal(button.getWrap(document).outerHTML,
+                              '<div id="0"><button name="test2">test2</button></div>');
+                done();
+            }).catch(function(error) {
+                done(error);
+            });
         })
 
         it('integrates with ObjectSupplier', function(done) {
@@ -51,7 +81,7 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, document);
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
             objDagController.manage(collection);
 
             var p0 = new Node({id:0, parent: null});

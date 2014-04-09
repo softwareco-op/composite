@@ -50,8 +50,10 @@ function(ObjectSupplier,
         this.dag = new DAG(this.collection);
         this.objectSupplier = new ObjectSupplier();
         this.objdag = new OBJDAG(this.objectSupplier, this.dag, this.document);
-        this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.document);
-        this.objDagController.manage(this.collection);
+        this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.dag, this.document);
+
+        //try turning this off for now
+        //this.objDagController.manage(this.collection);
         Global.dag = this.dag;
         Global.objdag = this.objdag;
     }
@@ -69,17 +71,19 @@ function(ObjectSupplier,
     }
 
     Page.prototype.addNode = function(node) {
-        this.dag.add(node);
+        var self = this;
+        var nodePromise = this.objDagController.add(node).then(function(nodeObject) {
+            if (nodeObject.id === self.rootNodeID) {
+                self.div.appendChild(nodeObject.getWrap(this.document));
+            }
+            return nodeObject;
+        }).catch(function(error) {
+            console.log(error);
+            throw new Error('error appending first node to page element');
+        });
 
-        if (node.id === this.rootNodeID) {
-            var self = this;
-            this.objdag.get(node.get('id')).then(function(object) {
-                self.div.appendChild(object.getWrap(this.document));
-            }).catch(function(error) {
-                console.log(error);
-                throw new Error('error appending first node to page element');
-            });
-        }
+        //this.dag.add(node);
+        return nodePromise;
     }
 
     Page.prototype.addNodes = function() {

@@ -6,8 +6,8 @@
  * An object that integrates components into Page(let)
  */
 define(
-['UI/Page', 'chai', 'sinon', 'underscore', 'localstorage'],
-function(Page, chai, sinon, underscore, BackboneLocalStorage) {
+['UI/Page', 'chai', 'sinon', 'underscore', 'localstorage', 'rsvp'],
+function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
 
     var assert = chai.assert;
 
@@ -34,14 +34,12 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             var p0 = new Node({id:0, parent:null, children: []});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel');
-            page.addNode(p0);
-
-            //Should do this asynchronously
-            setTimeout(function() {
+            page.addNode(p0).then(function(node0) {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"></div></div></div>');
                 done();
-            }, 100);
-
+            }).catch(function(error) {
+                done(error);
+            })
         })
 
         it('can add multiple nodes to the page', function(done) {
@@ -54,7 +52,8 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             var p0 = new Node({id:0});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel');
-            page.addNode(p0);
+            page.getDAG().add(p0);
+
 
             var p2 = new Node({id:2});
             p2.set('type', 'Components/Button');
@@ -62,12 +61,15 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             p2.set('text', 'Copy Component');
             page.getDAG().addChild(p0, p2);
 
-            //Should do this asynchronously
-            setTimeout(function() {
+            var promise1 = page.addNode(p0);
+            var promise2 = page.addNode(p2);
+            RSVP.all([promise1,promise2]).then(function(components) {
+                
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 100);
-
+            }).catch(function(error) {
+                done(error);
+            });
         })
 
         it('can handle out of order loading', function(done) {
@@ -97,7 +99,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage) {
             setTimeout(function() {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 200);
+            }, 400);
         });
 
         it('can handle copy tree operation', function(done) {

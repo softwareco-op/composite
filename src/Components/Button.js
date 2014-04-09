@@ -59,9 +59,8 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
             });
         }
 
-        this.button.name = self.name;
-        this.button.className = self.name;
-        this.button.textContent = self.text;
+        this.button.name = model.get('name');
+        this.button.textContent = model.get('text');
         this.button.addEventListener('click', function(clickEvent) {
             clickListener(clickEvent);
         });
@@ -70,6 +69,11 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     }
 
     Button.prototype.add = function(model, objdag, dag, dom) {
+        this.objdag = objdag;
+        var wrap = this.render(model, dom);
+    }
+
+    Button.prototype.update = function(model, objdag, dag, dom) {
         this.objdag = objdag;
         var wrap = this.render(model, dom);
     }

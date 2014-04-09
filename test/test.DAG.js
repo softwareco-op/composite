@@ -178,7 +178,6 @@ define(['Collection/DAG', 'node-uuid', 'localstorage', 'backbone', 'underscore',
             var grandparent = dag.getParent(parent);
             var copy = dag.copyTree(grandparent);
             dag.setChild(grandparent, copy);
-            console.log(JSON.stringify(dag.collection));
 
             var grandchildren = grandparent.get('children');
             assert.equal(2, grandchildren.length);
