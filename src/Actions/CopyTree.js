@@ -17,7 +17,6 @@ define(['Composition/Global'], function(Global) {
         var grandparent = dag.getParent(parent);
         var copy = dag.copyTree(grandparent);
         dag.setChild(grandparent, copy);
-        console.log(JSON.stringify(dag.collection));
     }
 
     return CopyTree;

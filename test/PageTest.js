@@ -81,21 +81,23 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             p2.set('type', 'Components/Button');
             p2.set('name', 'Copy Component');
             p2.set('text', 'Copy Component');
-            page.addNode(p2);
-
+            page.getDAG().add(p2);
+            var promise1 = page.addNode(p2);
             setTimeout(function() {
                 var p0 = new Node({id:0, parent:null, children: []});
                 p0.set('type', 'Components/Div');
                 p0.set('class', 'panel');
-                page.addNode(p0);
+                page.getDAG().add(p0);
                 page.getDAG().setChild(p0, p2);
-            }, 100);
+                var promise2 = page.addNode(p0);
+                RSVP.all([promise1,promise2]).then(function(children) {
+                    assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
+                    done();
+                }).catch(function(error) {
+                    done(error);
+                });
+            }, 85);
 
-            //Should do this asynchronously
-            setTimeout(function() {
-                assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
-                done();
-            }, 400);
         });
 
         it('can handle copy tree operation', function(done) {
@@ -109,7 +111,8 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             var p0 = new Node({id:0});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel');
-            page.addNode(p0);
+            page.getDAG().add(p0);
+
 
             var p2 = new Node({id:2})
             p2.set('type', 'Components/Button');
@@ -122,19 +125,21 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             p6.set('event', 'click');
             page.getDAG().addChild(p2, p6);
 
-            page.getOBJDAG().get(2).then(function(button) {
-                var event = document.createEvent('Event');
-                event.initEvent('click', true, true);
-                button.button.dispatchEvent(event);
-            })
-
+            RSVP.all([page.addNode(p0), page.addNode(p2), page.addNode(p6)]).then(function(components) {
+                var button = components[1];
+                var action = components[2];
+                action.perform();
+                //var event = document.createEvent('Event');
+                //event.initEvent('click', true, true);
+                //button.button.dispatchEvent(event);
+            });
 
             //Should do this asynchronously
             setTimeout(function() {
+                assert.equal(div.outerHTML, '<div id="testdiv"><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
                 assert.equal(page.getDAG().collection.length, 6);
-                assert.equal(div.outerHTML, '<div id="testdiv"><div id="0"><div class="panel"><div id="2"><button name="Copy Component" class="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
-            }, 1200);
+            }, 600);
         })
 
     })
