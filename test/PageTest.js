@@ -22,12 +22,18 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
         localStorage:new BackboneLocalStorage('ViewDAG-test')
     });
 
+    var LocalCollection = Backbone.Collection.extend({
+        model: Node,
+        localStorage:new BackboneLocalStorage('composite-local')
+    });
+
     describe('Page', function() {
 
         it('can add nodes to the page', function(done) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
-            var page = new Page(div, document, 0, collection);
+            var localCollection = new LocalCollection();
+            var page = new Page(div, document, 0, collection, localCollection);
 
             page.install();
 
@@ -45,7 +51,8 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
         it('can add multiple nodes to the page', function(done) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
-            var page = new Page(div, document, 0, collection);
+            var localCollection = new LocalCollection();
+            var page = new Page(div, document, 0, collection, localCollection);
 
             page.install();
 
@@ -73,7 +80,8 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
         it('can handle out of order loading', function(done) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
-            var page = new Page(div, document, 0, collection);
+            var localCollection = new LocalCollection();
+            var page = new Page(div, document, 0, collection, localCollection);
 
             page.install();
 
@@ -104,7 +112,9 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             //var div = document.createElement('div');
             var div = document.getElementById('testdiv');
             var collection = new NodeCollection();
-            var page = new Page(div, document, 0, collection);
+            var localCollection = new LocalCollection();
+            var page = new Page(div, document, 0, collection, localCollection);
+
 
             page.install();
 

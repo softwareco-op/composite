@@ -8,6 +8,7 @@
 define(['Model/ObjectSupplier',
         'Collection/OBJDAGController',
         'Collection/OBJDAG',
+        'Model/Hasher',
         'Collection/DAG',
         'Composition/Global',
         'localstorage',
@@ -15,6 +16,7 @@ define(['Model/ObjectSupplier',
 function(ObjectSupplier,
          OBJDAGController,
          OBJDAG,
+         Hasher,
          DAG,
          Global,
          BackboneLocalStorage,
@@ -50,10 +52,10 @@ function(ObjectSupplier,
         this.dag = new DAG(this.collection);
         this.objectSupplier = new ObjectSupplier();
         this.objdag = new OBJDAG(this.objectSupplier, this.dag, this.document);
-        this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.dag, this.document);
+        this.hasher = new Hasher("SHA-256");
+        this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.dag, this.hasher, this.document);
 
-        //try turning this off for now
-        //this.objDagController.manage(this.collection);
+        this.objDagController.manage(this.collection);
         Global.dag = this.dag;
         Global.objdag = this.objdag;
     }

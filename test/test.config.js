@@ -9,6 +9,7 @@ require.config({
       rsvp: '../bower_components/rsvp/rsvp.amd',
       chai: '../bower_components/chai/chai',
       sinon: '../node_modules/sinon/pkg/sinon',
+      'jssha':'../bower_components/jssha/src/sha256',
       'backbone.io':'../node_modules/backbone.io/lib/browser',
       'node-uuid':'../bower_components/node-uuid/uuid'
     },
@@ -35,12 +36,14 @@ require.config({
 
 require([
     '../test/test.DAG',
+    '../test/HasherTest',
     '../test/ObjectSupplierTest',
     '../test/OBJDAGTest',
     '../test/OBJDAGControllerTest',
     '../test/InputFieldTest',
     '../test/DIVTest',
     '../test/PageTest'
+
 ], function() {
 
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

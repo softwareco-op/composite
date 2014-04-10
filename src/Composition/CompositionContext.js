@@ -54,6 +54,11 @@ function(Page,
         }
     });
 
+    var LocalCollection = Backbone.Collection.extend({
+        model: Node,
+        localStorage:new BackboneLocalStorage('composite-local')
+    })
+
     function CompositionContext() {}
 
     CompositionContext.prototype.run = function(element, document) {
@@ -61,8 +66,9 @@ function(Page,
         Backbone.io.connect();
 
         var collection = new NodeCollection();
+        var localCollection = new LocalCollection();
 
-        var page = new Page(element, document, 0, collection);
+        var page = new Page(element, document, 0, collection, localCollection);
 
         page.install();
 

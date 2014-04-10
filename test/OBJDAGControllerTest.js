@@ -7,8 +7,8 @@
 // Tests OBJDAG functionality
 //
 define(
-['Collection/OBJDAG', 'Collection/OBJDAGController', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
+['Model/Hasher', 'Collection/OBJDAG', 'Collection/OBJDAGController', 'Model/ObjectSupplier', 'Composition/Global', 'Collection/DAG', 'node-uuid', 'rsvp', 'localstorage', 'backbone', 'chai', 'sinon'],
+function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, BackboneLocalStorage, Backbone, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -30,7 +30,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
+            var hasher = new Hasher("SHA-256");
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, hasher, document);
 
             var p0 = new Node({id:0, parent:null, children:[]});
             p0.set('type', 'Components/Button');
@@ -50,7 +51,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
+            var hasher = new Hasher("SHA-256");
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, hasher, document);
 
             var p0 = new Node({id:0, parent:null, children:[]});
             p0.set('type', 'Components/Button');
@@ -82,7 +84,8 @@ function(OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RSVP, Back
             var dag = new DAG(collection);
             var objectSupplier = new ObjectSupplier();
             var objdag = new OBJDAG();
-            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, document);
+            var hasher = new Hasher("SHA-256");
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, hasher, document);
             objDagController.manage(collection);
 
             var p0 = new Node({id:0, parent: null});
