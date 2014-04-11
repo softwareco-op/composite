@@ -28,16 +28,13 @@ define(['UI/View', 'backbone'], function(View, Backbone) {
         this.setAttributes(dom, {id: node.get('id')});
 
         var self = this;
-        return this.objdag.getChildren(this).then(function(children) {
-            children.map(function(child) {
-                div.appendChild(child.getWrap(dom));
-            })
-            self.trigger('rendered', self);
-            return div;
-        }).catch(function(error) {
-            console.log(error);
-            throw error;
-        });
+        var children = this.objdag.getChildren(this);
+
+        children.map(function(child) {
+            div.appendChild(child.getWrap(dom));
+        })
+        self.trigger('rendered', self);
+        return div;
     }
 
     /*

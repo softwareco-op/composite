@@ -4,6 +4,9 @@
 
 define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
 
+    /*
+     * A Directed Acyclic Graph of objects.
+     */
     function OBJDAG() {
         this.dagObjects = {};
         this.defaultTimeout = 600;
@@ -37,66 +40,37 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
     }
 
     //
-    // Retrieves an object asynchronously.
-    //
-    // @param {String} id of object to retrieve
-    // @param {Number} timeout in milliseconds to wait before failing
-    //
-    OBJDAG.prototype.get = function(id, timeout) {
-        var self = this;
-        return new RSVP.Promise(function(resolve, reject) {
-            if (self.exists(id)) {
-                resolve(self.dagObjects[id]);
-            }
-
-            var callback = function(object) {
-                if (object.id === id) {
-                    self.off('add', callback);
-                    resolve(self.dagObjects[id]);
-                }
-            }
-
-            self.on('add', callback);
-
-            //We call reject if more time elapsed than some threshold.
-            var onTimeout = function() {
-                reject('timed out waiting for object with id ' + id);
-            }
-            var timeToWait = timeout || self.defaultTimeout;
-            setTimeout(onTimeout, timeToWait);
-        });
-    }
-
-    //
-    // Retrieves an object currently in the object dag.
+    // Retrieves an object.
     //
     // @param {String} id of object to retrieve
     //
-    OBJDAG.prototype.getNow = function(id) {
+    OBJDAG.prototype.get = function(id) {
         return this.dagObjects[id];
     }
 
     //
-    // Retrieve the parent asynchronously.
+    // Retrieve the parent.
     //
     // @return the parent of the object with the given id
     //
-    OBJDAG.prototype.getParent = function(object, timeout) {
-        return this.get(object.parent, timeout);
+    OBJDAG.prototype.getParent = function(object) {
+        return this.get(object.parent);
     }
 
     //
-    // Deletes the object with the given id
+    // Deletes the object.
     //
     OBJDAG.prototype.remove = function(object) {
         delete this.dagObjects[object.id];
         this.trigger('remove', object);
     }
 
+    /*
+     * Retrieves the children of an object.
+     */
     OBJDAG.prototype.getChildren = function(object) {
         var get = _.bind(this.get, this);
-        var promises = object.children.map(get);
-        return RSVP.all(promises);
+        return object.children.map(get);
     }
 
     return OBJDAG;

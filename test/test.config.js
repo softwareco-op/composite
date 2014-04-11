@@ -38,12 +38,12 @@ require([
     '../test/test.DAG',
     '../test/HasherTest',
     '../test/ObjectSupplierTest',
-    '../test/OBJDAGTest',
-    '../test/OBJDAGControllerTest',
     '../test/InputFieldTest',
     '../test/DIVTest',
-    '../test/PageTest',
-    '../test/PromiseTest'
+    '../test/OBJDAGTest'
+    // '../test/OBJDAGControllerTest',
+    // '../test/PageTest',
+    // '../test/PromiseTest'
 
 ], function() {
 

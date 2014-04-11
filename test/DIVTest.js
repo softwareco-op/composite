@@ -28,13 +28,10 @@ function(Div, OBJDAG, RSVP, Backbone, chai, sinon) {
 
             objdag.add(div);
 
-            div.render(model, document).then(function(element) {
-                var expected = '<div class="test"></div>';
-                assert.equal(element.outerHTML, expected);
-                done();
-            }).catch(function(error) {
-                console.log(error);
-            });
+            var element = div.render(model, document);
+            var expected = '<div class="test"></div>';
+            assert.equal(element.outerHTML, expected);
+            done();
 
         })
 

@@ -6,27 +6,32 @@
 /**
  * ObjectSupplier converts Backbone models to transient Javascript objects.
  **/
-define(['rsvp'], function(RSVP) {
+define(
+['Components/Button', 'Components/Div', 'Components/InputField'],
+function(Button, Div, InputField) {
 
-    function ObjectSupplier() {}
+    function ObjectSupplier() {
+        this.componentMap = {
+            'Components/Button' : Button,
+            'Components/Div': Div,
+            'Components/InputField' : InputField
+        }
+    }
 
-    ObjectSupplier.prototype.object = function(model, moduleName) {
-        if (moduleName === undefined) {
-            moduleName = model.get('type');
+    /*
+     * Construct a module given a valid model
+     * @param {Backbone.Model} model containing an available type.
+     */
+    ObjectSupplier.prototype.object = function(model) {
+        var moduleName = model.get('type');
+
+        var constructor = this.componentMap[moduleName];
+
+        if (constructor === undefined) {
+            throw Error('Invalid module name provided ' + moduleName);
         }
 
-        var promise = new RSVP.Promise(function(resolve, reject) {
-            requirejs([moduleName], function(Module) {
-                if (Module === undefined) {
-                    throw "Module not found or module isn't returning an object";
-                }
-                resolve(new Module(model));
-            }, function (error) {
-                reject(error);
-            });
-        });
-
-        return promise;
+        return new constructor(model);
     }
 
     return ObjectSupplier;
