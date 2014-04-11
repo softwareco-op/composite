@@ -68,6 +68,15 @@ define(['rsvp', 'underscore','backbone'], function(RSVP, _, Backbone) {
     }
 
     //
+    // Retrieves an object currently in the object dag.
+    //
+    // @param {String} id of object to retrieve
+    //
+    OBJDAG.prototype.getNow = function(id) {
+        return this.dagObjects[id];
+    }
+
+    //
     // Retrieve the parent asynchronously.
     //
     // @return the parent of the object with the given id

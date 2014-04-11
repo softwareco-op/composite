@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 //
 
-define(['Model/Hasher', 'rsvp'], function(Hasher, RSVP)  {
+define(['Model/Hasher'], function(Hasher)  {
 
     function OBJDAGController(objectSupplier, objDag, dag, hasher, context) {
         this.objectSupplier = objectSupplier;
@@ -39,23 +39,20 @@ define(['Model/Hasher', 'rsvp'], function(Hasher, RSVP)  {
      */
     OBJDAGController.prototype.isNew = function(model) {
         var modelHash = model.get('hash');
-        var promise = new RSVP.Promise(function(resolve, reject) { resolve(false); });
 
         if (this.objDag.exists(model.get('id'))) {
 
-            return this.objDag.get(model.get('id')).then(function(dagObject) {
+            var dagObject = this.objDag.getNow(model.get('id'));
 
-                if (dagObject.hash === modelHash) {
-                    return dagObject;
-                }
+            if (dagObject.hash === modelHash) {
+                return dagObject;
+            }
 
-                return false;
-
-            });
+            return false;
 
         }
 
-        return promise;
+        return false;
     }
 
 
@@ -67,49 +64,48 @@ define(['Model/Hasher', 'rsvp'], function(Hasher, RSVP)  {
      */
     OBJDAGController.prototype.add = function(model) {
         var self = this;
-        var moduleName = model.get('type');
-        this.checkHash(model);
-        return this.isNew(model).then(function(dagObject) {
-            if (dagObject) {
-                return dagObject;
-            }
-
+        return this.handleIncoming('add', model, function(model) {
+            //create the object
+            var moduleName = model.get('type');
             return self.objectSupplier.object(model, moduleName);
-        }).then(function(dagObject) {
-            self.decorate(model, dagObject);
-            self.objDag.add(dagObject);
-            self.call('add', dagObject, model);
-            var parentModel = self.dag.getParent(model);
-            self.objDag.get(dagObject.parent).then(function(parent) {
-                self.call('update', parent, parentModel);
-            });
-            return dagObject;
-        }).catch(function(error) {
-            console.log(error);
-            throw new Error(error);
-        });
-
+        })
     }
 
     OBJDAGController.prototype.update = function(model) {
         var self = this;
-        this.checkHash(model);
-        return this.isNew(model).then(function(dagObject) {
-            if (dagObject) {
-                return dagObject;
-            }
-
-            return self.objDag.get(model.get('id')).then(function(dagObject) {
-                self.decorate(model, dagObject);
-                self.call('update', dagObject, model);
-                var parentModel = self.dag.getParent(model);
-                self.objDag.get(dagObject.parent).then(function(parent) {
-                    self.call('update', parent, parentModel);
-                });
-                return dagObject;
-            })
+        return this.handleIncoming('update', model, function(model) {
+            return self.objDag.get(model.get('id'));
         })
     }
+
+    OBJDAGController.prototype.handleIncoming = function(type, model, fn) {
+        var self = this;
+        this.checkHash(model);
+        var dagObject = this.isNew(model);
+
+        if (dagObject) {
+            return dagObject;
+        }
+
+        return fn(model).then(function(dagObject) {
+            self.decorate(model, dagObject);
+            self.objDag.add(dagObject);
+            self.call(type, dagObject, model);
+            var parentModel = self.dag.getParent(model);
+            if (parentModel === undefined) {
+                return dagObject;
+            }
+            self.objDag.get(dagObject.parent).then(function(parent) {
+                self.call('update', parent, parentModel);
+            }).catch(function(error) {
+                console.log(error);
+                throw new Error(error);
+            });
+
+            return dagObject;
+        })
+    }
+
 
     OBJDAGController.prototype.decorate = function(model, object) {
         model.pairs().map(function(pair) {

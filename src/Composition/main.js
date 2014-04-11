@@ -8,6 +8,7 @@ require.config({
         'underscore':'../bower_components/underscore-amd/underscore',
         'node-uuid':'../bower_components/node-uuid/uuid',
         'rsvp':'../bower_components/rsvp/rsvp.amd',
+        'jssha':'../bower_components/jssha/src/sha256',
         'backbone.io':'../node_modules/backbone.io/lib/browser',
         'socketio':'../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io'
     },

@@ -28,7 +28,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
     });
 
     describe('Page', function() {
-
+/*
         it('can add nodes to the page', function(done) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
@@ -47,12 +47,50 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
                 done(error);
             })
         })
+*/
+        it('can detect duplicates', function(done) {
+            var div = document.createElement('div');
+            var rcollection = new NodeCollection();
+            var collection = new LocalCollection();
+            var page = new Page(div, document, 0, collection);
 
+            page.install();
+
+            var p0 = new Node();
+            p0.set('type', 'Components/Div');
+            p0.set('class', 'panel2');
+            page.getDAG().add(p0);
+
+            page.setRootNodeID(p0.get('id'));
+
+            var p2 = new Node();
+            p2.set('type', 'Components/Button');
+            p2.set('name', 'Copy Component');
+            p2.set('text', 'CC');
+            page.getDAG().addChild(p0, p2);
+
+            var promise1 = page.addNode(p0);
+            var promise2 = page.addNode(p2);
+
+            RSVP.all([promise1, promise2]).then(function(components) {
+                var expected = '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>';
+                var outerHTML = div.outerHTML;
+
+                console.log(expected);
+                console.log(outerHTML);
+
+                assert.equal(div.outerHTML, expected);
+                done();
+            }).catch(function(error) {
+                done(error);
+            });
+        })
+/*
         it('can add multiple nodes to the page', function(done) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
             var localCollection = new LocalCollection();
-            var page = new Page(div, document, 0, collection, localCollection);
+            var page = new Page(div, document, 0, collection);
 
             page.install();
 
@@ -67,9 +105,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             p2.set('text', 'Copy Component');
             page.getDAG().addChild(p0, p2);
 
-            var promise1 = page.addNode(p0);
-            var promise2 = page.addNode(p2);
-            RSVP.all([promise1,promise2]).then(function(components) {
+            RSVP.all([page.addNode(p0),page.addNode(p2)]).then(function(components) {
                 assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
                 done();
             }).catch(function(error) {
@@ -81,7 +117,7 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
             var div = document.createElement('div');
             var collection = new NodeCollection();
             var localCollection = new LocalCollection();
-            var page = new Page(div, document, 0, collection, localCollection);
+            var page = new Page(div, document, 0, collection);
 
             page.install();
 
@@ -109,11 +145,11 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
         });
 
         it('can handle copy tree operation', function(done) {
-            //var div = document.createElement('div');
-            var div = document.getElementById('testdiv');
+            var div = document.createElement('div');
+            //var div = document.getElementById('testdiv');
             var collection = new NodeCollection();
             var localCollection = new LocalCollection();
-            var page = new Page(div, document, 0, collection, localCollection);
+            var page = new Page(div, document, 0, collection);
 
 
             page.install();
@@ -146,11 +182,12 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
 
             //Should do this asynchronously
             setTimeout(function() {
-                assert.equal(div.outerHTML, '<div id="testdiv"><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
+                assert.equal(div.outerHTML, '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>');
                 assert.equal(page.getDAG().collection.length, 6);
                 done();
             }, 600);
-        })
+       })
+*/
 
     })
 

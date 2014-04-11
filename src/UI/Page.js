@@ -72,6 +72,10 @@ function(ObjectSupplier,
         return this.objdag;
     }
 
+    Page.prototype.setRootNodeID = function(id) {
+        this.rootNodeID = id;
+    }
+
     Page.prototype.addNode = function(node) {
         var self = this;
         var nodePromise = this.objDagController.add(node).then(function(nodeObject) {
@@ -84,7 +88,7 @@ function(ObjectSupplier,
             throw new Error('error appending first node to page element');
         });
 
-        //this.dag.add(node);
+        this.dag.add(node);
         return nodePromise;
     }
 

@@ -37,13 +37,42 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
             p0.set('type', 'Components/Button');
             p0.set('name', 'test');
             p0.set('text', 'test');
+
             objDagController.add(p0).then(function(button) {
-                assert.equal(button.getWrap(document).outerHTML,
-                              '<div id="0"><button name="test">test</button></div>');
+                assert.equal(button.getWrap(document).outerHTML,'<div id="0"><button name="test">test</button></div>');
                 done();
             }).catch(function(error) {
                 done(error);
             });
+        })
+
+        it('can detect duplicate additions', function(done) {
+            var collection = new NodeCollection();
+            var dag = new DAG(collection);
+            var objectSupplier = new ObjectSupplier();
+            var objdag = new OBJDAG();
+            var hasher = new Hasher("SHA-256");
+            var objDagController = new OBJDAGController(objectSupplier, objdag, dag, hasher, document);
+
+            var p0 = new Node({id:0, parent:null, children:[]});
+            p0.set('type', 'Components/Button');
+            p0.set('name', 'test');
+            p0.set('text', 'test');
+
+            dag.add(p0);
+
+            objDagController.add(p0).then(function(button) {
+                return this;
+            }).catch(function(error) {
+                done(error);
+            }).then(function(button) {
+                return objDagController.add(p0);
+            }).then(function(button) {
+                assert.equal(button.getWrap(document).outerHTML,
+                              '<div id="0"><button name="test">test</button></div>');
+                done();
+            })
+
         })
 
         it('can update object', function(done) {
@@ -63,7 +92,6 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
             p1.set('type', 'Components/Button');
             p1.set('name', 'test2');
             p1.set('text', 'test2');
-
 
 
             objDagController.add(p0).then(function(button) {
