@@ -6,13 +6,14 @@
 /**
  * DAG is directed acyclic graph on a backbone collection.
  **/
-define(['underscore', 'node-uuid'], function(_, uuid) {
+define(['Model/Hasher', 'underscore', 'node-uuid'], function(Hasher, _, uuid) {
 
     /**
      * @param {Backbone.Collection} collection used to store the nodes
      */
     function DAG(collection) {
         this.collection = collection
+        this.hasher = new Hasher("SHA-256");
     }
 
     /**
@@ -65,6 +66,9 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
         if (model.get('children') === undefined) {
             model.set('children', []);
         }
+        if (model.get('hash') === undefined) {
+            model.set('hash', this.hasher.hashModel(model));
+        }
     }
 
     /**
@@ -75,8 +79,9 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
     DAG.prototype.addChild = function(parent, child) {
         this.validateNode(parent);
         this.validateNode(child);
-        this.collection.add(child);
         this.setChild(parent, child);
+        this.collection.add(child);
+        child.save();
         parent.save();
     }
 
@@ -86,7 +91,7 @@ define(['underscore', 'node-uuid'], function(_, uuid) {
      * @param {Backbone.Model} child to add to parent.
      */
     DAG.prototype.setChild = function(parent, child) {
-        child.save({'parent': parent.get('id')});
+        child.set('parent', parent.get('id'));
         var children = parent.get('children') || [];
         //Make a copy of the list so that Backbone fires a change event.  This ought to be
         //accomplished in a better way.

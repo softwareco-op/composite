@@ -24,8 +24,7 @@ define(['Model/Hasher'], function(Hasher)  {
         var modelHash = model.get('hash');
 
         if (modelHash === undefined) {
-            modelHash = this.hasher.hashModel(model);
-            model.set('hash', modelHash);
+            throw new Error('model ' + model.get('id') + ' missing hash');
         }
 
         return modelHash;
@@ -42,7 +41,7 @@ define(['Model/Hasher'], function(Hasher)  {
 
         if (this.objDag.exists(model.get('id'))) {
 
-            var dagObject = this.objDag.getNow(model.get('id'));
+            var dagObject = this.objDag.get(model.get('id'));
 
             if (dagObject.hash === modelHash) {
                 return dagObject;
@@ -78,6 +77,9 @@ define(['Model/Hasher'], function(Hasher)  {
         })
     }
 
+    /*
+     * Handles incoming models representing nodes.
+     */
     OBJDAGController.prototype.handleIncoming = function(type, model, fn) {
         var self = this;
         this.checkHash(model);
@@ -87,23 +89,30 @@ define(['Model/Hasher'], function(Hasher)  {
             return dagObject;
         }
 
-        return fn(model).then(function(dagObject) {
-            self.decorate(model, dagObject);
-            self.objDag.add(dagObject);
-            self.call(type, dagObject, model);
-            var parentModel = self.dag.getParent(model);
-            if (parentModel === undefined) {
-                return dagObject;
-            }
-            self.objDag.get(dagObject.parent).then(function(parent) {
-                self.call('update', parent, parentModel);
-            }).catch(function(error) {
-                console.log(error);
-                throw new Error(error);
-            });
+        dagObject = fn(model);
 
+        if (dagObject === undefined) {
+            if (type === 'update') {
+                throw new Error('Error handling incoming ' + type + ' on model ' + model.get('id') +
+                                '. Perhaps an update before a successful add completed')
+            } else {
+                throw new Error('Error handling incoming ' + type + ' on model ' + model.get('id'));
+            }
+        }
+
+        self.decorate(model, dagObject);
+        self.objDag.add(dagObject);
+        self.call(type, dagObject, model);
+
+        var parentModel = self.dag.getParent(model);
+        if (parentModel === undefined) {
             return dagObject;
-        })
+        }
+        var parent = self.objDag.get(dagObject.parent);
+        self.call('update', parent, parentModel);
+
+        return dagObject;
+
     }
 
 

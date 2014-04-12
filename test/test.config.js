@@ -40,10 +40,10 @@ require([
     '../test/ObjectSupplierTest',
     '../test/InputFieldTest',
     '../test/DIVTest',
-    '../test/OBJDAGTest'
-    // '../test/OBJDAGControllerTest',
-    // '../test/PageTest',
-    // '../test/PromiseTest'
+    '../test/OBJDAGTest',
+    '../test/OBJDAGControllerTest',
+    //'../test/PageTest',
+    '../test/PromiseTest'
 
 ], function() {
 

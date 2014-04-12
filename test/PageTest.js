@@ -56,34 +56,33 @@ function(Page, chai, sinon, underscore, BackboneLocalStorage, RSVP) {
 
             page.install();
 
-            var p0 = new Node();
+            var p0 = new Node({id: 0});
             p0.set('type', 'Components/Div');
             p0.set('class', 'panel2');
             page.getDAG().add(p0);
 
             page.setRootNodeID(p0.get('id'));
 
-            var p2 = new Node();
+            var p2 = new Node({id: 2});
             p2.set('type', 'Components/Button');
             p2.set('name', 'Copy Component');
             p2.set('text', 'CC');
             page.getDAG().addChild(p0, p2);
 
-            var promise1 = page.addNode(p0);
-            var promise2 = page.addNode(p2);
+            page.addNode(p0);
+            page.addNode(p2);
 
-            RSVP.all([promise1, promise2]).then(function(components) {
-                var expected = '<div><div id="0"><div class="panel"><div id="2"><button name="Copy Component">Copy Component</button></div></div></div></div>';
-                var outerHTML = div.outerHTML;
+            var expected = '<div><div id="{id1}"><div class="panel2"><div id="{id2}"><button name="Copy Component">Copy Component</button></div></div></div></div>';
+            expected = expected.replace(/{id1}/g, p0.get('id'));
+            expected = expected.replace(/{id2}/g, p2.get('id'));
 
-                console.log(expected);
-                console.log(outerHTML);
+            var outerHTML = div.outerHTML;
 
-                assert.equal(div.outerHTML, expected);
-                done();
-            }).catch(function(error) {
-                done(error);
-            });
+
+            console.log(expected);
+            console.log(outerHTML);
+            assert.equal(div.outerHTML, expected);
+            done();
         })
 /*
         it('can add multiple nodes to the page', function(done) {

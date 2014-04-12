@@ -37,13 +37,11 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
             p0.set('type', 'Components/Button');
             p0.set('name', 'test');
             p0.set('text', 'test');
+            p0.set('hash', hasher.hashModel(p0));
 
-            objDagController.add(p0).then(function(button) {
-                assert.equal(button.getWrap(document).outerHTML,'<div id="0"><button name="test">test</button></div>');
-                done();
-            }).catch(function(error) {
-                done(error);
-            });
+            var button = objDagController.add(p0);
+            assert.equal(button.getWrap(document).outerHTML,'<div id="0"><button name="test">test</button></div>');
+            done();
         })
 
         it('can detect duplicate additions', function(done) {
@@ -61,18 +59,13 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
 
             dag.add(p0);
 
-            objDagController.add(p0).then(function(button) {
-                return this;
-            }).catch(function(error) {
-                done(error);
-            }).then(function(button) {
-                return objDagController.add(p0);
-            }).then(function(button) {
-                assert.equal(button.getWrap(document).outerHTML,
-                              '<div id="0"><button name="test">test</button></div>');
-                done();
-            })
+            var button = objDagController.add(p0);
+            var button2 = objDagController.add(p0);
+            assert.equal(button,button2);
 
+            assert.equal(button.getWrap(document).outerHTML,
+                         '<div id="0"><button name="test">test</button></div>');
+            done();
         })
 
         it('can update object', function(done) {
@@ -87,24 +80,21 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
             p0.set('type', 'Components/Button');
             p0.set('name', 'test');
             p0.set('text', 'test');
+            p0.set('hash', hasher.hashModel(p0));
 
             var p1 = new Node({id:0, parent:null, children:[]});
             p1.set('type', 'Components/Button');
             p1.set('name', 'test2');
             p1.set('text', 'test2');
+            p1.set('hash', hasher.hashModel(p1));
 
-
-            objDagController.add(p0).then(function(button) {
-                assert.equal(button.getWrap(document).outerHTML,
-                              '<div id="0"><button name="test">test</button></div>');
-                return objDagController.update(p1);
-            }).then(function(button) {
-                assert.equal(button.getWrap(document).outerHTML,
-                              '<div id="0"><button name="test2">test2</button></div>');
-                done();
-            }).catch(function(error) {
-                done(error);
-            });
+            var button = objDagController.add(p0);
+            assert.equal(button.getWrap(document).outerHTML,
+                         '<div id="0"><button name="test">test</button></div>');
+            var button2 =  objDagController.update(p1);
+            assert.equal(button2.getWrap(document).outerHTML,
+                         '<div id="0"><button name="test2">test2</button></div>');
+            done();
         })
 
         it('integrates with ObjectSupplier', function(done) {
@@ -137,11 +127,9 @@ function(Hasher, OBJDAG, OBJDAGController, ObjectSupplier, Global, DAG, uuid, RS
                     //simulate a click on the button
                     var event = document.createEvent('Event');
                     event.initEvent('click', true, true);
-                    objdag.get(model.get('id')).then(function(object) {
-                        return objdag.getParent(object);
-                    }).then(function(parent) {
-                        parent.button.dispatchEvent(event);
-                    });
+                    var object = objdag.get(model.get('id'));
+                    var parent =  objdag.getParent(object);
+                    parent.button.dispatchEvent(event);
                 }
             }
             dag.add(p0);

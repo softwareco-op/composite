@@ -78,18 +78,14 @@ function(ObjectSupplier,
 
     Page.prototype.addNode = function(node) {
         var self = this;
-        var nodePromise = this.objDagController.add(node).then(function(nodeObject) {
-            if (nodeObject.id === self.rootNodeID) {
-                self.div.appendChild(nodeObject.getWrap(this.document));
-            }
+        var nodeObject = this.objDagController.add(node);
+        if (nodeObject.id === self.rootNodeID) {
+            self.div.appendChild(nodeObject.getWrap(this.document));
             return nodeObject;
-        }).catch(function(error) {
-            console.log(error);
-            throw new Error('error appending first node to page element');
-        });
+        }
 
         this.dag.add(node);
-        return nodePromise;
+        return nodeObject;
     }
 
     Page.prototype.addNodes = function() {

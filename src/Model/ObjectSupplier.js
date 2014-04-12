@@ -7,14 +7,15 @@
  * ObjectSupplier converts Backbone models to transient Javascript objects.
  **/
 define(
-['Components/Button', 'Components/Div', 'Components/InputField'],
-function(Button, Div, InputField) {
+['Components/Button', 'Components/Div', 'Components/InputField', 'Actions/GlobalAction'],
+function(Button, Div, InputField, GlobalAction) {
 
     function ObjectSupplier() {
         this.componentMap = {
             'Components/Button' : Button,
             'Components/Div': Div,
-            'Components/InputField' : InputField
+            'Components/InputField' : InputField,
+            'Actions/GlobalAction' : GlobalAction
         }
     }
 

@@ -24,7 +24,7 @@ function(Div, OBJDAG, RSVP, Backbone, chai, sinon) {
             div.id = 0;
             div.parent = null;
             div.children = [];
-
+            console.log(JSON.stringify([div, div]));
 
             objdag.add(div);
 

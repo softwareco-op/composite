@@ -44,18 +44,13 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
         var self = this;
         var objdag = this.objdag;
         var clickListener = function (clickEvent) {
-            objdag.get(model.get('id')).then(function(object) {
-                return objdag.getChildren(object);
-            }).then(function(children) {
-                var click = _.filter(children, function(object) {
-                    return object.event == 'click';
-                })
-                _.map(click, function(object) {
-                    object.perform();
-                });
-            }).catch(function(error) {
-                console.log(error);
-                throw new Error(error);
+            var object = objdag.get(model.get('id'));
+            var children = objdag.getChildren(object);
+            var click = _.filter(children, function(object) {
+                return object.event == 'click';
+            })
+            _.map(click, function(object) {
+                object.perform();
             });
         }
 
