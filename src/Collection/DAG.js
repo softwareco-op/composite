@@ -6,119 +6,146 @@
 /**
  * DAG is directed acyclic graph on a backbone collection.
  **/
-define(['Model/Hasher', 'underscore', 'node-uuid'], function(Hasher, _, uuid) {
+define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Hasher, Cloner, _, uuid) {
 
     /**
-     * @param {Backbone.Collection} collection used to store the nodes
+     * @constructor
      */
-    function DAG(collection) {
-        this.collection = collection
+    function DAG() {
+        this.collection = {}
         this.hasher = new Hasher("SHA-256");
-    }
-
-    /**
-     * @param {Backbone.Model} model containing children.
-     * @return the {Backbone.Model}s with parent set to this.id or an empty list.
-     */
-    DAG.prototype.getParent = function(model) {
-        return this.collection.findWhere({id: model.get('parent')});
-    }
-
-    /**
-     * @param {Backbone.Model} model containing children.
-     * @return the {Backbone.Model}s with parent set to this.id or an empty list.
-     */
-    DAG.prototype.getChildren = function(model) {
-        return this.collection.where({parent: model.get('id')});
-    }
-
-    /**
-     * Remove all children of this model
-     * @param {Backbone.Model} model with children.
-     */
-    DAG.prototype.removeChildren = function(model) {
-        this.getChildren(model).map(function(child) {
-            child.destroy();
-        });
+        this.cloner = new Cloner();
     }
 
     /**
      * Add a node to this DAG
-     * @param {Backbone.Model} model to add
+     * @param {Node} node to add
      */
-    DAG.prototype.add = function(model) {
-        this.validateNode(model);
-        this.collection.add(model);
-        model.save();
+    DAG.prototype.add = function(node) {
+        this.validateNode(node);
+        this.collection[node.id] = node;
+        return node;
     }
 
     /*
-     * Validates a model's node attributes.  If attributes are missing, valid defaults are set.
-     * @param {Backbone.Model} model to validate
+     * Validates a node's node attributes.  If attributes are missing, valid defaults are set.
+     * @param {Node} node to validate
      */
-    DAG.prototype.validateNode = function(model) {
-        if (model.get('id') === undefined || model.get('id') === null) {
-            model.set('id', uuid.v4());
+    DAG.prototype.validateNode = function(node) {
+        if (node.id === undefined || node.id === null) {
+            node.id = uuid.v4();
         }
-        if (model.get('parent') === undefined) {
-            model.set('parent', null);
+        if (node.parent === undefined) {
+            node.parent = null;
         }
-        if (model.get('children') === undefined) {
-            model.set('children', []);
+        if (node.children === undefined) {
+            node.children = [];
         }
-        if (model.get('hash') === undefined) {
-            model.set('hash', this.hasher.hashModel(model));
-        }
+
+        node.hash = this.hasher.hashNode(node);
+    }
+
+    /*
+     * Remove a node from this DAG
+     * @param {Node} to remove
+     */
+    DAG.prototype.remove = function(node) {
+        delete this.collection[node.id];
     }
 
     /**
-     * Add a child to this model
-     * @param {Backbone.Model} parent of child.
-     * @param {Backbone.Model} child to add to parent.
+     * Unlink children of this node. The children are not removed from the DAG.
+     * @param {Node} node with children.
+     */
+    DAG.prototype.unlinkChildren = function(node) {
+        node.children = [];
+        this.add(node);
+        return node;
+    }
+
+    /**
+     * Tests if a node exists in the DAG.
+     * Note: collection should only contain DAG nodes, or node ids should be uuids.
+     *
+     * @param {Node} node in question.
+     * @return true if the node exists in the DAG, else false.
+     */
+    DAG.prototype.exists = function(node) {
+        return this.collection[node.id] !== undefined;
+    }
+
+    /*
+     * Retrieve a node from the DAG.
+     * @param {string} id of the node to retrieve.
+     * @return the node requested. If the node was not found returns undefined.
+     */
+    DAG.prototype.get = function(id) {
+        return this.collection[id];
+    }
+
+    /**
+     * @param {Node} node containing children.
+     * @return the {Node}s with parent set to this.id or an empty list.
+     */
+    DAG.prototype.getParent = function(node) {
+        return this.get(node.parent);
+    }
+
+    /**
+     * @param {Node} node containing children.
+     * @return the {Node}s with parent set to this.id or an empty list.
+     */
+    DAG.prototype.getChildren = function(node) {
+        var fn = _.bind(this.get, this);
+        return _.map(node.children, fn);
+    }
+
+    /**
+     * Add a child to this node
+     * @param {Node} parent of child.
+     * @param {Node} child to add to parent.
      */
     DAG.prototype.addChild = function(parent, child) {
         this.validateNode(parent);
         this.validateNode(child);
         this.setChild(parent, child);
-        this.collection.add(child);
-        child.save();
-        parent.save();
+        this.add(parent);
+        return this.add(child);
+    }
+
+    /*
+     * Unlinks the child from the parent.  This does not remove the child from the dag.
+     * @param {Node} parent of child.
+     * @param {Node} child to remove from parent.
+     */
+    DAG.prototype.unlinkChild = function(parent, child) {
+        var index = _.indexOf(parent.children, child);
+        if (index < 0) {
+            return false;
+        }
+        parent.childre = parent.children.splice(index, 1);
+        return this.add(parent);
     }
 
     /**
      * Add a child to a parent.
-     * @param {Backbone.Model} parent of child.
-     * @param {Backbone.Model} child to add to parent.
+     * @param {Node} parent of child.
+     * @param {Node} child to add to parent.
      */
     DAG.prototype.setChild = function(parent, child) {
-        child.set('parent', parent.get('id'));
-        var children = parent.get('children') || [];
-        //Make a copy of the list so that Backbone fires a change event.  This ought to be
-        //accomplished in a better way.
-        var copy = _.map(children, function(child) {return child;});
-        copy.push(child.get('id'));
-        parent.save({'children': copy});
-    }
-
-
-    /**
-     * Tests if a node exists in the DAG.
-     * Note: collection should only contain DAG nodes, or model ids should be uuids.
-     *
-     * @param {Backbone.Model} model in question.
-     * @return true if the model exists in the DAG, else false.
-     */
-    DAG.prototype.exists = function(model) {
-        return this.collection.get(model) !== undefined;
+        child.parent = parent.id;
+        var children = parent.children || [];
+        children.push(child.id);
+        parent.children = children;
     }
 
     /**
-     * Copy the given model.
-     * @return a copy of the given model with a new id.
+     * Copy the given node.
+     * @return a copy of the given node with a new id.
      */
-    DAG.prototype.copy = function(model) {
-        var copy = model.clone();
-        copy.set('id', uuid.v4());
+    DAG.prototype.copy = function(node) {
+        var copy = this.cloner.clone(node);
+        copy.id = uuid.v4();
         this.add(copy);
         return copy;
     }
@@ -126,12 +153,12 @@ define(['Model/Hasher', 'underscore', 'node-uuid'], function(Hasher, _, uuid) {
     /**
      * Make a copy of the tree at the given node.
      */
-    DAG.prototype.copyTree = function(model) {
-        var copy = this.copy(model);
-        copy.set('children', []);
+    DAG.prototype.copyTree = function(node) {
+        var copy = this.copy(node);
+        copy.children = [];
 
         var self = this;
-        this.getChildren(model).map(function(child) {
+        this.getChildren(node).map(function(child) {
             var copiedChild = self.copyTree(child);
             self.addChild(copy, copiedChild);
         });

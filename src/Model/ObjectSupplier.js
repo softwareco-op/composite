@@ -7,8 +7,8 @@
  * ObjectSupplier converts Backbone models to transient Javascript objects.
  **/
 define(
-['Components/Button', 'Components/Div', 'Components/InputField', 'Actions/GlobalAction'],
-function(Button, Div, InputField, GlobalAction) {
+[ 'Components/Div','Components/Button', 'Components/InputField', 'Actions/GlobalAction'],
+function(Div, Button, InputField, GlobalAction) {
 
     function ObjectSupplier() {
         this.componentMap = {
@@ -24,7 +24,7 @@ function(Button, Div, InputField, GlobalAction) {
      * @param {Backbone.Model} model containing an available type.
      */
     ObjectSupplier.prototype.object = function(model) {
-        var moduleName = model.get('type');
+        var moduleName = model.type;
 
         var constructor = this.componentMap[moduleName];
 

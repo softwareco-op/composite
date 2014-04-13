@@ -27,7 +27,9 @@
     "node-uuid": "~1.4.1",
     "rsvp": "~3.0.6",
     "backbone.iobind": "~0.4.7",
-    "jssha": "~1.5.0"
+    "jssha": "~1.5.0",
+    "eventemitter2": "~0.4.13",
+    "lodash-amd": "~2.4.1"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

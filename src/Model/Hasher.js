@@ -7,7 +7,7 @@ define(['jssha'],
 function(jsSHA) {
 
     /*
-     * Hasher hashes strings and Backbone models.
+     * Hasher hashes strings and nodes.
      * @param {string} hashAlgorithm to use.  See https://github.com/Caligatio/jsSHA for options.
      */
     function Hasher(hashAlgorithm) {
@@ -26,13 +26,13 @@ function(jsSHA) {
     }
 
     /*
-     * Hashes a Backbone model using JSON serialization.
+     * Hashes a node using JSON serialization.
      *
-     * @param {Backbone.Model} model to hash.
-     * @return {string} hash value of JSONified model.
+     * @param {Node} node to hash.
+     * @return {string} hash value of JSONified node.
      */
-    Hasher.prototype.hashModel = function(model) {
-        var string = JSON.stringify(model);
+    Hasher.prototype.hashNode = function(node) {
+        var string = JSON.stringify(node);
         return this.hash(string);
     }
 

@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['UI/View', 'backbone'], function(View, Backbone) {
+define(['UI/View', 'backbone', 'underscore'], function(View, Backbone, _) {
 
     /*
      * A div node that renders child nodes.
@@ -40,15 +40,15 @@ define(['UI/View', 'backbone'], function(View, Backbone) {
     /*
      * Called when this div is added to a graph/dag/tree.
      */
-    DIV.prototype.add = function(node, objdag, dag, dom) {
-        this.objdag = objdag;
+    DIV.prototype.add = function(node, dag, dom) {
+        this.dag = dag;
         return this.render(node, dom);
     }
 
     /*
      * Called when this div is updated on the graph/dag/tree.
      */
-    DIV.prototype.update = function(node, objdag, dag, dom) {
+    DIV.prototype.update = function(node, dag, dom) {
         return this.render(node, dom);
     }
 

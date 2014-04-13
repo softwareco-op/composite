@@ -7,7 +7,7 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     //
     // A simple button.
     //
-    // @class
+    // @constructor
     // @param {Backbone.Model} model to render
     //
     function Button(model) {
@@ -21,8 +21,8 @@ define(['Model/ObjectSupplier', 'UI/View', 'underscore'], function(ObjectSupplie
     // @param {Backbone.Model} model used to read attributes
     //
     Button.prototype.setFields = function(model) {
-        this.name = model.get('name');
-        this.text = model.get('text');
+        this.name = model.name;
+        this.text = model.text;
     }
 
     //

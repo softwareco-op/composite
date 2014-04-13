@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 //
 
-define(['UI/View', 'Model/ObjectSupplier'], function(View, ObjectSupplier) {
+define(['UI/View', 'Model/ObjectSupplier', 'underscore'], function(View, ObjectSupplier, _) {
 
     //
     // A text field

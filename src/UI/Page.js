@@ -3,7 +3,7 @@
  */
 
 /*
- * An object that integrates components into Page(let)
+ * An HTML Page renderer.
  */
 define(['Model/ObjectSupplier',
         'Collection/OBJDAGController',
@@ -22,42 +22,27 @@ function(ObjectSupplier,
          BackboneLocalStorage,
          Backbone) {
 
-    // Store information into Backbone nodes
-    var Node = Backbone.Model.extend({
-        initialize: function() {
-            this.on('error', function(model, res) {
-                alert(res.error.message);
-            });
-        }
-    });
-
-
     /**
-     * Constructs a page(let) consisting of composite nodes.
+     * Constructs a page(let) consisting of a composition of nodes.
      *
      * @constructor
      * @param {Element} div where we put our composition
      * @param {Document} document containing our composition
-     * @param {Backbone.Collection} collection containing node models
-     * @param {String} rootNodeID references the node to add to the given div
+     * @param {DAG} DAG containing nodes
+     * @param {String} root is the root node id of the node to add to div
      */
-    function Page(div, document, rootNodeID, collection) {
+    function Page(div, document, root, dag) {
         this.div = div;
         this.document = document;
-        this.collection = collection;
-        this.rootNodeID = rootNodeID;
+        this.dag = dag;
+        this.root = root;
     }
 
     Page.prototype.install = function() {
-        this.dag = new DAG(this.collection);
+        this.dag = this.dag || new DAG();
         this.objectSupplier = new ObjectSupplier();
-        this.objdag = new OBJDAG(this.objectSupplier, this.dag, this.document);
         this.hasher = new Hasher("SHA-256");
-        this.objDagController = new OBJDAGController(this.objectSupplier, this.objdag, this.dag, this.hasher, this.document);
-
-        this.objDagController.manage(this.collection);
         Global.dag = this.dag;
-        Global.objdag = this.objdag;
     }
 
     Page.prototype.getNode = function() {
@@ -76,34 +61,33 @@ function(ObjectSupplier,
         this.rootNodeID = id;
     }
 
-    Page.prototype.addNode = function(node) {
+    Page.prototype.add = function(node) {
         var self = this;
-        var nodeObject = this.objDagController.add(node);
+        var nodeObject = dag.get(node.id);
         if (nodeObject.id === self.rootNodeID) {
             self.div.appendChild(nodeObject.getWrap(this.document));
             return nodeObject;
         }
-
-        this.dag.add(node);
+        nodeObject.add(node, dag, dom);
         return nodeObject;
     }
 
     Page.prototype.addNodes = function() {
         var p0 = new Node({id:0});
-        p0.set('type', 'Components/Div');
-        p0.set('class', 'panel');
-        this.addNode(p0);
+        p0.type = 'Components/Div';
+        p0class = 'panel';
+        this.add(p0);
 
         var p2 = new Node();
-        p2.set('type', 'Components/Button');
-        p2.set('name', 'Copy Component');
-        p2.set('text', 'Copy Component');
-        this.dag.addChild(p0, p2);
+        p2.type = 'Components/Button';
+        p2.name = 'Copy Component';
+        p2.text = 'Copy Component';
+        this.dag.add(p2);
 
         var p6 = new Node();
-        p6.set('type', 'Actions/CopyTree');
-        p6.set('event', 'click');
-        this.dag.addChild(p2, p6);
+        p6.type = 'Actions/CopyTree';
+        p6.event = 'click';
+        this.dag.add(p6);
 
         // var p3 = new Node({id:3});
         // p3.set('type', 'Components/InputField');

@@ -29,7 +29,7 @@ function(Hasher, Backbone, chai, sinon) {
 
             var hasher = new Hasher("SHA-256");
 
-            var hash = hasher.hashModel(node);
+            var hash = hasher.hashNode(node);
 
             assert.equal(hash, 'd0118393a0efab15de4f0bd99264ddbe53a3c0a87e3c5025a46027d8e3717d7c');
 
