@@ -50,6 +50,7 @@ define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], func
             var dag = new DAG();
             dag.add(n);
             var nc = dag.addChild(n, c);
+            dag.add(c);
 
             var children = dag.getChildren(n);
             assert.deepEqual(nc, children[0]);
@@ -118,8 +119,12 @@ define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], func
             var child = new Node({id: 2, color: 'blue'});
             dag.add(parent);
             dag.addChild(parent, child);
+            dag.add(child);
 
-            var parentCopy = dag.copyTree(parent);
+            var copies = dag.copyTree(parent);
+            dag.addAll(copies);
+
+            var parentCopy = dag.get(copies[0].id);
             var childCopy = dag.getChildren(parentCopy)[0];
 
             assert.notEqual(child.parent, childCopy.parent);
@@ -135,8 +140,11 @@ define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], func
             var child = new Node({color: 'blue'});
             dag.add(parent);
             dag.addChild(parent, child);
+            dag.add(child);
 
-            var parentCopy = dag.copyTree(parent);
+            var copies = dag.copyTree(parent);
+            dag.addAll(copies);
+            var parentCopy = copies[0];
             var childCopy = dag.getChildren(parentCopy)[0];
 
             assert.isNull(parent.parent);
@@ -160,15 +168,19 @@ define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], func
             p2.name = 'Copy Component';
             p2.text = 'Copy Component';
             dag.addChild(p0, p2);
+            dag.add(p2);
 
             var p6 = new Node();
             p6.type = 'Actions/CopyTree';
             p6.event = 'click';
             dag.addChild(p2, p6);
+            dag.add(p6);
 
             var parent = dag.getParent(p6);
             var grandparent = dag.getParent(parent);
-            var copy = dag.copyTree(grandparent);
+            var copies = dag.copyTree(grandparent);
+            dag.addAll(copies);
+            var copy = copies[0];
             dag.setChild(grandparent, copy);
 
             var grandchildren = grandparent.children;

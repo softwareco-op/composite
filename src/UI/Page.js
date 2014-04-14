@@ -5,23 +5,16 @@
 /*
  * An HTML Page renderer.
  */
-define(['Model/ObjectSupplier',
-        'Collection/OBJDAGController',
-        'Collection/OBJDAG',
-        'Model/Hasher',
+define(['Model/Node',
+        'Model/ObjectSupplier',
         'Collection/DAG',
         'Composition/Global',
-        'localstorage',
-        'backbone'],
-function(ObjectSupplier,
-         OBJDAGController,
-         OBJDAG,
-         Hasher,
+        'lodash'],
+function(Node,
+         ObjectSupplier,
          DAG,
          Global,
-         BackboneLocalStorage,
-         Backbone) {
-
+         _) {
     /**
      * Constructs a page(let) consisting of a composition of nodes.
      *
@@ -39,22 +32,31 @@ function(ObjectSupplier,
     }
 
     Page.prototype.install = function() {
+        var objectSupplier = new ObjectSupplier();
         this.dag = this.dag || new DAG();
-        this.objectSupplier = new ObjectSupplier();
-        this.hasher = new Hasher("SHA-256");
-        Global.dag = this.dag;
+
+        var pipeline = _.compose(_.bind(this.add, this),
+                                 _.bind(this.dag.add, this.dag),
+                                 _.bind(this.deduplicate, this, this.dag),
+                                 _.bind(objectSupplier.add, objectSupplier));
+        Global.pipeline = pipeline;
+        return pipeline;
     }
 
-    Page.prototype.getNode = function() {
-        return Node;
+    /*
+     * @param {Node} node to check for duplication.
+     * @param {DAG} dag used to check existence of node.
+     * @return the node if it is not a duplicate and null otherwise.
+     */
+    Page.prototype.deduplicate = function(dag, node) {
+        if (dag.exists(node)) {
+            throw new Error('node already in memory: ' + node.id);
+        }
+        return node;
     }
 
     Page.prototype.getDAG = function() {
         return this.dag;
-    }
-
-    Page.prototype.getOBJDAG = function() {
-        return this.objdag;
     }
 
     Page.prototype.setRootNodeID = function(id) {
@@ -63,13 +65,23 @@ function(ObjectSupplier,
 
     Page.prototype.add = function(node) {
         var self = this;
-        var nodeObject = dag.get(node.id);
-        if (nodeObject.id === self.rootNodeID) {
-            self.div.appendChild(nodeObject.getWrap(this.document));
-            return nodeObject;
+        var parent = this.dag.getParent(node);
+
+        if (node.object.add !== undefined) {
+            node.object.add(node, this.dag, this.document);
         }
-        nodeObject.add(node, dag, dom);
-        return nodeObject;
+
+        if (parent !== undefined) {
+            if (parent.object.update !== undefined) {
+                parent.object.update(parent, this.dag, this.document);
+            }
+        }
+
+        if (node.id === self.root) {
+            self.div.appendChild(node.object.getWrap(this.document));
+            return node;
+        }
+        return node;
     }
 
     Page.prototype.addNodes = function() {

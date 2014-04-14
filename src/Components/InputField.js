@@ -2,74 +2,57 @@
 // (C) 2014 SoftwareCo-oP
 //
 
-define(['UI/View', 'Model/ObjectSupplier', 'underscore'], function(View, ObjectSupplier, _) {
+define(['UI/View', 'lodash'], function(View, _) {
 
     //
     // A text field
     //
-    // @param {Backbone.Model} model describing this text field
+    // @param {Node} node describing this text field
     //
-    function InputField(model) {
-        this.setFields(model)
+    function InputField(node) {
+        this.node = node;
     }
     _.extend(InputField.prototype, View.prototype)
 
     //
-    // Read the attributes required to render the component
-    //
-    // @param {Backbone.Model} model used to read attributes
-    //
-    InputField.prototype.setFields = function(model) {
-        this.name = model.get('name');
-        this.fieldType = model.get('fieldType');
-        this.value = model.get('value');
-        this.onchange = model.get('onchange');
-
-    }
-
-    //
     // Renders the input field when the onchange function is available
     //
-    // @param {Backbone.Model} model used to read attributes
+    // @param {Node} node used to read attributes
+    // @param {DAG} dag used to notify listeners
     // @param {Document} dom to use for rendering
-    // @return {Element} dom element representing the button
     //
-    InputField.prototype.render = function(model, objdag, dom) {
-        this.setFields(model);
-
+    InputField.prototype.render = function(node, dag, dom) {
+        this.node = node;
         var input = this.initialize(dom, function(dom) {
             return dom.createElement('input');
         });
 
         var self = this;
         var onChange = function() {
-            objdag.getChildren(self).then(function(children) {
-                var changeFns = _.filter(children, function(object) {
-                    return object.event === 'onchange';
-                });
-                _.map(changeFns, function(object) {
-                    object.perform(input, model);
-                });
-            }).catch(function(error) {
-                console.log(error);
-            })
+            var children = dag.getChildren(self);
+            var changeFns = _.filter(children, function(object) {
+                return object.node.event === 'onchange';
+            });
+            _.map(changeFns, function(object) {
+                object.perform(input, node);
+            });
         }
 
-        this.setAttributes(dom, {id: model.get('id')});
-        input.setAttribute('type', self.fieldType);
-        input.setAttribute('name', self.name);
-        input.value = self.value;
+        this.setAttributes(dom, {id: node.id});
+        input.setAttribute('type', node.fieldType);
+        input.setAttribute('name', node.name);
+        input.value = node.value;
         input.onchange = onChange;
 
         return this.wrap;
     }
 
-    InputField.prototype.add = function(model, objdag, dag, dom) {
-        this.render(model, objdag, dom);
+    InputField.prototype.add = function(node, objdag, dag, dom) {
+        this.render(node, objdag, dom);
     }
 
-    InputField.prototype.update = function(model, objdag, dag, dom) {
-        this.render(model, objdag, dom);
+    InputField.prototype.update = function(node, objdag, dag, dom) {
+        this.render(node, objdag, dom);
     }
 
     return InputField;

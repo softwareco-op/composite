@@ -3,32 +3,28 @@
  */
 
 define(
-['Components/Div', 'Collection/OBJDAG', 'rsvp', 'backbone', 'chai', 'sinon'],
-function(Div, OBJDAG, RSVP, Backbone, chai, sinon) {
+['Components/Div', 'Collection/DAG', 'Model/Node', 'chai', 'sinon'],
+function(Div, DAG, Node, chai, sinon) {
 
     var assert = chai.assert;
 
-    var Node = Backbone.Model.extend({});
-
     describe('DivTest', function() {
         it('renders an empty div', function(done) {
-            var model = new Node({
+            var node = new Node({
                 id: '0',
                 parent: null,
                 class: 'test',
             });
 
-            var objdag = new OBJDAG();
-
-            var div = new Div(model, objdag);
+            var div = new Div(node);
             div.id = 0;
             div.parent = null;
             div.children = [];
-            console.log(JSON.stringify([div, div]));
 
-            objdag.add(div);
+            var dag = new DAG();
+            dag.add(div);
 
-            var element = div.render(model, document);
+            var element = div.render(node, dag, document);
             var expected = '<div class="test"></div>';
             assert.equal(element.outerHTML, expected);
             done();
@@ -36,43 +32,33 @@ function(Div, OBJDAG, RSVP, Backbone, chai, sinon) {
         })
 
         it('renders children', function(done) {
-            var model = new Node({
+            var dag = new DAG();
+            var node = new Node({
                 id: '0',
                 parent: null,
                 class: 'test',
+                children: [1]
             });
-            var objdag = new OBJDAG();
 
-            var div = new Div(model, objdag);
-            div.id = 0;
-            div.parent = null;
-            div.children = [1];
-            objdag.add(div);
 
-            var model2 = new Node({
+            node.object = new Div(node)
+            dag.add(node);
+
+            var node2 = new Node({
                 id: '1',
                 parent: null,
                 class: 'test2',
             });
 
-            var div2 = new Div(model2, objdag);
-            div2.id = 1;
-            div2.parent = 0;
-            div2.children = [];
-            objdag.add(div2);
+            node2.object = new Div(node2);
+            dag.add(node2);
 
+            node.object.render(node, dag, document);
+            node2.object.render(node2, dag, document);
 
-            var p1 = div.render(model, document);
-            var p2 = div2.render(model2, document);
-
-            RSVP.all([p1, p2]).then(function(divs) {
-                var expected = '<div id="0"><div class="test"><div id="1"><div class="test2"></div></div></div></div>';
-                assert.equal(div.getWrap(document).outerHTML, expected);
-                done();
-            }).catch(function(error) {
-                console.log(error);
-            });
-
+            var expected = '<div id="0"><div class="test"><div id="1"><div class="test2"></div></div></div></div>';
+            assert.equal(node.object.getWrap(document).outerHTML, expected);
+            done();
         });
 
     })

@@ -20,9 +20,10 @@ function(ObjectSupplier, Node, BackboneLocalStorage, Backbone, chai, sinon) {
             node.name = 'testButton';
 
             var objectSupplier = new ObjectSupplier();
-            var button = objectSupplier.object(node);
-            var name = button.name;
+            objectSupplier.object(node);
+            var name = node.name;
             assert.equal(name, 'testButton');
+            assert.isTrue(node.object !== undefined);
             done();
         });
 

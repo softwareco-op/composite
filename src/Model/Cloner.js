@@ -11,6 +11,11 @@ function(_) {
      */
     function Cloner() {}
 
+    Cloner.prototype.cloneNode = function(node) {
+        var toClone = _.omit(node, 'object');
+        return this.clone(toClone);
+    }
+
     Cloner.prototype.clone = function(object) {
         return this.jsonClone(object);
     }

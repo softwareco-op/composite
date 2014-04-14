@@ -64,12 +64,14 @@ function(Cloner, Button, _, chai, sinon) {
 
             assert.equal(clone.name, button.name);
             assert.equal(clone.text, button.text);
-            console.log(JSON.stringify(clone))
-            console.log(JSON.stringify(button))
+
             assert(_.isEqual(clone, clone2), 'ought to be deep equal');
             clone.nest[0] = 0;
-            assert(!_.isEqual(clone, clone2), 'ought to be deep equal');
-
+            assert(!_.isEqual(clone, clone2), 'ought not be deep equal');
+            assert.equal(clone.nest[0], 0);
+            assert.equal(clone2.nest[0], 1);
+            clone.nest[0] = 1;
+            assert(_.isEqual(clone, clone2), 'ought to be deep equal');
             done();
         })
 

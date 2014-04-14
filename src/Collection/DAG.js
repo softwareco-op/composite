@@ -18,6 +18,13 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
     }
 
     /**
+     * @return the number of nodes in the DAG.
+     */
+    DAG.prototype.size = function() {
+        return _.size(this.collection);
+    }
+
+    /**
      * Add a node to this DAG
      * @param {Node} node to add
      */
@@ -25,6 +32,11 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         this.validateNode(node);
         this.collection[node.id] = node;
         return node;
+    }
+
+    DAG.prototype.addAll = function(nodes) {
+        var self = this;
+        return nodes.map(function(node) { self.add(node) });
     }
 
     /*
@@ -109,8 +121,7 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         this.validateNode(parent);
         this.validateNode(child);
         this.setChild(parent, child);
-        this.add(parent);
-        return this.add(child);
+        return child;
     }
 
     /*
@@ -137,6 +148,8 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         var children = parent.children || [];
         children.push(child.id);
         parent.children = children;
+        this.validateNode(parent);
+        return parent;
     }
 
     /**
@@ -144,26 +157,31 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
      * @return a copy of the given node with a new id.
      */
     DAG.prototype.copy = function(node) {
-        var copy = this.cloner.clone(node);
+        var copy = this.cloner.cloneNode(node);
         copy.id = uuid.v4();
-        this.add(copy);
         return copy;
     }
 
     /**
      * Make a copy of the tree at the given node.
+     * @return a list of copied nodes starting at node and traversing down the tree.
      */
     DAG.prototype.copyTree = function(node) {
         var copy = this.copy(node);
+
+        //We'll reset and rebuild the children list on the copy.
         copy.children = [];
+
+        var copiedNodes = [copy];
 
         var self = this;
         this.getChildren(node).map(function(child) {
-            var copiedChild = self.copyTree(child);
-            self.addChild(copy, copiedChild);
+            var copiedChildren = self.copyTree(child);
+            self.addChild(copy, copiedChildren[0]);
+            copiedNodes = copiedNodes.concat(copiedChildren);
         });
 
-        return copy;
+        return copiedNodes;
     }
 
     return DAG;

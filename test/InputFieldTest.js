@@ -6,26 +6,24 @@
 // Test InputField functionality
 //
 define(
-['Components/InputField', 'Collection/OBJDAG', 'rsvp', 'backbone', 'chai', 'sinon'],
-function(InputField, OBJDAG, RSVP, Backbone, chai, sinon) {
+['Components/InputField', 'Model/Node', 'Collection/DAG', 'chai', 'sinon'],
+function(InputField, Node, DAG, chai, sinon) {
 
     var assert = chai.assert;
-
-    var Node = Backbone.Model.extend({});
 
     describe('InputFieldTest', function() {
 
         it('renders as expected', function(done) {
-            var model = new Node({
+            var node = new Node({
                 id: '1',
                 parent: null,
                 name: 'testName',
                 fieldType: 'text',
                 value: 'test content'
             });
-            var inputField = new InputField(model);
-            var objdag = new OBJDAG();
-            var element = inputField.render(model, objdag, document);
+            var inputField = new InputField(node);
+            var dag = new DAG();
+            var element = inputField.render(node, dag, document);
             assert.equal(element.outerHTML, '<div id="1"><input type="text" name="testName"></div>');
             done();
         })

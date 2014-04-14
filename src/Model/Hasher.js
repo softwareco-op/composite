@@ -3,8 +3,8 @@
  */
 
 
-define(['jssha'],
-function(jsSHA) {
+define(['jssha', 'lodash'],
+function(jsSHA, _) {
 
     /*
      * Hasher hashes strings and nodes.
@@ -32,7 +32,8 @@ function(jsSHA) {
      * @return {string} hash value of JSONified node.
      */
     Hasher.prototype.hashNode = function(node) {
-        var string = JSON.stringify(node);
+        var toHash = _.omit(node, 'object');
+        var string = JSON.stringify(toHash);
         return this.hash(string);
     }
 
