@@ -35,19 +35,19 @@ define(['Model/ObjectSupplier', 'UI/View', 'lodash'], function(ObjectSupplier, V
         var clickListener = function (clickEvent) {
             var object = dag.get(node.id);
             var children = dag.getChildren(object);
-            var click = _.filter(children, function(object) {
-                return object.node.event == 'click';
+            var click = _.filter(children, function(node) {
+                return node.event == 'onmouseup';
             })
-            _.map(click, function(object) {
-                object.perform();
+            _.map(click, function(node) {
+                node.object.perform(dag, node);
             });
         }
 
         this.button.name = node.name;
         this.button.textContent = node.text;
-        this.button.addEventListener('click', function(clickEvent) {
+        this.button.onmouseup = function(clickEvent) {
             clickListener(clickEvent);
-        });
+        };
 
         return self.wrap;
     }

@@ -4,7 +4,7 @@
 
 
 /**
- * DAG is directed acyclic graph on a backbone collection.
+ * DAG is directed acyclic graph.
  **/
 define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], function(DAG, Node, uuid, _, chai) {
 

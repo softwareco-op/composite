@@ -11,8 +11,12 @@ function(_) {
      */
     function Cloner() {}
 
+    Cloner.prototype.stripNode = function(node) {
+        return _.omit(node, 'object');
+    }
+
     Cloner.prototype.cloneNode = function(node) {
-        var toClone = _.omit(node, 'object');
+        var toClone = this.stripNode(node);
         return this.clone(toClone);
     }
 

@@ -4,8 +4,8 @@
 
 
 define(
-['Model/Hasher', 'backbone', 'chai', 'sinon'],
-function(Hasher, Backbone, chai, sinon) {
+['Model/Node', 'Model/Hasher', 'chai', 'sinon'],
+function(Node, Hasher, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -23,7 +23,6 @@ function(Hasher, Backbone, chai, sinon) {
         });
 
         it('can hash a model', function(done) {
-            var Node = Backbone.Model.extend({});
 
             var node = new Node({name: 'a test field name'});
 

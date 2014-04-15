@@ -27,18 +27,17 @@ function(Node,
     function Page(div, document, root, dag) {
         this.div = div;
         this.document = document;
-        this.dag = dag;
+        this.dag = dag || new DAG();
+        this.objectSupplier = new ObjectSupplier();
         this.root = root;
     }
 
     Page.prototype.install = function() {
-        var objectSupplier = new ObjectSupplier();
-        this.dag = this.dag || new DAG();
 
         var pipeline = _.compose(_.bind(this.add, this),
                                  _.bind(this.dag.add, this.dag),
                                  _.bind(this.deduplicate, this, this.dag),
-                                 _.bind(objectSupplier.add, objectSupplier));
+                                 _.bind(this.objectSupplier.add, this.objectSupplier));
         Global.pipeline = pipeline;
         return pipeline;
     }
@@ -84,23 +83,23 @@ function(Node,
         return node;
     }
 
-    Page.prototype.addNodes = function() {
+    Page.prototype.getNodes = function() {
         var p0 = new Node({id:0});
         p0.type = 'Components/Div';
-        p0class = 'panel';
-        this.add(p0);
+        p0.class = 'panel';
 
         var p2 = new Node();
         p2.type = 'Components/Button';
         p2.name = 'Copy Component';
         p2.text = 'Copy Component';
-        this.dag.add(p2);
+        this.dag.addChild(p0, p2);
 
         var p6 = new Node();
         p6.type = 'Actions/CopyTree';
-        p6.event = 'click';
-        this.dag.add(p6);
+        p6.event = 'onmouseup';
+        this.dag.addChild(p2, p6);
 
+        return [p0, p2, p6];
         // var p3 = new Node({id:3});
         // p3.set('type', 'Components/InputField');
         // p3.set('name', 'username');

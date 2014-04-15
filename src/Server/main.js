@@ -22,5 +22,12 @@ requirejs.config({
 requirejs(['Server/HttpServer', 'events'], function(HttpServer, events) {
     var eventBus = new events.EventEmitter();
     var httpServer = new HttpServer(3000, eventBus, servePath);
-    httpServer.startService();
+    var io = httpServer.startService();
+
+    io.on('connection', function(socket) {
+        socket.on('node', function(node) {
+            console.log(node);
+        })
+    })
+
 });

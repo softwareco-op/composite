@@ -7,8 +7,8 @@
  * Tests ObjectSupplier functionality
  **/
 define(
-['Model/ObjectSupplier', 'Model/Node', 'localstorage', 'backbone', 'chai', 'sinon'],
-function(ObjectSupplier, Node, BackboneLocalStorage, Backbone, chai, sinon) {
+['Model/ObjectSupplier', 'Model/Node', 'chai', 'sinon'],
+function(ObjectSupplier, Node, chai, sinon) {
 
     var assert = chai.assert;
 

@@ -7,14 +7,12 @@ require.config({
     ],
     paths: {
       jquery: '../bower_components/jquery/jquery',
-      localstorage:'../bower_components/backbone.localstorage/backbone.localStorage',
-      backbone: '../bower_components/backbone-amd/backbone',
       rsvp: '../bower_components/rsvp/rsvp.amd',
       chai: '../bower_components/chai/chai',
       sinon: '../node_modules/sinon/pkg/sinon',
-        //'underscore':'../bower_components/underscore-amd/underscore',
       'jssha':'../bower_components/jssha/src/sha256',
-      'node-uuid':'../bower_components/node-uuid/uuid'
+      'node-uuid':'../bower_components/node-uuid/uuid',
+      'socketioclient':'../node_modules/socket.io-client/dist/socket.io'
     },
     shim: {
         sinon: {
@@ -22,14 +20,6 @@ require.config({
         },
         rsvp: {
             exports: 'rsvp'
-        },
-        backbone: {
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'
-        },
-        'backbone.localStorage': {
-            deps: ['backbone'],
-            exports: 'Backbone'
         }
     }
 });
@@ -41,7 +31,8 @@ require([
     '../test/DAGTest',
     '../test/DIVTest',
     '../test/InputFieldTest',
-    '../test/PageTest'
+    '../test/PageTest',
+    '../test/NodeSocketTest'
     //'../test/PromiseTest'
 
 ], function() {
