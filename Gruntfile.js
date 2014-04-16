@@ -100,7 +100,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-shell');
 
-  grunt.registerTask('test', ['connect', 'shell:ci']);
+  grunt.registerTask('test', ['connect', 'shell:ci', 'serverTest']);
   grunt.registerTask('build', ['copy', 'uglify']);
   grunt.registerTask('serverTest', ['mochaTest']);
   grunt.registerTask('default', ['nodemon']);

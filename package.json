@@ -34,7 +34,7 @@
     "grunt-mocha-test": "~0.10.2"
   },
   "scripts": {
-    "test": "grunt shell:travis"
+    "test": "grunt shell:travis serverTest"
   },
   "repository": {
     "type": "git",
