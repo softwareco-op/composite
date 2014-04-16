@@ -3,14 +3,14 @@
  */
 
 define(
-['Model/Cloner', 'socketioclient'],
-function(Cloner, socketio) {
+['Model/Cloner'],
+function(Cloner) {
 
     /*
      * NodeSocket transports nodes.
      */
-    function NodeSocket(url, socket) {
-        this.socket = socket || socketio.connect(url);
+    function NodeSocket(socket) {
+        this.socket = socket;
         this.cloner = new Cloner();
     }
 

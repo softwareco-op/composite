@@ -3,7 +3,7 @@
  */
 
 define(
-['Model/Cloner', 'Components/Button2', 'lodash', 'chai', 'sinon'],
+['Model/Cloner', 'Components/Button', 'lodash', 'chai', 'sinon'],
 function(Cloner, Button, _, chai, sinon) {
 
     var assert = chai.assert;

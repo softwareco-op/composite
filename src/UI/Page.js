@@ -8,11 +8,13 @@
 define(['Model/Node',
         'Model/ObjectSupplier',
         'Collection/DAG',
+        'Model/Unique',
         'Composition/Global',
         'lodash'],
 function(Node,
          ObjectSupplier,
          DAG,
+         Unique,
          Global,
          _) {
     /**
@@ -29,6 +31,7 @@ function(Node,
         this.document = document;
         this.dag = dag || new DAG();
         this.objectSupplier = new ObjectSupplier();
+        this.unique = new Unique(this.dag);
         this.root = root;
     }
 
@@ -36,22 +39,10 @@ function(Node,
 
         var pipeline = _.compose(_.bind(this.add, this),
                                  _.bind(this.dag.add, this.dag),
-                                 _.bind(this.deduplicate, this, this.dag),
+                                 _.bind(this.unique.add, this.unique),
                                  _.bind(this.objectSupplier.add, this.objectSupplier));
         Global.pipeline = pipeline;
         return pipeline;
-    }
-
-    /*
-     * @param {Node} node to check for duplication.
-     * @param {DAG} dag used to check existence of node.
-     * @return the node if it is not a duplicate and null otherwise.
-     */
-    Page.prototype.deduplicate = function(dag, node) {
-        if (dag.exists(node)) {
-            throw new Error('node already in memory: ' + node.id);
-        }
-        return node;
     }
 
     Page.prototype.getDAG = function() {

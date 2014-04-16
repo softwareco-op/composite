@@ -15,7 +15,8 @@
     "express": "~3.5.0",
     "socket.io": "~0.9.16",
     "eventemitter2": "~0.4.13",
-    "socket.io-client": "~0.9.16"
+    "socket.io-client": "~0.9.16",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -29,7 +30,8 @@
     "grunt-nodemon": "~0.2.1",
     "mocha-phantomjs": "~3.3.2",
     "mocha": "~1.17.1",
-    "phantomjs": "~1.9.7-1"
+    "phantomjs": "~1.9.7-1",
+    "grunt-mocha-test": "~0.10.2"
   },
   "scripts": {
     "test": "grunt shell:travis"

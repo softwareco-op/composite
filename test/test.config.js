@@ -25,14 +25,14 @@ require.config({
 });
 
 require([
-    '../test/ClonerTest',
+    //'../test/ClonerTest',
     '../test/HasherTest',
     '../test/ObjectSupplierTest',
     '../test/DAGTest',
     '../test/DIVTest',
     '../test/InputFieldTest',
-    '../test/PageTest',
-    '../test/NodeSocketTest'
+    '../test/PageTest'
+    //'../test/NodeSocketTest'
     //'../test/PromiseTest'
 
 ], function() {

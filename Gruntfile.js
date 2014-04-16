@@ -3,6 +3,16 @@ module.exports = function(grunt) {
   var port = 8981;
 
   grunt.initConfig({
+    mochaTest: {
+      test: {
+          options: {
+              ui: 'bdd',
+              reporter: 'spec',
+              clearRequireCache: true
+          },
+          src:['test/NodeSocketTest.js']
+      }
+    },
     copy: {
       dist: {
         files: [
@@ -76,11 +86,12 @@ module.exports = function(grunt) {
     watch: {
       jsFiles: {
         files: ['**/*.js'],
-        tasks: ['jshint', 'connect', 'shell:ci']
+        tasks: ['jshint', 'connect', 'shell:ci', 'serverTest']
       }
     }
   });
 
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -91,5 +102,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['connect', 'shell:ci']);
   grunt.registerTask('build', ['copy', 'uglify']);
+  grunt.registerTask('serverTest', ['mochaTest']);
   grunt.registerTask('default', ['nodemon']);
 }

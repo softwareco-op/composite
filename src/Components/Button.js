@@ -2,7 +2,8 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['Model/ObjectSupplier', 'UI/View', 'lodash'], function(ObjectSupplier, View, _) {
+define(['Model/ObjectSupplier', 'UI/View', 'lodash'], 
+function(ObjectSupplier, View, _) {
 
     //
     // A simple button.

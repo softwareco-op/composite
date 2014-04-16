@@ -37,14 +37,14 @@ define(['http', 'express', 'socket.io'], function(http, express, socketio) {
     /**
      * Start the server listening on the port defined in the constructor
      */
-    HttpServer.prototype.startService = function() {
+    HttpServer.prototype.startService = function(options) {
         if (this.running === true) {
             console.log("http server already running!");
             return this.io;
         }
         this.app = express();
         this.server = http.createServer(this.app);
-        this.io = socketio.listen(this.server);
+        this.io = socketio.listen(this.server, options);
         var eventBus = this.eventBus;
         this.server.listen(this.port);
         this.app.use(express.static(this.servePath));
