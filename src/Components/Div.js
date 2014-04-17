@@ -25,18 +25,28 @@ define(['UI/View', 'lodash'], function(View, _) {
             return dom.createElement('div');
         });
 
+        //Remove the nodes.  We will repopulate this div.
+        this.wrap.removeChild(this.wrap.lastChild);
+        div = dom.createElement('div');
+        this.wrap.appendChild(div);
+
         div.setAttribute('class', node.class);
         this.setAttributes(dom, {id: node.id});
 
         var self = this;
         var children = dag.getChildren(node);
 
+
+
         children.map(function(child) {
             //Children may be part of this div node, but not yet in the local memory buffer.
             //If they aren't in memory, then skip over them.  If the tree is valid,
             //we should get an update call when the child is added.
             if (child !== undefined) {
-                div.appendChild(child.object.getWrap(dom));
+                var childElement = child.object.getWrap(dom);
+                if (!div.contains(childElement)) {
+                    div.appendChild(childElement);
+                }
             }
         })
 

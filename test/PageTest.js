@@ -143,7 +143,8 @@ function(Node, Page, chai, sinon, underscore) {
             var action = pipeline(p6);
 
             action.object.perform(page.getDAG(), action);
-            var copiedChild = page.getDAG().getChildren(p0)[1];
+            var grandparent = page.getDAG().get(p0.id);
+            var copiedChild = page.getDAG().getChildren(grandparent)[1];
             var copiedGrandchild = page.getDAG().getChildren(copiedChild)[0];
 
             //var event = document.createEvent('Event');

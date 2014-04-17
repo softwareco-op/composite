@@ -55,6 +55,7 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         }
 
         node.hash = this.hasher.hashNode(node);
+        return node;
     }
 
     /*
@@ -162,6 +163,15 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         return copy;
     }
 
+
+    /*
+     * Clone a node.
+     * @return a clone of the given node with the same id.
+     */
+    DAG.prototype.clone = function(node) {
+        return this.cloner.cloneNode(node);
+    }
+
     /**
      * Make a copy of the tree at the given node.
      * @return a list of copied nodes starting at node and traversing down the tree.
@@ -182,6 +192,24 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         });
 
         return copiedNodes;
+    }
+
+    /*
+     * Similar to copyTree.  Add the copied tree as a child
+     * on the destination node.
+     *
+     * Similar to cp -r source dest/
+     *
+     * @param {Node} source to recursively copy
+     * @param {Node} destination to add nodes to.
+     * @return all copied and modified nodes.
+     */
+    DAG.prototype.copyTreeTo = function(source, destination) {
+        var destinationWithCopy = this.clone(destination);
+        var copies = this.copyTree(source);
+        this.addChild(destinationWithCopy, copies[0])
+        copies.unshift(destinationWithCopy);
+        return copies;
     }
 
     return DAG;

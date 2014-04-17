@@ -29,12 +29,12 @@ define(['UI/View', 'lodash'], function(View, _) {
 
         var self = this;
         var onChange = function() {
-            var children = dag.getChildren(self);
-            var changeFns = _.filter(children, function(object) {
-                return object.node.event === 'onchange';
+            var children = dag.getChildren(node);
+            var changeFns = _.filter(children, function(child) {
+                return child.event === 'onchange';
             });
-            _.map(changeFns, function(object) {
-                object.perform(input, node);
+            _.map(changeFns, function(child) {
+                child.object.perform(input, node);
             });
         }
 
@@ -47,12 +47,12 @@ define(['UI/View', 'lodash'], function(View, _) {
         return this.wrap;
     }
 
-    InputField.prototype.add = function(node, objdag, dag, dom) {
-        this.render(node, objdag, dom);
+    InputField.prototype.add = function(node, dag, dom) {
+        this.render(node, dag, dom);
     }
 
-    InputField.prototype.update = function(node, objdag, dag, dom) {
-        this.render(node, objdag, dom);
+    InputField.prototype.update = function(node, dag, dom) {
+        this.render(node, dag, dom);
     }
 
     return InputField;

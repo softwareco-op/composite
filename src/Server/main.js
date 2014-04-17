@@ -15,18 +15,8 @@ requirejs.config({
     }
 });
 
-requirejs(['Server/HttpServer', 'Server/NodeBuffer', 'events'], function(HttpServer, NodeBuffer, events) {
-    var eventBus = new events.EventEmitter();
-    var httpServer = new HttpServer(3000, eventBus, servePath);
-    var io = httpServer.startService();
-    var nodeBuffer = new NodeBuffer();
-    var pipeline = nodeBuffer.install();
-
-    io.on('connection', function(socket) {
-        socket.on('node', function(node) {
-            console.log(node);
-            pipeline(node);
-        })
-    })
-
+requirejs(['Server/HttpNodePipeline'], function(HttpNodePipeline) {
+    var httpNodePipeline = new HttpNodePipeline(servePath, 3000);
+    httpNodePipeline.install();
+    httpNodePipeline.routeNodesToPipeline();
 });

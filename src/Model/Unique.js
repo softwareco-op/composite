@@ -19,7 +19,10 @@ function() {
      */
     Unique.prototype.add = function(node) {
         if (this.dag.exists(node)) {
-            throw new Error('node already in memory: ' + node.id);
+            var dagNode = this.dag.get(node.id);
+            if (dagNode.hash === node.hash) {
+                throw new Error('node already in memory: ' + node.id);
+            }
         }
         return node;
     }
