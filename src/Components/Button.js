@@ -30,7 +30,7 @@ function(ObjectSupplier, View, _) {
             return dom.createElement('button')
         });
 
-        this.setAttributes(dom, {id: node.id});
+        this.setAttributes(dom, {id: node.id, 'class':node.clazz});
 
         var self = this;
         var clickListener = function (clickEvent) {

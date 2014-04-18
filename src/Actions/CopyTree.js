@@ -9,9 +9,17 @@ define(['Composition/Global', 'lodash'], function(Global, _) {
     }
 
     CopyTree.prototype.perform = function(dag, node) {
-        var parent = dag.getParent(node);
-        var grandparent = dag.getParent(parent);
-        var copies = dag.copyTreeTo(grandparent, grandparent);
+        var copies;
+        if (node.source === undefined || node.destination === undefined) {
+            var parent = dag.getParent(node);
+            var grandparent = dag.getParent(parent);
+            copies = dag.copyTreeTo(grandparent, grandparent);
+        } else {
+            var source = dag.get(node.source);
+            var destination = dag.get(node.destination);
+            copies = dag.copyTreeTo(source, destination);
+        }
+
         _.map(copies, Global.pipeline, Global.pipeline);
     }
 

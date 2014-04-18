@@ -19,12 +19,13 @@ function(InputField, Node, DAG, chai, sinon) {
                 parent: null,
                 name: 'testName',
                 fieldType: 'text',
-                value: 'test content'
+                value: 'test content',
+                clazz: 'testClass'
             });
             var inputField = new InputField(node);
             var dag = new DAG();
             var element = inputField.render(node, dag, document);
-            assert.equal(element.outerHTML, '<div id="1"><input type="text" name="testName"></div>');
+            assert.equal(element.outerHTML, '<div id="1" class="testClass"><input type="text" name="testName"></div>');
             done();
         })
 

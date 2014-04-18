@@ -38,7 +38,7 @@ define(['UI/View', 'lodash'], function(View, _) {
             });
         }
 
-        this.setAttributes(dom, {id: node.id});
+        this.setAttributes(dom, {id: node.id, 'class':node.clazz});
         input.setAttribute('type', node.fieldType);
         input.setAttribute('name', node.name);
         input.value = node.value;

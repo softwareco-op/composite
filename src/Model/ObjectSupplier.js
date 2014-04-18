@@ -8,8 +8,8 @@
  **/
 define(
 [ 'Components/Div','Components/Button', 'Components/InputField', 'Actions/GlobalAction',
-  'Actions/CopyTree', 'Actions/StoreValue'],
-function(Div, Button, InputField, GlobalAction, CopyTree, StoreValue) {
+  'Actions/CopyTree', 'Actions/StoreValue', 'Actions/Reorder'],
+function(Div, Button, InputField, GlobalAction, CopyTree, StoreValue, Reorder) {
 
     function ObjectSupplier() {
         this.componentMap = {
@@ -18,7 +18,8 @@ function(Div, Button, InputField, GlobalAction, CopyTree, StoreValue) {
             'Components/InputField' : InputField,
             'Actions/GlobalAction' : GlobalAction,
             'Actions/CopyTree' : CopyTree,
-            'Actions/StoreValue' : StoreValue
+            'Actions/StoreValue' : StoreValue,
+            'Actions/Reorder' : Reorder
         }
     }
 

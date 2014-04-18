@@ -44,6 +44,8 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
      * @param {Node} node to validate
      */
     DAG.prototype.validateNode = function(node) {
+        if (node === null) {return node;}
+
         if (node.id === undefined || node.id === null) {
             node.id = uuid.v4();
         }
@@ -145,6 +147,11 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
      * @param {Node} child to add to parent.
      */
     DAG.prototype.setChild = function(parent, child) {
+        if (parent === null) {
+            child.parent = null;
+            return parent;
+        }
+
         child.parent = parent.id;
         var children = parent.children || [];
         children.push(child.id);

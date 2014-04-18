@@ -80,47 +80,83 @@ function(Node,
     }
 
     Page.prototype.getNodes = function() {
-        var p0 = new Node({id:0});
-        p0.type = 'Components/Div';
-        p0.class = 'panel';
 
-        var p2 = new Node();
+        var page = this.getPanel(null, 0);
+
+        var choice = this.getPanel(page, 1);
+
+        var down = this.getMove(choice, 6, 1);
+
+        var p2 = this.getCopyTree(choice, choice, page);
+
+        var p3 = this.getInputField(choice, 3, 'text');
+
+        var p4 = this.getInputField(choice, 4, 'password');
+
+        var up = this.getMove(choice, 5, page, -1);
+
+        return [page].concat(choice, down, p2, p3, p4, up);
+    }
+
+    Page.prototype.getPanel = function(parent, id) {
+        var p0 = new Node({id:id});
+        p0.type = 'Components/Div';
+        p0.clazz = 'panel';
+        this.dag.addChild(parent, p0);
+        return p0;
+    }
+
+    Page.prototype.getCopyTree = function(parent, source, destination) {
+       var p2 = new Node();
         p2.type = 'Components/Button';
         p2.name = 'Copy Component';
         p2.text = 'Copy Component';
-        this.dag.addChild(p0, p2);
+        p2.clazz = 'left';
+        this.dag.addChild(parent, p2);
 
         var p6 = new Node();
         p6.type = 'Actions/CopyTree';
         p6.event = 'onmouseup';
+        p6.source = source.id;
+        p6.destination = destination.id;
         this.dag.addChild(p2, p6);
 
+        return [p2, p6];
+    }
 
-        var p3 = new Node({id:3});
+    Page.prototype.getInputField = function(parent, id, type) {
+        var p3 = new Node({id:id});
         p3.type = 'Components/InputField';
         p3.name = 'username';
-        p3.fieldType = 'text';
+        p3.fieldType = type;
         p3.value = 'username';
-        this.dag.addChild(p0, p3);
+        p3.clazz = 'left';
+        this.dag.addChild(parent, p3);
 
-        var p7 = new Node({id:7});
+        var p7 = new Node();
         p7.type = 'Actions/StoreValue';
         p7.event = 'onchange';
         this.dag.addChild(p3, p7);
 
-        var p4 = new Node({id:4});
-        p4.type = 'Components/InputField';
-        p4.name = 'password';
-        p4.fieldType = 'password';
-        p4.value = '';
-        this.dag.addChild(p0, p4);
+        return [p3, p7];
+    }
 
-        var p8 = new Node({id:8});
-        p8.type = 'Actions/StoreValue';
-        p8.event = 'onchange';
-        this.dag.addChild(p4, p8);
+    Page.prototype.getMove = function(parent, id, container, amount) {
+        var p7 = new Node({id:id})
+        p7.type = 'Components/Button';
+        p7.name = 'Move';
+        p7.text = 'Move';
+        p7.clazz = 'button';
+        this.dag.addChild(parent, p7);
 
-        return [p0, p2, p6, p3, p7, p4, p8];
+        var p8 = new Node()
+        p8.type = 'Actions/Reorder';
+        p8.event = 'onmouseup';
+        p8.amount = amount;
+        p8.container = container.id;
+        this.dag.addChild(p7, p8);
+
+        return [p7, p8];
     }
 
     return Page;

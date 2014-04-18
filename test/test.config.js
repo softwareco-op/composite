@@ -31,7 +31,8 @@ require([
     '../test/DAGTest',
     '../test/DIVTest',
     '../test/InputFieldTest',
-    '../test/PageTest'
+    '../test/PageTest',
+    '../test/ReorderChildTest'
     //'../test/NodeSocketTest'
     //'../test/PromiseTest'
 

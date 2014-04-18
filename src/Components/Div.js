@@ -30,8 +30,8 @@ define(['UI/View', 'lodash'], function(View, _) {
         div = dom.createElement('div');
         this.wrap.appendChild(div);
 
-        div.setAttribute('class', node.class);
-        this.setAttributes(dom, {id: node.id});
+
+        this.setAttributes(dom, {id: node.id, 'class': node.clazz});
 
         var self = this;
         var children = dag.getChildren(node);

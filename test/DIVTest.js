@@ -13,7 +13,7 @@ function(Div, DAG, Node, chai, sinon) {
             var node = new Node({
                 id: '0',
                 parent: null,
-                class: 'test',
+                clazz: 'test',
             });
 
             var div = new Div(node);
@@ -25,7 +25,7 @@ function(Div, DAG, Node, chai, sinon) {
             dag.add(div);
 
             var element = div.render(node, dag, document);
-            var expected = '<div class="test"></div>';
+            var expected = '<div></div>';
             assert.equal(element.outerHTML, expected);
             done();
 
@@ -36,7 +36,7 @@ function(Div, DAG, Node, chai, sinon) {
             var node = new Node({
                 id: '0',
                 parent: null,
-                class: 'test',
+                clazz: 'test',
                 children: [1]
             });
 
@@ -47,7 +47,7 @@ function(Div, DAG, Node, chai, sinon) {
             var node2 = new Node({
                 id: '1',
                 parent: null,
-                class: 'test2',
+                clazz: 'test2',
             });
 
             node2.object = new Div(node2);
@@ -56,7 +56,7 @@ function(Div, DAG, Node, chai, sinon) {
             node.object.render(node, dag, document);
             node2.object.render(node2, dag, document);
 
-            var expected = '<div id="0"><div class="test"><div id="1"><div class="test2"></div></div></div></div>';
+            var expected = '<div id="0" class="test"><div><div id="1" class="test2"><div></div></div></div></div>';
             assert.equal(node.object.getWrap(document).outerHTML, expected);
             done();
         });

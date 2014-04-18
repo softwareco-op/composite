@@ -1,0 +1,14 @@
+.left {
+    float: left;
+    display: table-cell;
+}
+
+.panel {
+    display: table;
+    width:1200px;
+}
+
+.table {
+    display: table;
+    width:1200px;
+}
