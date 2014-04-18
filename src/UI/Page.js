@@ -85,17 +85,16 @@ function(Node,
 
         var choice = this.getPanel(page, 1);
 
-        var down = this.getMove(choice, 6, 1);
+
 
         var p2 = this.getCopyTree(choice, choice, page);
 
         var p3 = this.getInputField(choice, 3, 'text');
 
-        var p4 = this.getInputField(choice, 4, 'password');
+        var up = this.getMove(choice, 5, '+', page, -1);
+        var down = this.getMove(choice, 6, '-', page, 1);
 
-        var up = this.getMove(choice, 5, page, -1);
-
-        return [page].concat(choice, down, p2, p3, p4, up);
+        return [page].concat(choice, down, p2, p3,  up);
     }
 
     Page.prototype.getPanel = function(parent, id) {
@@ -141,11 +140,11 @@ function(Node,
         return [p3, p7];
     }
 
-    Page.prototype.getMove = function(parent, id, container, amount) {
+    Page.prototype.getMove = function(parent, id, text, container, amount) {
         var p7 = new Node({id:id})
         p7.type = 'Components/Button';
         p7.name = 'Move';
-        p7.text = 'Move';
+        p7.text = text;
         p7.clazz = 'button';
         this.dag.addChild(parent, p7);
 
