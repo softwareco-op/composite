@@ -1,7 +1,7 @@
 composite
 =========
 
-A javascript library using requirejs and backbone to create composite, configurable views
+A javascript library using requirejs and socket.io to create composite, configurable views
 
 Design Goals
 ============
