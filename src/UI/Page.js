@@ -102,6 +102,8 @@ function(Node,
 
     Page.prototype.getMoveImage = function(parent, id, src, description, container, amount) {
         var image = new Node({id:id});
+        image.type = 'Components/Image';
+        image.clazz = 'image';
         image.src = src;
         image.alt = description;
         this.dag.addChild(parent, image);

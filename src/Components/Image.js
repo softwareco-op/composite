@@ -27,6 +27,8 @@ function(View, _) {
             return dom.createElement('img');
         })
 
+        this.setAttributes(dom, {id: node.id, 'class':node.clazz});
+
         var self = this;
         this.image.src = node.src;
         this.image.alt = node.alt;
@@ -34,8 +36,12 @@ function(View, _) {
         return this.image;
     }
 
-    Image.prototype.add = function(node, dag, context) {
-        this.dag = dag;
+    Image.prototype.add = function(node, dag, dom) {
+        var wrap = this.render(node, dag, dom);
+    }
+
+    Image.prototype.update = function(node, dag, dom) {
+        var wrap = this.render(node, dag, dom);
     }
 
     return Image;
