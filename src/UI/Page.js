@@ -89,9 +89,9 @@ function(Node,
 
         var p3 = this.getInputField(choice, 3, 'text');
 
-        var upImage = this.getImage(choice, 7, 'icons/uparrow.png', 'Up Arrow');
+        var upImage = this.getMoveImage(choice, 7, 'icons/uparrow.png', 'Up Arrow', page, -1);
 
-        var downImage = this.getImage(choice, 8, 'icons/downarrow.png', 'Down Arrow');
+        var downImage = this.getMoveImage(choice, 8, 'icons/downarrow.png', 'Down Arrow', page, 1);
 
         var up = this.getMove(choice, 5, '+', page, -1);
 
@@ -100,11 +100,18 @@ function(Node,
         return [page].concat(choice, down, upImage, downImage, p2, p3,  up);
     }
 
-    Page.prototype.getImage = function(parent, id, src, description) {
+    Page.prototype.getMoveImage = function(parent, id, src, description, container, amount) {
         var image = new Node({id:id});
         image.src = src;
         image.alt = description;
         this.dag.addChild(parent, image);
+
+        var p8 = new Node()
+        p8.type = 'Actions/Reorder';
+        p8.event = 'onmouseup';
+        p8.amount = amount;
+        p8.container = container.id;
+        this.dag.addChild(image, p8);
 
         return image;
     }
