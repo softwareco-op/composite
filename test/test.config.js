@@ -30,11 +30,13 @@ require([
     '../test/ObjectSupplierTest',
     '../test/DAGTest',
     '../test/DIVTest',
+    '../test/ImageTest',
     '../test/InputFieldTest',
     '../test/PageTest',
     '../test/ReorderChildTest'
     //'../test/NodeSocketTest'
     //'../test/PromiseTest'
+
 
 ], function() {
 

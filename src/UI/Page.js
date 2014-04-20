@@ -85,16 +85,28 @@ function(Node,
 
         var choice = this.getPanel(page, 1);
 
-
-
         var p2 = this.getCopyTree(choice, choice, page);
 
         var p3 = this.getInputField(choice, 3, 'text');
 
+        var upImage = this.getImage(choice, 7, 'icons/uparrow.png', 'Up Arrow');
+
+        var downImage = this.getImage(choice, 8, 'icons/downarrow.png', 'Down Arrow');
+
         var up = this.getMove(choice, 5, '+', page, -1);
+
         var down = this.getMove(choice, 6, '-', page, 1);
 
-        return [page].concat(choice, down, p2, p3,  up);
+        return [page].concat(choice, down, upImage, downImage, p2, p3,  up);
+    }
+
+    Page.prototype.getImage = function(parent, id, src, description) {
+        var image = new Node({id:id});
+        image.src = src;
+        image.alt = description;
+        this.dag.addChild(parent, image);
+
+        return image;
     }
 
     Page.prototype.getPanel = function(parent, id) {

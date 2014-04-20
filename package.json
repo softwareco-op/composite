@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "assert": "~0.4.9",
-    "grunt": "~0.4.3",
+    "grunt": "~0.4.4",
     "requirejs": "~2.1.11",
     "underscore": "~1.5.2",
     "backbone.io": "~0.4.1",

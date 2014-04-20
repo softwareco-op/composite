@@ -2,7 +2,7 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['Model/ObjectSupplier', 'UI/View', 'lodash'], 
+define(['Model/ObjectSupplier', 'UI/View', 'lodash'],
 function(ObjectSupplier, View, _) {
 
     //
@@ -27,7 +27,7 @@ function(ObjectSupplier, View, _) {
         this.node = node;
 
         this.button = this.initialize(dom, function(dom) {
-            return dom.createElement('button')
+            return dom.createElement('button');
         });
 
         this.setAttributes(dom, {id: node.id, 'class':node.clazz});
