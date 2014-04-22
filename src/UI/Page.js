@@ -85,27 +85,25 @@ function(Node,
 
         var choice = this.getPanel(page, 1);
 
-        var p2 = this.getCopyTree(choice, choice, page);
+        var p2 = this.getCopyTree(choice, 2, 'icons/add.png', 'Copy', 25, 25, choice, page);
 
         var p3 = this.getInputField(choice, 3, 'text');
 
-        var upImage = this.getMoveImage(choice, 7, 'icons/uparrow.png', 'Up Arrow', page, -1);
+        var upImage = this.getMoveImage(choice, 7, 'icons/uparrow.png', 'Up Arrow', 25, 25, page, -1);
 
-        var downImage = this.getMoveImage(choice, 8, 'icons/downarrow.png', 'Down Arrow', page, 1);
+        var downImage = this.getMoveImage(choice, 8, 'icons/downarrow.png', 'Down Arrow', 25, 25, page, 1);
 
-        var up = this.getMove(choice, 5, '+', page, -1);
-
-        var down = this.getMove(choice, 6, '-', page, 1);
-
-        return [page].concat(choice, down, upImage, downImage, p2, p3,  up);
+        return [page].concat(choice, upImage, downImage, p2, p3);
     }
 
-    Page.prototype.getMoveImage = function(parent, id, src, description, container, amount) {
+    Page.prototype.getMoveImage = function(parent, id, src, description, width, height, container, amount) {
         var image = new Node({id:id});
         image.type = 'Components/Image';
         image.clazz = 'image';
         image.src = src;
         image.alt = description;
+        image.width = width;
+        image.height = height;
         this.dag.addChild(parent, image);
 
         var p8 = new Node()
@@ -115,7 +113,7 @@ function(Node,
         p8.container = container.id;
         this.dag.addChild(image, p8);
 
-        return image;
+        return [image, p8];
     }
 
     Page.prototype.getPanel = function(parent, id) {
@@ -126,22 +124,24 @@ function(Node,
         return p0;
     }
 
-    Page.prototype.getCopyTree = function(parent, source, destination) {
-       var p2 = new Node();
-        p2.type = 'Components/Button';
-        p2.name = 'Copy Component';
-        p2.text = 'Copy Component';
-        p2.clazz = 'left';
-        this.dag.addChild(parent, p2);
+    Page.prototype.getCopyTree = function(parent, id, src, description, width, height, source, destination) {
+        var image = new Node({id:id});
+        image.type = 'Components/Image';
+        image.clazz = 'image';
+        image.src = src;
+        image.alt = description;
+        image.width = width;
+        image.height = height;
+        this.dag.addChild(parent, image);
 
         var p6 = new Node();
         p6.type = 'Actions/CopyTree';
         p6.event = 'onmouseup';
         p6.source = source.id;
         p6.destination = destination.id;
-        this.dag.addChild(p2, p6);
+        this.dag.addChild(image, p6);
 
-        return [p2, p6];
+        return [image, p6];
     }
 
     Page.prototype.getInputField = function(parent, id, type) {
@@ -149,7 +149,7 @@ function(Node,
         p3.type = 'Components/InputField';
         p3.name = 'username';
         p3.fieldType = type;
-        p3.value = 'username';
+        p3.value = '';
         p3.clazz = 'left';
         this.dag.addChild(parent, p3);
 

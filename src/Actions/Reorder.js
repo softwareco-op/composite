@@ -6,18 +6,16 @@
  * 1. Create a div node.
  * 2. Add children to the node.
  * 3. Add to each child an up node and down node.
- * 4. Each up/down button will get the grandparent's children
- * 5. Find the parent node in the grandparent's children list.
- * 6. Move the parent node earlier in the list, in the case of the up button.
- * 7. Move the parent node later in the list, in the case of the down button.
+ * 6. Move the item earlier in the list, in the case of the up button.
+ * 7. Move the item later in the list, in the case of the down button.
  * 8. Save the result to the pipeline.
  *
  * Reorders a child node relative to its peers.
  */
 
 define(
-['Composition/Global'],
-function(Global) {
+['Composition/Global', 'Actions/Action', 'lodash'],
+function(Global, Action, _) {
 
     /*
      * Reorder's a child node relative to its peers.
@@ -25,13 +23,15 @@ function(Global) {
     function Reorder(node) {
         this.node = node;
     }
+    _.extend(Reorder.prototype, Action.prototype);
 
     /*
      * Move a node in the dag.  If node doesn't have a target container and item, then use a default
      * parent and grandparent relative to this node.  Otherwise, move the item within the container specified
      * by the node.
      */
-    Reorder.prototype.perform = function(dag, node) {
+    Reorder.prototype.perform = function(node, dag) {
+        console.log('performing');
         var container = node.container;
         var item = node.item;
 
@@ -49,6 +49,12 @@ function(Global) {
         }
 
         var children = container.children;
+        if (children === undefined || item === undefined) {
+            console.log("cannot reorder an undefined item or children");
+            return;
+        }
+
+
         this.move(children, item.id, this.node.amount);
         Global.pipeline(dag.validateNode(container));
     }
@@ -80,10 +86,6 @@ function(Global) {
         list.splice(newindex, 0, node);
 
         return list;
-    }
-
-    Reorder.prototype.add = function(node, dag, dom) {
-        this.dag = dag;
     }
 
     return Reorder;

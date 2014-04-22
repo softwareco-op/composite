@@ -126,41 +126,47 @@ function(Node, Page, chai, sinon, underscore) {
             p0.type = 'Components/Div';
             p0.clazz = 'panel';
 
-
-            var p2 = new Node({id:2})
-            p2.type = 'Components/Button';
-            p2.name = 'Copy Component';
-            p2.text = 'Copy Component';
-            p2.clazz = 'button';
-            page.getDAG().addChild(p0, p2);
-
-
+            var node = new Node({id:2});
+            node.type = 'Components/Image';
+            node.src = 'icons/uparrow.png';
+            node.clazz = 'img';
+            node.alt = 'Testing';
+            node.width = '100';
+            node.height = '100';
+            page.getDAG().addChild(p0, node);
 
             var p6 = new Node({id:6})
             p6.type = 'Actions/CopyTree';
-            p6.event = 'click';
-            page.getDAG().addChild(p2, p6);
+            p6.event = 'onmouseup';
+            p6.amount = -1;
+            page.getDAG().addChild(node, p6);
 
 
             pipeline(p0)
-            var button = pipeline(p2);
+            var image = pipeline(node);
             var action = pipeline(p6);
 
-            action.object.perform(page.getDAG(), action);
-            var grandparent = page.getDAG().get(p0.id);
-            var copiedChild = page.getDAG().getChildren(grandparent)[1];
-            var copiedGrandchild = page.getDAG().getChildren(copiedChild)[0];
+            var fn = image.object.el.onmouseup;
+            image.object.el.addEventListener('onmouseup', function(event) {
+                fn(event);
 
-            //var event = document.createEvent('Event');
-            //event.initEvent('click', true, true);
-            //button.object.button.dispatchEvent(event);
+                var grandparent = page.getDAG().get(p0.id);
+                var copiedChild = page.getDAG().getChildren(grandparent)[1];
+                var copiedGrandchild = page.getDAG().getChildren(copiedChild)[0];
 
-            var expected = '<div><div id="0" class="panel"><div><div id="2" class="button"><button name="Copy Component">Copy Component</button></div><div id="{id1}" class="panel"><div><div id="{id2}" class="button"><button name="Copy Component">Copy Component</button></div></div></div></div></div></div>'
-            expected = expected.replace(/{id1}/g, copiedChild.id);
-            expected = expected.replace(/{id2}/g, copiedGrandchild.id);
-            assert.equal(div.outerHTML, expected);
-            assert.equal(page.getDAG().size(), 6);
-            done();
+
+                var expected = '<div><div id="0" class="panel"><div><div id="2" class="img"><img src="icons/uparrow.png" alt="Testing" width="100" height="100"></div><div id="{id1}" class="panel"><div><div id="{id2}" class="img"><img src="icons/uparrow.png" alt="Testing" width="100" height="100"></div></div></div></div></div></div>'
+                expected = expected.replace(/{id1}/g, copiedChild.id);
+                expected = expected.replace(/{id2}/g, copiedGrandchild.id);
+                assert.equal(div.outerHTML, expected);
+                assert.equal(page.getDAG().size(), 6);
+                done();
+            })
+
+            var event = document.createEvent('Event');
+            event.initEvent('onmouseup', true, true);
+            image.object.el.dispatchEvent(event);
+
        })
 
     })

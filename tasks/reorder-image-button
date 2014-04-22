@@ -1,0 +1,7 @@
+Reorder gets its parent node.
+Reorder gets the parent node object.
+Reorder gets the parent node object element, el.
+	All objects need their html element to be named element.
+Reorder gets el's onmouseup function, fn.
+Reorder wraps fn in a new function fn' that calls fn, then performs the reorder.
+

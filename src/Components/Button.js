@@ -26,7 +26,7 @@ function(ObjectSupplier, View, _) {
     Button.prototype.render = function(node, dag, dom) {
         this.node = node;
 
-        this.button = this.initialize(dom, function(dom) {
+        this.el = this.initialize(dom, function(dom) {
             return dom.createElement('button');
         });
 
@@ -44,9 +44,9 @@ function(ObjectSupplier, View, _) {
             });
         }
 
-        this.button.name = node.name;
-        this.button.textContent = node.text;
-        this.button.onmouseup = function(clickEvent) {
+        this.el.name = node.name;
+        this.el.textContent = node.text;
+        this.el.onmouseup = function(clickEvent) {
             clickListener(clickEvent);
         };
 

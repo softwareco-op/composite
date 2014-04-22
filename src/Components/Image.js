@@ -23,17 +23,20 @@ function(View, _) {
      * @return {Element} dom element representing the button
      */
     Image.prototype.render = function(node, dag, dom) {
-        this.image = this.initialize(dom, function(dom) {
+        this.el = this.initialize(dom, function(dom) {
             return dom.createElement('img');
         })
 
         this.setAttributes(dom, {id: node.id, 'class':node.clazz});
 
         var self = this;
-        this.image.src = node.src;
-        this.image.alt = node.alt;
 
-        return this.image;
+        this.el.src = node.src;
+        this.el.alt = node.alt;
+        this.el.width = node.width;
+        this.el.height = node.height;
+
+        return this.el;
     }
 
     Image.prototype.add = function(node, dag, dom) {
@@ -45,4 +48,5 @@ function(View, _) {
     }
 
     return Image;
+
 })

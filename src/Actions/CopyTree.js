@@ -2,13 +2,14 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['Composition/Global', 'lodash'], function(Global, _) {
+define(['Composition/Global', 'Actions/Action', 'lodash'], function(Global, Action, _) {
 
     function CopyTree(node) {
         _.merge(this, node);
     }
+    _.extend(CopyTree.prototype, Action.prototype);
 
-    CopyTree.prototype.perform = function(dag, node) {
+    CopyTree.prototype.perform = function(node, dag) {
         var copies;
         if (node.source === undefined || node.destination === undefined) {
             var parent = dag.getParent(node);
@@ -22,6 +23,7 @@ define(['Composition/Global', 'lodash'], function(Global, _) {
 
         _.map(copies, Global.pipeline, Global.pipeline);
     }
+
 
     return CopyTree;
 

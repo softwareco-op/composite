@@ -3,8 +3,8 @@
  */
 
 define(
-['Actions/Reorder', 'Model/Node', 'UI/Page', 'chai', 'sinon'],
-function(Reorder, Node, Page, chai, sinon) {
+['Actions/Reorder', 'Components/Image', 'Model/Node', 'UI/Page', 'chai', 'sinon'],
+function(Reorder, Image, Node, Page, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -76,11 +76,47 @@ function(Reorder, Node, Page, chai, sinon) {
             pipeline(p7);
             var action = pipeline(p8);
 
-            action.object.perform(page.getDAG(), action);
+            action.object.perform(action, page.getDAG());
 
             console.log(div.outerHTML);
             done();
 
+        })
+
+        it('installs to an image', function(done) {
+            var div = document.createElement('div');
+            var page = new Page(div, document, 0);
+            var pipeline = page.install();
+
+            var node = new Node({id:0});
+            node.type = 'Components/Image';
+            node.src = 'icons/uparrow.png';
+            node.clazz = 'img';
+            node.alt = 'Testing';
+            node.width = '100';
+            node.height = '100';
+
+            var p8 = new Node({id:8})
+            p8.type = 'Actions/Reorder';
+            p8.event = 'onmouseup';
+            p8.amount = -1;
+            page.getDAG().addChild(node, p8);
+
+            var image = pipeline(node);
+            var action = pipeline(p8);
+
+
+            var fn = image.object.el.onmouseup;
+            image.object.el.addEventListener('onmouseup', function(event) {
+                fn(event);
+                //action.object.perform(action, page.getDAG());
+                console.log(div.outerHTML);
+                done();
+            })
+
+            var event = document.createEvent('Event');
+            event.initEvent('onmouseup', true, true);
+            image.object.el.dispatchEvent(event);
         })
 
     })
