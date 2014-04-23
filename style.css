@@ -1,14 +1,32 @@
-.left {
-    float: left;
-    display: table-cell;
-}
-
 .panel {
-    display: table;
-    width:1200px;
+    width:400px;
+    position:relative;
 }
 
-.table {
-    display: table;
-    width:1200px;
+.copy {
+    position: absolute;
+    left: 0px;
+    width:30px;
+    margin:auto;
 }
+
+.choice {
+    position: absolute;
+    left: 30px;
+    width: 150px;
+    margin:auto;
+ }
+
+.moveUp {
+    position: absolute;
+    left: 200px;
+    width: 30px;
+    margin:auto;
+}
+
+.moveDown {
+    position: absolute;
+    left: 230px;
+    width: 30px;
+}
+

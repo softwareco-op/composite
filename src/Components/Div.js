@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['UI/View', 'lodash'], function(View, _) {
+define([], function() {
 
     /*
      * A div node that renders child nodes.
@@ -11,7 +11,6 @@ define(['UI/View', 'lodash'], function(View, _) {
     function DIV(node) {
         this.node = node;
     }
-    _.extend(DIV.prototype, View.prototype)
 
     /*
      * Renders the div
@@ -21,36 +20,44 @@ define(['UI/View', 'lodash'], function(View, _) {
      */
     DIV.prototype.render = function(node, dag, dom) {
         this.node = node;
-        var div = this.initialize(dom, function(dom) {
-            return dom.createElement('div');
-        });
+
+        this.el = this.el || dom.createElement('div');
 
         //Remove the nodes.  We will repopulate this div.
-        this.wrap.removeChild(this.wrap.lastChild);
-        div = dom.createElement('div');
-        this.wrap.appendChild(div);
+        this.clear();
 
-
-        this.setAttributes(dom, {id: node.id, 'class': node.clazz});
 
         var self = this;
         var children = dag.getChildren(node);
 
-
-
         children.map(function(child) {
             //Children may be part of this div node, but not yet in the local memory buffer.
             //If they aren't in memory, then skip over them.  If the tree is valid,
-            //we should get an update call when the child is added.
+            //we should get an update call when the child is added and all will be well.
             if (child !== undefined) {
-                var childElement = child.object.getWrap(dom);
-                if (!div.contains(childElement)) {
-                    div.appendChild(childElement);
+                var childElement = child.object.el;
+                if (childElement && !self.el.contains(childElement)) {
+                    self.el.appendChild(childElement);
                 }
             }
         })
 
-        return div;
+        this.el.setAttribute('id', node.id);
+        this.el.setAttribute('class', node.clazz);
+
+        return this.el;
+    }
+
+    /**
+     * Clear the div of elements
+     * @return this view
+     */
+    DIV.prototype.clear = function() {
+        if (typeof this.el === 'undefined') {return;}
+        while (this.el.hasChildNodes()) {
+            this.el.removeChild(this.el.lastChild);
+        }
+        return this;
     }
 
     /*

@@ -2,7 +2,7 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['Model/ObjectSupplier', 'UI/View', 'lodash'],
+define(['Model/ObjectSupplier', 'lodash'],
 function(ObjectSupplier, View, _) {
 
     //
@@ -14,7 +14,6 @@ function(ObjectSupplier, View, _) {
     function Button(node) {
         this.node = node;
     }
-    _.extend(Button.prototype, View.prototype);
 
     //
     // Renders the button
@@ -26,11 +25,7 @@ function(ObjectSupplier, View, _) {
     Button.prototype.render = function(node, dag, dom) {
         this.node = node;
 
-        this.el = this.initialize(dom, function(dom) {
-            return dom.createElement('button');
-        });
-
-        this.setAttributes(dom, {id: node.id, 'class':node.clazz});
+        this.el = this.el || dom.createElement('button');
 
         var self = this;
         var clickListener = function (clickEvent) {
@@ -44,6 +39,8 @@ function(ObjectSupplier, View, _) {
             });
         }
 
+        this.el.id = node.id;
+        this.el.setAttribute('class', node.clazz);
         this.el.name = node.name;
         this.el.textContent = node.text;
         this.el.onmouseup = function(clickEvent) {

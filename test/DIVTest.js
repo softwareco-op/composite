@@ -25,7 +25,7 @@ function(Div, DAG, Node, chai, sinon) {
             dag.add(div);
 
             var element = div.render(node, dag, document);
-            var expected = '<div></div>';
+            var expected = '<div id="0" class="test"></div>';
             assert.equal(element.outerHTML, expected);
             done();
 
@@ -55,9 +55,10 @@ function(Div, DAG, Node, chai, sinon) {
 
             node.object.render(node, dag, document);
             node2.object.render(node2, dag, document);
+            node.object.update(node, dag, document);
 
-            var expected = '<div id="0" class="test"><div><div id="1" class="test2"><div></div></div></div></div>';
-            assert.equal(node.object.getWrap(document).outerHTML, expected);
+            var expected = '<div id="0" class="test"><div id="1" class="test2"></div></div>';
+            assert.equal(node.object.el.outerHTML, expected);
             done();
         });
 

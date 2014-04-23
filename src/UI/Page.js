@@ -73,7 +73,7 @@ function(Node,
                 self.div.removeChild(self.div.lastChild);
             }
 
-            self.div.appendChild(node.object.getWrap(this.document));
+            self.div.appendChild(node.object.el);
             return node;
         }
         return node;
@@ -89,17 +89,17 @@ function(Node,
 
         var p3 = this.getInputField(choice, 3, 'text');
 
-        var upImage = this.getMoveImage(choice, 7, 'icons/uparrow.png', 'Up Arrow', 25, 25, page, -1);
+        var upImage = this.getMoveImage(choice, 7, 'moveUp', 'icons/uparrow.png', 'Up Arrow', 25, 25, page, -1);
 
-        var downImage = this.getMoveImage(choice, 8, 'icons/downarrow.png', 'Down Arrow', 25, 25, page, 1);
+        var downImage = this.getMoveImage(choice, 8, 'moveDown', 'icons/downarrow.png', 'Down Arrow', 25, 25, page, 1);
 
         return [page].concat(choice, upImage, downImage, p2, p3);
     }
 
-    Page.prototype.getMoveImage = function(parent, id, src, description, width, height, container, amount) {
+    Page.prototype.getMoveImage = function(parent, id, clazz, src, description, width, height, container, amount) {
         var image = new Node({id:id});
         image.type = 'Components/Image';
-        image.clazz = 'image';
+        image.clazz = clazz;
         image.src = src;
         image.alt = description;
         image.width = width;
@@ -127,7 +127,7 @@ function(Node,
     Page.prototype.getCopyTree = function(parent, id, src, description, width, height, source, destination) {
         var image = new Node({id:id});
         image.type = 'Components/Image';
-        image.clazz = 'image';
+        image.clazz = 'copy';
         image.src = src;
         image.alt = description;
         image.width = width;
@@ -147,10 +147,10 @@ function(Node,
     Page.prototype.getInputField = function(parent, id, type) {
         var p3 = new Node({id:id});
         p3.type = 'Components/InputField';
-        p3.name = 'username';
+        p3.name = 'choice';
         p3.fieldType = type;
         p3.value = '';
-        p3.clazz = 'left';
+        p3.clazz = 'choice';
         this.dag.addChild(parent, p3);
 
         var p7 = new Node();
@@ -166,7 +166,7 @@ function(Node,
         p7.type = 'Components/Button';
         p7.name = 'Move';
         p7.text = text;
-        p7.clazz = 'button';
+        p7.clazz = 'move';
         this.dag.addChild(parent, p7);
 
         var p8 = new Node()

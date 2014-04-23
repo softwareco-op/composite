@@ -25,7 +25,7 @@ function(Node, Page, chai, sinon, underscore) {
 
             pipeline(p0);
 
-            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><div></div></div></div>');
+            assert.equal(div.outerHTML, '<div><div id="0" class="panel"></div></div>');
 
             done();
         })
@@ -57,7 +57,7 @@ function(Node, Page, chai, sinon, underscore) {
                 console.log(error.message);
             }
 
-            var expected = '<div><div id="{id1}" class="panel2"><div><div id="{id2}" class="button"><button name="Copy Component">Copy Component</button></div></div></div></div>';
+            var expected = '<div><div id="{id1}" class="panel2"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>';
             expected = expected.replace(/{id1}/g, p0.id);
             expected = expected.replace(/{id2}/g, p2.id);
 
@@ -88,7 +88,7 @@ function(Node, Page, chai, sinon, underscore) {
             pipeline(p0);
             pipeline(p2);
 
-            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><div><div id="2" class="button"><button name="Copy Component">Copy Component</button></div></div></div></div>');
+            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>');
             done();
         })
 
@@ -112,7 +112,7 @@ function(Node, Page, chai, sinon, underscore) {
             page.getDAG().setChild(p0, p2);
             pipeline(p0);
 
-            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><div><div id="2" class="button"><button name="Copy Component">Copy Component</button></div></div></div></div>');
+            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>');
             done();
         });
 
@@ -127,9 +127,9 @@ function(Node, Page, chai, sinon, underscore) {
             p0.clazz = 'panel';
 
             var node = new Node({id:2});
-            node.type = 'Components/Image';
+            node.tag = 'img';
+            node.compositeType = 'Components/Image';
             node.src = 'icons/uparrow.png';
-            node.clazz = 'img';
             node.alt = 'Testing';
             node.width = '100';
             node.height = '100';
@@ -154,8 +154,8 @@ function(Node, Page, chai, sinon, underscore) {
                 var copiedChild = page.getDAG().getChildren(grandparent)[1];
                 var copiedGrandchild = page.getDAG().getChildren(copiedChild)[0];
 
+                var expected = '<div><div id="0" class="panel"><img id="2" src="icons/uparrow.png" alt="Testing" width="100" height="100"><div id="{id1}" class="panel"><img id="{id2}" src="icons/uparrow.png" alt="Testing" width="100" height="100"></div></div></div>';
 
-                var expected = '<div><div id="0" class="panel"><div><div id="2" class="img"><img src="icons/uparrow.png" alt="Testing" width="100" height="100"></div><div id="{id1}" class="panel"><div><div id="{id2}" class="img"><img src="icons/uparrow.png" alt="Testing" width="100" height="100"></div></div></div></div></div></div>'
                 expected = expected.replace(/{id1}/g, copiedChild.id);
                 expected = expected.replace(/{id2}/g, copiedGrandchild.id);
                 assert.equal(div.outerHTML, expected);

@@ -3,8 +3,8 @@
  */
 
 define(
-['UI/View', 'lodash'],
-function(View, _) {
+['UI/HTML'],
+function(HTML) {
 
     /*
      * Image component.
@@ -12,7 +12,6 @@ function(View, _) {
     function Image(node) {
         this.node = node;
     }
-    _.extend(Image.prototype, View.prototype);
 
     /*
      * Renders an image into the document
@@ -23,28 +22,16 @@ function(View, _) {
      * @return {Element} dom element representing the button
      */
     Image.prototype.render = function(node, dag, dom) {
-        this.el = this.initialize(dom, function(dom) {
-            return dom.createElement('img');
-        })
-
-        this.setAttributes(dom, {id: node.id, 'class':node.clazz});
-
-        var self = this;
-
-        this.el.src = node.src;
-        this.el.alt = node.alt;
-        this.el.width = node.width;
-        this.el.height = node.height;
-
+        this.el = this.el || HTML.nodeToElement(node, dom);
         return this.el;
     }
 
     Image.prototype.add = function(node, dag, dom) {
-        var wrap = this.render(node, dag, dom);
+        this.render(node, dag, dom);
     }
 
     Image.prototype.update = function(node, dag, dom) {
-        var wrap = this.render(node, dag, dom);
+        this.render(node, dag, dom);
     }
 
     return Image;

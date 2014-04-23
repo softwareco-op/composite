@@ -33,7 +33,8 @@ require([
     '../test/ImageTest',
     '../test/InputFieldTest',
     '../test/PageTest',
-    '../test/ReorderTest'
+    '../test/ReorderTest',
+    '../test/HTMLTest'
     //'../test/NodeSocketTest'
     //'../test/PromiseTest'
 
