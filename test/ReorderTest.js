@@ -39,29 +39,25 @@ function(Reorder, Image, Node, Page, chai, sinon) {
             var page = new Page(div, document, 0);
             var pipeline = page.install();
 
-            var p0 = new Node({id:0});
+            var p0 = new Node({id:0, html:{'class': 'panel'}})
             p0.type = 'Components/Div';
-            p0.clazz = 'panel';
+            p0.html.tag = 'div';
 
-
-            var p2 = new Node({id:2})
+            var p2 = new Node({id: 2, html:{'class': 'button'}});
             p2.type = 'Components/Button';
-            p2.name = 'Copy Component';
-            p2.text = 'Copy Component';
-            p2.clazz = 'button';
+            p2.html.name = 'Copy Component';
+            p2.html.tag = 'button';
             page.getDAG().addChild(p0, p2);
-
 
             var p6 = new Node({id:6})
             p6.type = 'Actions/CopyTree';
             p6.event = 'click';
             page.getDAG().addChild(p2, p6);
 
-            var p7 = new Node({id:7})
+            var p7 = new Node({id: 7, html:{'class': 'button'}});
             p7.type = 'Components/Button';
-            p7.name = 'Move';
-            p7.text = 'Move';
-            p7.clazz = 'button';
+            p7.html.name = 'Copy Component';
+            p7.html.tag = 'button';
             page.getDAG().addChild(p0, p7);
 
             var p8 = new Node({id:8})
@@ -88,13 +84,12 @@ function(Reorder, Image, Node, Page, chai, sinon) {
             var page = new Page(div, document, 0);
             var pipeline = page.install();
 
-            var node = new Node({id:0});
+            var node = new Node({id:0, html:{'class':'img'}});
             node.type = 'Components/Image';
-            node.src = 'icons/uparrow.png';
-            node.clazz = 'img';
-            node.alt = 'Testing';
-            node.width = '100';
-            node.height = '100';
+            node.html.src = 'icons/uparrow.png';
+            node.html.alt = 'Testing';
+            node.html.width = '100';
+            node.html.height = '100';
 
             var p8 = new Node({id:8})
             p8.type = 'Actions/Reorder';

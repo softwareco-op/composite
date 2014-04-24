@@ -1,32 +1,40 @@
-.panel {
+.choices {
+    position:relative;
+    width:400px;
+}
+
+.choice {
     width:400px;
     position:relative;
 }
 
 .copy {
-    position: absolute;
-    left: 0px;
-    width:30px;
-    margin:auto;
+    position: relative;
+    bottom: -5px;
+    width: 25px;
+    height: 25px;
 }
 
-.choice {
-    position: absolute;
-    left: 30px;
+.choiceName {
+    position: relative;
+    left: 10px;
     width: 150px;
-    margin:auto;
  }
 
 .moveUp {
-    position: absolute;
-    left: 200px;
-    width: 30px;
-    margin:auto;
+    position: relative;
+    bottom: -10px;
+    left: 15px;
+    width: 25px;
+    height: 25px;
 }
 
 .moveDown {
-    position: absolute;
-    left: 230px;
-    width: 30px;
+    position: relative;
+    bottom: -10px;
+    left: 15px;
+    width: 25px;
+    height: 25px;
+
 }
 

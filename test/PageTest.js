@@ -19,9 +19,10 @@ function(Node, Page, chai, sinon, underscore) {
 
             var pipeline = page.install();
 
-            var p0 = new Node({id:0})
+            var p0 = new Node({id:0, html:{}})
             p0.type = 'Components/Div';
-            p0.clazz = 'panel';
+            p0.html['class'] = 'panel';
+            p0.html.tag = 'div';
 
             pipeline(p0);
 
@@ -37,15 +38,16 @@ function(Node, Page, chai, sinon, underscore) {
 
             var pipeline = page.install();
 
-            var p0 = new Node({id: 0});
+            var p0 = new Node({id:0, html:{}})
             p0.type = 'Components/Div';
-            p0.clazz = 'panel2';
+            p0.html['class'] = 'panel2';
+            p0.html.tag = 'div';
 
-            var p2 = new Node({id: 2});
+            var p2 = new Node({id: 2, html:{}});
             p2.type = 'Components/Button';
-            p2.name = 'Copy Component';
-            p2.text = 'Copy Component';
-            p2.clazz = 'button';
+            p2.html['class'] = 'button';
+            p2.html.name = 'Copy Component';
+            p2.html.tag = 'button';
             page.getDAG().addChild(p0, p2);
 
             page.setRootNodeID(p0.id);
@@ -57,7 +59,7 @@ function(Node, Page, chai, sinon, underscore) {
                 console.log(error.message);
             }
 
-            var expected = '<div><div id="{id1}" class="panel2"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>';
+            var expected = '<div><div id="{id1}" class="panel2"><button id="2" class="button" name="Copy Component"></button></div></div>';
             expected = expected.replace(/{id1}/g, p0.id);
             expected = expected.replace(/{id2}/g, p2.id);
 
@@ -73,22 +75,23 @@ function(Node, Page, chai, sinon, underscore) {
 
             var pipeline = page.install();
 
-            var p0 = new Node({id:0});
+            var p0 = new Node({id:0, html:{}})
             p0.type = 'Components/Div';
-            p0.clazz = 'panel';
+            p0.html['class'] = 'panel';
+            p0.html.tag = 'div';
 
-            var p2 = new Node({id:2});
+            var p2 = new Node({id: 2, html:{}});
             p2.type = 'Components/Button';
-            p2.name = 'Copy Component';
-            p2.text = 'Copy Component';
-            p2.clazz = 'button';
+            p2.html['class'] = 'button';
+            p2.html.name = 'Copy Component';
+            p2.html.tag = 'button';
             page.getDAG().addChild(p0, p2);
 
             page.setRootNodeID(p0.id);
             pipeline(p0);
             pipeline(p2);
 
-            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>');
+            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component"></button></div></div>');
             done();
         })
 
@@ -98,21 +101,21 @@ function(Node, Page, chai, sinon, underscore) {
 
             var pipeline = page.install();
 
-            var p2 = new Node({id:2});
+            var p2 = new Node({id: 2, html:{}});
             p2.type = 'Components/Button';
-            p2.name = 'Copy Component';
-            p2.text = 'Copy Component';
-            p2.clazz = 'button';
+            p2.html['class'] = 'button';
+            p2.html.name = 'Copy Component';
+            p2.html.tag = 'button';
             pipeline(p2);
 
-
-            var p0 = new Node({id:0, parent:null, children: []});
+            var p0 = new Node({id:0, html:{}})
             p0.type = 'Components/Div';
-            p0.clazz = 'panel';
-            page.getDAG().setChild(p0, p2);
+            p0.html['class'] = 'panel';
+            p0.html.tag = 'div';
+            page.getDAG().addChild(p0, p2);
             pipeline(p0);
 
-            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component">Copy Component</button></div></div>');
+            assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component"></button></div></div>');
             done();
         });
 
@@ -122,25 +125,24 @@ function(Node, Page, chai, sinon, underscore) {
 
             var pipeline = page.install();
 
-            var p0 = new Node({id:0});
+            var p0 = new Node({id:0, html:{}});
             p0.type = 'Components/Div';
-            p0.clazz = 'panel';
+            p0.html['class'] = 'panel';
+            p0.html.tag = 'div';
 
-            var node = new Node({id:2});
-            node.tag = 'img';
-            node.compositeType = 'Components/Image';
-            node.src = 'icons/uparrow.png';
-            node.alt = 'Testing';
-            node.width = '100';
-            node.height = '100';
+            var node = new Node({id:2, html:{}});
+            node.type = 'Components/Image';
+            node.html.tag = 'img';
+            node.html.src = 'icons/uparrow.png';
+            node.html.alt = 'Testing';
+            node.html.width = '100';
+            node.html.height = '100';
             page.getDAG().addChild(p0, node);
 
             var p6 = new Node({id:6})
             p6.type = 'Actions/CopyTree';
             p6.event = 'onmouseup';
-            p6.amount = -1;
             page.getDAG().addChild(node, p6);
-
 
             pipeline(p0)
             var image = pipeline(node);
@@ -158,6 +160,7 @@ function(Node, Page, chai, sinon, underscore) {
 
                 expected = expected.replace(/{id1}/g, copiedChild.id);
                 expected = expected.replace(/{id2}/g, copiedGrandchild.id);
+                console.log(div.outerHTML);
                 assert.equal(div.outerHTML, expected);
                 assert.equal(page.getDAG().size(), 6);
                 done();

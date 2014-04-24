@@ -2,8 +2,8 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['Model/ObjectSupplier', 'lodash'],
-function(ObjectSupplier, View, _) {
+define(['UI/HTML'],
+function(HTML) {
 
     //
     // A simple button.
@@ -24,30 +24,8 @@ function(ObjectSupplier, View, _) {
     //
     Button.prototype.render = function(node, dag, dom) {
         this.node = node;
-
-        this.el = this.el || dom.createElement('button');
-
-        var self = this;
-        var clickListener = function (clickEvent) {
-            var object = dag.get(node.id);
-            var children = dag.getChildren(object);
-            var click = _.filter(children, function(node) {
-                return node.event == 'onmouseup';
-            })
-            _.map(click, function(node) {
-                node.object.perform(dag, node);
-            });
-        }
-
-        this.el.id = node.id;
-        this.el.setAttribute('class', node.clazz);
-        this.el.name = node.name;
-        this.el.textContent = node.text;
-        this.el.onmouseup = function(clickEvent) {
-            clickListener(clickEvent);
-        };
-
-        return self.wrap;
+        this.el = this.el || HTML.nodeToElement(node, dom);
+        return this.el;
     }
 
     Button.prototype.add = function(node, dag, dom) {
@@ -57,7 +35,6 @@ function(ObjectSupplier, View, _) {
     Button.prototype.update = function(node, dag, dom) {
         var wrap = this.render(node, dag, dom);
     }
-
 
     return Button;
 

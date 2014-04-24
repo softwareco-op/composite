@@ -11,12 +11,12 @@ function(Image, Node, chai, sinon) {
     describe('Image', function() {
 
         it('should render a proper html tag', function(done) {
-            var node = new Node({id:1});
-            node.tag = 'img';
-            node.src = 'icons/uparrow.png';
-            node.alt = 'Testing';
-            node.width = '100';
-            node.height = '100';
+            var node = new Node({id:1, html:{}});
+            node.html.tag = 'img';
+            node.html.src = 'icons/uparrow.png';
+            node.html.alt = 'Testing';
+            node.html.width = '100';
+            node.html.height = '100';
 
             var image = new Image(node);
             var imageElement = image.render(node, null, document);

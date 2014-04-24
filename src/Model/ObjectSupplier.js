@@ -37,12 +37,7 @@ function(Div, Button, InputField, Image, GlobalAction, CopyTree, StoreValue, Reo
      * @param {Node} node containing an available type.
      */
     ObjectSupplier.prototype.object = function(node) {
-        //depreciated.  Use compositeType.
         var moduleName = node.type;
-
-        if (node.compositeType) {
-            moduleName = node.compositeType;
-        }
 
         var constructor = this.componentMap[moduleName];
 

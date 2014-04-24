@@ -21,19 +21,21 @@ define(['UI/HTML'], function(HTML) {
     // @param {Document} dom to use for rendering
     //
     InputField.prototype.render = function(node, dag, dom) {
-        var omitValueFromElement = function(value, key) {
-            if (key === 'value') {
-                return true;
-            }
-            return false;
-        }
-
-        this.el = this.el || HTML.nodeToElement(node, dom, omitValueFromElement);
+        this.el = this.el || HTML.nodeToElement(node, dom);
+        this.el.value = node.value;
         return this.el;
     }
 
     InputField.prototype.add = function(node, dag, dom) {
         this.render(node, dag, dom);
+
+        //Let any children know we are here.
+        var children = dag.getChildren(node);
+        if (children === undefined) {return;}
+        children.map(function(child) {
+            if (child === undefined) {return;}
+            child.object.add(child, dag, dom);
+        })
     }
 
     InputField.prototype.update = function(node, dag, dom) {

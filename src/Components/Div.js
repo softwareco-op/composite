@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define([], function() {
+define(['UI/HTML'], function(HTML) {
 
     /*
      * A div node that renders child nodes.
@@ -20,12 +20,10 @@ define([], function() {
      */
     DIV.prototype.render = function(node, dag, dom) {
         this.node = node;
-
-        this.el = this.el || dom.createElement('div');
+        this.el = this.el || HTML.nodeToElement(node, dom)
 
         //Remove the nodes.  We will repopulate this div.
         this.clear();
-
 
         var self = this;
         var children = dag.getChildren(node);
@@ -41,9 +39,6 @@ define([], function() {
                 }
             }
         })
-
-        this.el.setAttribute('id', node.id);
-        this.el.setAttribute('class', node.clazz);
 
         return this.el;
     }

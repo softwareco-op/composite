@@ -14,13 +14,12 @@ function(InputField, Page, Node, DAG, chai, sinon) {
     describe('InputFieldTest', function() {
 
         it('renders as expected', function(done) {
-            var node = new Node({
-                id: '1',
-                tag: 'input',
-                parent: null,
-                type: 'text',
-                name: 'testName',
-            });
+            var node = new Node({id: '1', html:{}});
+            node.parent = null;
+            node.html.tag = 'input';
+            node.html.type = 'text';
+            node.html.name = 'testName';
+
             var inputField = new InputField(node);
             var dag = new DAG();
             var element = inputField.render(node, dag, document);
@@ -33,34 +32,38 @@ function(InputField, Page, Node, DAG, chai, sinon) {
             var page = new Page(div, document, 0);
             var pipeline = page.install();
 
+            var node = new Node({id: '1', html:{}});
+            node.parent = null;
+            node.html.tag = 'input';
+            node.html.type = 'text';
+            node.html.name = 'testName';
+            node.value = 'test content';
+            node.type = 'Components/InputField';
+            node.children = [2];
 
-            var node = new Node({
-                id: '1',
-                tag: 'input',
-                parent: null,
-                type: 'text',
-                name: 'testName',
-                value: 'test content',
-                compositeType: 'Components/InputField',
-                children:[2]
-            });
-
-            var node2 = new Node({
-                id: '2',
-                parent: 1,
-                type: 'Actions/StoreValue'
-            })
+            var node2 = new Node({id: '2', html:{}});
+            node2.parent = 1;
+            node2.type = 'Actions/StoreValue';
+            node2.event = 'onchange';
 
             var input = pipeline(node);
             var action = pipeline(node2);
 
             node.value = 'altered';
-            action.object.perform(node2, page.getDAG());
-            var newNode = page.getDAG().get(1);
-            assert.equal(newNode.value, 'test content');
+            var fn = input.object.el.onchange;
+            input.object.el.addEventListener('onchange', function(event) {
+                fn(event);
 
-            //Todo
-            done();
+                //action.object.perform(node2, page.getDAG());
+                var newNode = page.getDAG().get(1);
+                assert.equal(newNode.value, 'test content');
+                done();
+            })
+
+            var event = document.createEvent('Event');
+            event.initEvent('onchange', true, true);
+            input.object.el.dispatchEvent(event);
+
         })
 
     })
