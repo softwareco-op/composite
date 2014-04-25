@@ -25,7 +25,8 @@ require.config({
 });
 
 require([
-    //'../test/ClonerTest',
+    //'../test/ClonerTest',e
+    '../test/PathTest',
     '../test/HasherTest',
     '../test/ObjectSupplierTest',
     '../test/DAGTest',

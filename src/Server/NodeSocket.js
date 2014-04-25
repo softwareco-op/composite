@@ -21,6 +21,7 @@ function(Cloner) {
     NodeSocket.prototype.add = function(node) {
         var toSend = this.cloner.stripNode(node);
         this.socket.emit('node', toSend);
+        return node;
     }
 
     /*

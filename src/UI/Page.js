@@ -79,98 +79,146 @@ function(Node,
         return node;
     }
 
-    Page.prototype.getNodes = function() {
+    Page.prototype.addNodes = function(pipeline) {
+        var ballotBox = this.getPanel(pipeline, null, {'class':'ballotBox'}, 0);
 
-        var choices = this.getPanel(null, 0, {'class':'choices'});
+        var ballot = this.getBallot(pipeline, ballotBox);
 
-        var choice = this.getPanel(choices, 1, {'class':'choice'});
+        return [ballotBox].concat(ballot);
+    }
+
+    Page.prototype.getBallot = function(pipeline, parent) {
+        var ballot = this.getPanel(pipeline, parent, {'class':'ballot'});
+
+        var usernameHtml = {
+            'name':'username',
+            'type':'text',
+            'class':'username'
+        }
+        var username = this.getInputField(pipeline, ballot, 10, usernameHtml);
+
+        var copyHtml = {
+            'class':'copy',
+            'src':'icons/add.png',
+            'alt':'New Ballot',
+        }
+        var newBallotButton = this.getNewBallot(pipeline, ballot, copyHtml, '../../', '../../../');
+        var choices = this.getChoices(pipeline, ballot);
+        return [ballot].concat(username, choices);
+    }
+
+    Page.prototype.getNewBallot = function(pipeline, parent, html, blankBallot, ballotBox) {
+        html.tag = 'img';
+        var image = new Node({html:html});
+        image.type = 'Components/Image';
+        this.dag.addChild(parent, image);
+        image = pipeline(image);
+
+        var p6 = new Node();
+        p6.type = 'Actions/CopyTree';
+        p6.event = 'onmouseup';
+        p6.sourcePath = blankBallot;
+        p6.destinationPath = ballotBox;
+        this.dag.addChild(image, p6);
+        var copyTree = pipeline(p6);
+        return [image, copyTree];
+    }
+
+    Page.prototype.getChoices = function(pipeline, parent) {
+        var choices = this.getPanel(pipeline, parent, {'class':'choices'});
+
+        var choice = this.getPanel(pipeline, choices, {'class':'choice'});
 
         var copyHtml = {
             'class':'copy',
             'src':'icons/add.png',
             'alt':'Copy',
         }
-        var copy = this.getCopyTree(choice, 2, copyHtml, choice, choices);
+        var copy = this.getCopyTree(pipeline, choice, 2, copyHtml, '../../', '../../../');
 
         var inputHtml = {
             'name':'choice',
             'type':'text',
             'class':'choiceName'
         }
-        var input = this.getInputField(choice, 3, inputHtml);
+        var input = this.getInputField(pipeline, choice, 3, inputHtml);
 
         var upHtml = {
             'class':'moveUp',
             'src':'icons/uparrow.png',
             'alt':'Up Arrow',
         }
-        var upImage = this.getMoveImage(choice, 7, upHtml, choices, -1);
+        var upImage = this.getVote(pipeline, choice, 7, upHtml, '../../../', -1);
 
         var downHtml = {
             'class':'moveDown',
             'src':'icons/downarrow.png',
             'alt':'Down Arrow',
         }
-        var downImage = this.getMoveImage(choice, 8, downHtml, choices, 1);
+        var downImage = this.getVote(pipeline, choice, 8, downHtml, '../../../', 1);
 
         return [choices].concat(choice, upImage, downImage, copy, input);
     }
 
-    Page.prototype.getMoveImage = function(parent, id, html, container, amount) {
+    Page.prototype.getVote = function(pipeline, parent, id, html, container, amount) {
         html.tag = 'img';
         var image = new Node({id:id, html:html});
         image.type = 'Components/Image';
         this.dag.addChild(parent, image);
+        image = pipeline(image);
 
         var p8 = new Node()
         p8.type = 'Actions/Reorder';
         p8.event = 'onmouseup';
         p8.amount = amount;
-        p8.container = container.id;
+        p8.container = container;
         this.dag.addChild(image, p8);
+        var reorder = pipeline(p8);
 
-        return [image, p8];
+        return [image, reorder];
     }
 
-    Page.prototype.getPanel = function(parent, id, html) {
+    Page.prototype.getPanel = function(pipeline, parent, html, id) {
         html.tag = 'div'
         var p0 = new Node({id:id, html:html});
         p0.type = 'Components/Div';
         this.dag.addChild(parent, p0);
-        return p0;
+        return pipeline(p0);
     }
 
-    Page.prototype.getCopyTree = function(parent, id, html, source, destination) {
+    Page.prototype.getCopyTree = function(pipeline, parent, id, html, source, destination) {
         html.tag = 'img';
         var image = new Node({id:id, html:html});
         image.type = 'Components/Image';
         this.dag.addChild(parent, image);
+        image = pipeline(image);
 
         var p6 = new Node();
         p6.type = 'Actions/CopyTree';
         p6.event = 'onmouseup';
-        p6.source = source.id;
-        p6.destination = destination.id;
+        p6.sourcePath = source;
+        p6.destinationPath = destination;
         this.dag.addChild(image, p6);
-
-        return [image, p6];
+        var copyTree = pipeline(p6);
+        return [image, copyTree];
     }
 
-    Page.prototype.getInputField = function(parent, id, html) {
+    Page.prototype.getInputField = function(pipeline, parent, id, html) {
         html.tag = 'input';
         var p3 = new Node({id:id, html:html});
         p3.type = 'Components/InputField';
         p3.value = '';
-
         this.dag.addChild(parent, p3);
+        var inputField = pipeline(p3);
 
         var p7 = new Node();
         p7.parent = id;
         p7.type = 'Actions/StoreValue';
         p7.event = 'onchange';
         this.dag.addChild(p3, p7);
+        var storeValue = pipeline(p7);
 
-        return [p3, p7];
+        return [inputField, storeValue];
     }
 
     return Page;

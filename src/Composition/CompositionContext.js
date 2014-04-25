@@ -17,12 +17,8 @@ function(ServerPage, Page) {
 
         var pipeline = serverPage.install();
 
-        var nodes = page.getNodes();
-
-        nodes.map(function(node) {
-            pipeline(node);
-        })
-
+        //Should move this example into its own module instead of page.
+        var nodes = page.addNodes(pipeline);
     }
 
     return CompositionContext;

@@ -14,8 +14,8 @@
  */
 
 define(
-['Composition/Global', 'Actions/Action', 'lodash'],
-function(Global, Action, _) {
+['Model/Path', 'Composition/Global', 'Actions/Action', 'lodash'],
+function(Path, Global, Action, _) {
 
     /*
      * Reorder's a child node relative to its peers.
@@ -36,7 +36,7 @@ function(Global, Action, _) {
         var item = node.item;
 
         if (node.container !== undefined) {
-            container = dag.clone(dag.get(node.container));
+            container = dag.clone(Path.getNode(dag, node, node.container));
         } else {
             parent = dag.getParent(node);
             container = dag.clone(dag.getParent(parent));
@@ -45,7 +45,7 @@ function(Global, Action, _) {
         if (node.item === undefined) {
             item = dag.getParent(dag.getParent(node));
         } else {
-            item = dag.getParent(node.id);
+            item = Path.getNode(dag, node, node.item);
         }
 
         var children = container.children;

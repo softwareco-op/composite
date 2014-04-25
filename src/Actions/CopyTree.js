@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['Composition/Global', 'Actions/Action', 'lodash'], function(Global, Action, _) {
+define(['Model/Path', 'Composition/Global', 'Actions/Action', 'lodash'], function(Path, Global, Action, _) {
 
     function CopyTree(node) {
         _.merge(this, node);
@@ -11,15 +11,27 @@ define(['Composition/Global', 'Actions/Action', 'lodash'], function(Global, Acti
 
     CopyTree.prototype.perform = function(node, dag) {
         var copies;
-        if (node.source === undefined || node.destination === undefined) {
-            var parent = dag.getParent(node);
-            var grandparent = dag.getParent(parent);
-            copies = dag.copyTreeTo(grandparent, grandparent);
+
+        var source;
+        if (node.source) {
+            source = dag.get(node.source);
+        } else if (node.sourcePath) {
+            source = Path.getNode(dag, node, node.sourcePath);
         } else {
-            var source = dag.get(node.source);
-            var destination = dag.get(node.destination);
-            copies = dag.copyTreeTo(source, destination);
+            var parent = dag.getParent(node);
+            source = dag.getParent(parent);
         }
+
+        var destination;
+        if (node.destination) {
+            destination = dag.get(node.destination);
+        } else if (node.destinationPath) {
+            destination = Path.getNode(dag, node, node.destinationPath);
+        } else {
+            destination = source;
+        }
+
+        copies = dag.copyTreeTo(source, destination);
 
         _.map(copies, Global.pipeline, Global.pipeline);
     }
