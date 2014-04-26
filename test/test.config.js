@@ -1,3 +1,5 @@
+require('amdefine/intercept');
+
 require.config({
     baseUrl: 'src',
     waitSeconds: 1,

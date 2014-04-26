@@ -16,7 +16,8 @@
     "socket.io": "~0.9.16",
     "eventemitter2": "~0.4.13",
     "socket.io-client": "~0.9.16",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "amdefine": "~0.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

@@ -3,6 +3,7 @@
  */
 
 
+
 var requirejs = require('requirejs');
 var path = require('path');
 var servePath = path.dirname(path.dirname(__dirname));
@@ -20,7 +21,12 @@ requirejs.config({
     }
 });
 
+
 global.define = requirejs;
+
+require('amdefine/intercept')
+var Node = require('Model/Node');
+console.log(Node);
 
 describe('NodeSocketTest', function() {
 

@@ -1,0 +1,1 @@
+Convert the current requirejs setup to module if the module pattern is compatible with mocha on node.js and the browser.  The structuring looks very promising, with the ability to pass in modules, extend or augment modules, load asynchronously via LABjs, and submodules
