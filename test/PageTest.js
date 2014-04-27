@@ -5,9 +5,7 @@
 /*
  * An object that integrates components into Page(let)
  */
-define(
-['Model/Node', 'UI/Page', 'chai', 'sinon', 'underscore'],
-function(Node, Page, chai, sinon, underscore) {
+(function(Node, Page, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -20,7 +18,7 @@ function(Node, Page, chai, sinon, underscore) {
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/Div';
+            p0.type = 'Components/HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
@@ -39,12 +37,12 @@ function(Node, Page, chai, sinon, underscore) {
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/Div';
+            p0.type = 'Components/HtmlNode';
             p0.html['class'] = 'panel2';
             p0.html.tag = 'div';
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/Button';
+            p2.type = 'Components/HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
@@ -76,12 +74,12 @@ function(Node, Page, chai, sinon, underscore) {
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/Div';
+            p0.type = 'Components/HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/Button';
+            p2.type = 'Components/HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
@@ -102,14 +100,14 @@ function(Node, Page, chai, sinon, underscore) {
             var pipeline = page.install();
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/Button';
+            p2.type = 'Components/HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
             pipeline(p2);
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/Div';
+            p0.type = 'Components/HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
             page.getDAG().addChild(p0, p2);
@@ -126,7 +124,7 @@ function(Node, Page, chai, sinon, underscore) {
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}});
-            p0.type = 'Components/Div';
+            p0.type = 'Components/HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
@@ -174,4 +172,4 @@ function(Node, Page, chai, sinon, underscore) {
 
     })
 
-})
+})(COMPOSITE.Node, COMPOSITE.Page, chai, sinon)

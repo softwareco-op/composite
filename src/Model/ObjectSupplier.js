@@ -4,19 +4,13 @@
 
 
 /**
- * ObjectSupplier converts Backbone models to transient Javascript objects.
+ * ObjectSupplier converts nodes to transient Javascript objects.
  **/
-define(
-[ 'Components/Div','Components/Button', 'Components/InputField', 'Components/Image', 'Actions/GlobalAction',
-  'Actions/CopyTree', 'Actions/StoreValue', 'Actions/Reorder'],
-function(Div, Button, InputField, Image, GlobalAction, CopyTree, StoreValue, Reorder) {
+(function(COMPOSITE, HtmlNode, GlobalAction, CopyTree, StoreValue, Reorder) {
 
     function ObjectSupplier() {
         this.componentMap = {
-            'Components/Button' : Button,
-            'Components/Div': Div,
-            'Components/InputField' : InputField,
-            'Components/Image': Image,
+            'Components/HtmlNode' : HtmlNode,
             'Actions/GlobalAction' : GlobalAction,
             'Actions/CopyTree' : CopyTree,
             'Actions/StoreValue' : StoreValue,
@@ -50,6 +44,12 @@ function(Div, Button, InputField, Image, GlobalAction, CopyTree, StoreValue, Reo
         return node;
     }
 
+    COMPOSITE.ObjectSupplier = ObjectSupplier;
     return ObjectSupplier;
 
-});
+})(COMPOSITE,
+   COMPOSITE.HtmlNode,
+   COMPOSITE.GlobalAction,
+   COMPOSITE.CopyTree,
+   COMPOSITE.StoreValue,
+   COMPOSITE.Reorder)

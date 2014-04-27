@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['UI/Page', 'Server/NodeSocket', 'socketioclient', 'Composition/Global', 'lodash'],
-function(Page, NodeSocket, socketioclient, Global,  _) {
+(function(COMPOSITE, Page, NodeSocket, socketioclient, _) {
 
     /*
      * ServerPage is a page that is connected to a server.
@@ -20,10 +18,11 @@ function(Page, NodeSocket, socketioclient, Global,  _) {
         this.nodeSocket.install(this.pipeline);
         this.pipeline = _.compose(_.bind(this.nodeSocket.add, this.nodeSocket),
                                   this.pipeline);
-        Global.pipeline = this.pipeline;
+        COMPOSITE.pipeline = this.pipeline;
         return this.pipeline;
     }
 
+    COMPOSITE.ServerPage = ServerPage;
     return ServerPage;
 
-})
+})(COMPOSITE, COMPOSITE.Page, COMPOSITE.NodeSocket, socketioclient, _)

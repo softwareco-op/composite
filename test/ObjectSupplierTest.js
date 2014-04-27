@@ -6,9 +6,7 @@
 /**
  * Tests ObjectSupplier functionality
  **/
-define(
-['Model/ObjectSupplier', 'Model/Node', 'chai', 'sinon'],
-function(ObjectSupplier, Node, chai, sinon) {
+(function(ObjectSupplier, Node, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -16,7 +14,7 @@ function(ObjectSupplier, Node, chai, sinon) {
 
         it('loads the desired module', function(done) {
             var node = new Node();
-            node.type = 'Components/Button';
+            node.type = 'Components/HtmlNode';
             node.name = 'testButton';
 
             var objectSupplier = new ObjectSupplier();
@@ -29,4 +27,4 @@ function(ObjectSupplier, Node, chai, sinon) {
 
     })
 
-});
+})(COMPOSITE.ObjectSupplier, COMPOSITE.Node, chai, sinon);

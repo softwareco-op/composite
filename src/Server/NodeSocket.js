@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['Model/Cloner'],
-function(Cloner) {
+(function(COMPOSITE, Cloner) {
 
     /*
      * NodeSocket transports nodes.
@@ -34,6 +32,7 @@ function(Cloner) {
         });
     }
 
+    COMPOSITE.NodeSocket = NodeSocket;
     return NodeSocket;
 
-})
+})(COMPOSITE, COMPOSITE.Cloner)

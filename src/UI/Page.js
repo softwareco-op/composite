@@ -5,18 +5,7 @@
 /*
  * An HTML Page renderer.
  */
-define(['Model/Node',
-        'Model/ObjectSupplier',
-        'Collection/DAG',
-        'Model/Unique',
-        'Composition/Global',
-        'lodash'],
-function(Node,
-         ObjectSupplier,
-         DAG,
-         Unique,
-         Global,
-         _) {
+(function(COMPOSITE, Node, ObjectSupplier, DAG, Unique, _) {
 
     /**
      * Constructs a page(let) consisting of a composition of nodes.
@@ -42,7 +31,7 @@ function(Node,
                                  _.bind(this.dag.add, this.dag),
                                  _.bind(this.unique.add, this.unique),
                                  _.bind(this.objectSupplier.add, this.objectSupplier));
-        Global.pipeline = pipeline;
+        COMPOSITE.pipeline = pipeline;
         return pipeline;
     }
 
@@ -221,6 +210,7 @@ function(Node,
         return [inputField, storeValue];
     }
 
+    COMPOSITE.Page = Page;
     return Page;
 
-});
+})(COMPOSITE, COMPOSITE.Node, COMPOSITE.ObjectSupplier, COMPOSITE.DAG, COMPOSITE.Unique, _);

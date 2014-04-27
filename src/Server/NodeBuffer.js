@@ -2,8 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(['Collection/DAG', 'Model/Unique'],
-function(DAG, Unique) {
+(function(COMPOSITE, DAG, Unique) {
 
     /*
      * NodeBuffer stores nodes consistently in a buffer.
@@ -18,7 +17,7 @@ function(DAG, Unique) {
                                  _.bind(this.unique.add, this.unique));
         return pipeline;
     }
-
+    COMPOSITE.NodeBuffer = NodeBuffer;
     return NodeBuffer;
 
-})
+})(COMPOSITE, COMPOSITE.DAG, COMPOSITE.Unique);

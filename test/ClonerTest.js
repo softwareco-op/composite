@@ -27,7 +27,7 @@
             var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
 
             var clone = cloner.clone(button);
-            for (var i = 0 ; i < 100000 ; i++) {
+            for (var i = 0 ; i < 10000 ; i++) {
                 clone = cloner.jsonClone(button);
             }
             var clone2 = _.clone(button);
@@ -43,7 +43,7 @@
             var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
 
             var clone = cloner.clone(button);
-            for (var i = 0 ; i < 100000 ; i++) {
+            for (var i = 0 ; i < 10000 ; i++) {
                 clone = cloner.deepClone(button);
             }
             var clone2 = _.clone(button);

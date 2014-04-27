@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['Composition/Global', 'Actions/Action', 'lodash'], function(Global, Action, _) {
+(function(COMPOSITE, Global, Action, _) {
 
     function StoreValue(node) {this.node = node}
     _.extend(StoreValue.prototype, Action.prototype);
@@ -15,6 +15,7 @@ define(['Composition/Global', 'Actions/Action', 'lodash'], function(Global, Acti
         return Global.pipeline(toChange);
     }
 
+    COMPOSITE.StoreValue = StoreValue;
     return StoreValue;
 
-});
+})(COMPOSITE, COMPOSITE.Global, COMPOSITE.Action, _);

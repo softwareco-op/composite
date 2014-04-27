@@ -25,7 +25,7 @@
         return node;
     }
 
-    COMPOSITE.Unique;
+    COMPOSITE.Unique = Unique;
     return Unique;
 
 })(COMPOSITE)

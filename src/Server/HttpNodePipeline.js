@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['Server/HttpServer', 'Server/NodeBuffer', 'events'],
-function(HttpServer, NodeBuffer, events) {
+(function(COMPOSITE, HttpServer, NodeBuffer, events) {
 
     /*
      * HttpNodePipeline sends http traffic to a node pipeline
@@ -59,4 +57,4 @@ function(HttpServer, NodeBuffer, events) {
 
     return HttpNodePipeline;
 
-})
+})(COMPOSITE, COMPOSITE.HttpServer, COMPOSITE.NodeBuffer, events)

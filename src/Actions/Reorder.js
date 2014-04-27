@@ -13,7 +13,7 @@
  * Reorders a child node relative to its peers.
  */
 
-function(Path, Global, Action, _) {
+(function(Path, Action, _) {
 
     /*
      * Reorder's a child node relative to its peers.
@@ -54,7 +54,7 @@ function(Path, Global, Action, _) {
 
 
         this.move(children, item.id, this.node.amount);
-        Global.pipeline(dag.validateNode(container));
+        COMPOSITE.pipeline(dag.validateNode(container));
     }
 
     /*
@@ -86,6 +86,7 @@ function(Path, Global, Action, _) {
         return list;
     }
 
+    COMPOSITE.Reorder = Reorder;
     return Reorder;
 
 })(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, _)

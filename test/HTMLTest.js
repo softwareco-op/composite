@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['UI/HTML', 'Model/Node', 'chai', 'sinon'],
-function(HTML, Node, chai, sinon) {
+(function(HTML, Node, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -44,4 +42,4 @@ function(HTML, Node, chai, sinon) {
 
     })
 
-})
+})(COMPOSITE.HTML, COMPOSITE.Node, chai, sinon)

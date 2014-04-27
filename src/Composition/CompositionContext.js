@@ -3,9 +3,7 @@
 */
 
 
-
-define(['UI/ServerPage', 'UI/Page'],
-function(ServerPage, Page) {
+(function(COMPOSITE, ServerPage, Page) {
 
     function CompositionContext() {}
 
@@ -21,6 +19,7 @@ function(ServerPage, Page) {
         var nodes = page.addNodes(pipeline);
     }
 
+    COMPOSITE.CompositionContext = CompositionContext;
     return CompositionContext;
 
-});
+})(COMPOSITE, COMPOSITE.ServerPage, COMPOSITE.Page);
