@@ -25,9 +25,9 @@
         var el = parent.object.el;
         var fn = el[node.event];
 
-        var callback = function(clickEvent) {
+        var callback = function(event) {
             if (fn) {
-                fn(clickEvent)
+                fn(event)
             }
             self.perform(node, dag);
         }

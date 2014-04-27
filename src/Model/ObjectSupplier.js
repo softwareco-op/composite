@@ -10,11 +10,11 @@
 
     function ObjectSupplier() {
         this.componentMap = {
-            'Components/HtmlNode' : HtmlNode,
-            'Actions/GlobalAction' : GlobalAction,
-            'Actions/CopyTree' : CopyTree,
-            'Actions/StoreValue' : StoreValue,
-            'Actions/Reorder' : Reorder
+            'Components/HtmlNode' : function {return COMPOSITE.HtmlNode},
+            'Actions/GlobalAction' : function {return COMPOSITE.GlobalAction},
+            'Actions/CopyTree' : function {return COMPOSITE.CopyTree},
+            'Actions/StoreValue' : function {return COMPOSITE.StoreValue},
+            'Actions/Reorder' : function {return COMPOSITE.Reorder}
         }
     }
 
@@ -33,7 +33,7 @@
     ObjectSupplier.prototype.object = function(node) {
         var moduleName = node.type;
 
-        var constructor = this.componentMap[moduleName];
+        var constructor = this.componentMap[moduleName]();
 
         if (constructor === undefined) {
             throw Error('Invalid module name provided ' + moduleName);
@@ -47,9 +47,4 @@
     COMPOSITE.ObjectSupplier = ObjectSupplier;
     return ObjectSupplier;
 
-})(COMPOSITE,
-   COMPOSITE.HtmlNode,
-   COMPOSITE.GlobalAction,
-   COMPOSITE.CopyTree,
-   COMPOSITE.StoreValue,
-   COMPOSITE.Reorder)
+})(COMPOSITE, COMPOSITE.HtmlNode,COMPOSITE.GlobalAction,COMPOSITE.CopyTree,COMPOSITE.StoreValue,COMPOSITE.Reorder)
