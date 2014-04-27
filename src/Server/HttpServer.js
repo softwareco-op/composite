@@ -4,8 +4,18 @@
 
 
 
-define(['http', 'express', 'socket.io'], function(http, express, socketio) {
+//define(['http', 'express', 'socket.io'], function(http, express, socketio) {
 
+(function(COMPOSITE) {
+
+    //test if we are running in node
+    if (typeof window === 'undefined') {
+        global.COMPOSITE.HttpServer = HttpServer;
+
+        http = require('http');
+        express = require('express');
+        socketio = require('socket.io');
+    }
 
 
     /**
@@ -84,9 +94,6 @@ define(['http', 'express', 'socket.io'], function(http, express, socketio) {
     }
 
 
+    return COMPOSITE;
 
-    return HttpServer;
-
-
-
-});
+})(COMPOSITE || {});

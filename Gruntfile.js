@@ -10,7 +10,8 @@ module.exports = function(grunt) {
               reporter: 'spec',
               clearRequireCache: true
           },
-          src:['test/NodeSocketTest.js']
+          //src:['test/NodeSocketTest.js','test/ServerTest']
+          src:['test/ServerTest.js']
       }
     },
     copy: {

@@ -1,0 +1,2 @@
+If I were to create an iframe and load only encryption libraries, then I would have a private environment.  The api to talk to the iframe would be simple.  sign, encrypt/decrypt and newkey/dropkey.
+

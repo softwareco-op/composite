@@ -4,29 +4,12 @@
 
 
 
-var requirejs = require('requirejs');
 var path = require('path');
 var servePath = path.dirname(path.dirname(__dirname));
-
-requirejs.config({
-    baseUrl: 'src',
-    waitSeconds: 1,
-    paths: {
-      rsvp: '../bower_components/rsvp/rsvp.amd',
-      chai: '../bower_components/chai/chai',
-      sinon: '../node_modules/sinon/pkg/sinon',
-      'jssha':'../bower_components/jssha/src/sha256',
-      'node-uuid':'../bower_components/node-uuid/uuid',
-      'lodash':'../node_modules/lodash/lodash'
-    }
-});
-
-
-global.define = requirejs;
-
-require('amdefine/intercept')
-var Node = require('Model/Node');
-console.log(Node);
+var Node = require('../src/Model/Node');
+var NodeSocket = require('../src/Server/NodeSocket');
+var socketioclient = require('socket.io-client');
+var HttpNodePipeline = require('Server/HttpNodePipeline');
 
 describe('NodeSocketTest', function() {
 

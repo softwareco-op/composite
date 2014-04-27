@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['Model/Cloner', 'Components/Button', 'lodash', 'chai', 'sinon'],
-function(Cloner, Button, _, chai, sinon) {
+(function(Cloner, Button, _, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -77,4 +75,4 @@ function(Cloner, Button, _, chai, sinon) {
 
     })
 
-})
+})(COMPOSITE.Cloner, COMPOSITE.Button, lodash, chai, sinon)

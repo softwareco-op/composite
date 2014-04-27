@@ -2,10 +2,8 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['lodash'],
-function(_) {
 
+(function(_) {
     /*
      * Used to clone objects
      */
@@ -33,5 +31,4 @@ function(_) {
     }
 
     return Cloner;
-
-})
+})(lodash)

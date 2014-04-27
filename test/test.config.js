@@ -1,4 +1,3 @@
-require('amdefine/intercept');
 
 require.config({
     baseUrl: 'src',

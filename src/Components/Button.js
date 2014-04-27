@@ -2,8 +2,7 @@
 // Copyright (C) 2014 SoftwareCo-oP
 //
 
-define(['UI/HTML'],
-function(HTML) {
+(function(HTML) {
 
     //
     // A simple button.
@@ -36,6 +35,7 @@ function(HTML) {
         var wrap = this.render(node, dag, dom);
     }
 
+    COMPOSITE.Button = Button;
     return Button;
 
-});
+})(COMPOSITE.HTML);

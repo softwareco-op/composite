@@ -2,11 +2,10 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['Model/Cloner', 'lodash'],
-function(Cloner, _) {
 
-    return {
+(function(COMPOSITE, _) {
+
+    COMPOSITE.HTML {
         /*
          * Create an element from the properties on a node.  A node's HTML object contains properties found
          * in a HTML elements (i.e. width, height, class, id, etc...).
@@ -43,4 +42,4 @@ function(Cloner, _) {
 
     }
 
-})
+})(COMPOSITE || {}, lodash)
