@@ -4,8 +4,6 @@
 
 
 
-//define(['http', 'express', 'socket.io'], function(http, express, socketio) {
-
 (function(COMPOSITE) {
 
     //test if we are running in node

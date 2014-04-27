@@ -37,17 +37,6 @@ describe('NodeSocketTest', function() {
         return io;
     }
 
-    beforeEach(function(done) {
-        define(['socket.io-client', 'Model/Node', 'Server/NodeSocket', 'Server/HttpNodePipeline', 'chai'], function(socketioclientMod, NodeMod, NodeSocketMod, HttpNodePipelineMod, chai) {
-            socketioclient = socketioclientMod;
-            Node = NodeMod;
-            NodeSocket = NodeSocketMod;
-            HttpNodePipeline = HttpNodePipelineMod;
-            assert = chai.assert;
-            done();
-        })
-    })
-
     it('can start the server', function(done) {
         var testPort = 3001;
         var httpNodePipeline = new HttpNodePipeline(servePath, testPort);

@@ -6,7 +6,8 @@
 /**
  * DAG is directed acyclic graph.
  **/
-define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Hasher, Cloner, _, uuid) {
+
+(function(Hasher, Cloner, _, uuid) {
 
     /**
      * @constructor
@@ -219,6 +220,7 @@ define(['Model/Hasher', 'Model/Cloner', 'underscore', 'node-uuid'], function(Has
         return copies;
     }
 
+    COMPOSITE.DAG = DAG;
     return DAG;
 
-});
+})(COMPOSITE.Hasher, COMPOSITE.Cloner, _, uuid)

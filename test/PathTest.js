@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-['Model/Path', 'Model/Node', 'Collection/DAG', 'chai', 'sinon'],
-function(Path, Node, DAG, chai, sinon) {
+(function(Path, Node, DAG, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -46,4 +44,4 @@ function(Path, Node, DAG, chai, sinon) {
 
     })
 
-})
+})(COMPOSITE.Path, COMPOSITE.Node, COMPOSITE.DAG, chai, sinon)

@@ -2,11 +2,9 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-[],
-function() {
+(function(COMPOSITE) {
 
-    return {
+    COMPOSITE.Path = {
 
         /*
          * Returns a node relative to the path and given node.
@@ -66,4 +64,5 @@ function() {
 
     }
 
-})
+    return COMPOSITE.Path;
+})(COMPOSITE);

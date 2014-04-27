@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-[],
-function() {
+(function(COMPOSITE) {
 
     /*
      * Unique tests if a node exists in a datastructure
@@ -27,6 +25,7 @@ function() {
         return node;
     }
 
+    COMPOSITE.Unique;
     return Unique;
 
-})
+})(COMPOSITE)

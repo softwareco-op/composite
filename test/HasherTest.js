@@ -3,9 +3,8 @@
  */
 
 
-define(
-['Model/Node', 'Model/Hasher', 'chai', 'sinon'],
-function(Node, Hasher, chai, sinon) {
+
+(function(Node, Hasher, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -36,4 +35,4 @@ function(Node, Hasher, chai, sinon) {
         });
     });
 
-})
+})(COMPOSITE.Node, COMPOSITE.Hasher, chai, sinon)

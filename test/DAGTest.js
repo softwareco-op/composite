@@ -6,7 +6,8 @@
 /**
  * DAG is directed acyclic graph.
  **/
-define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], function(DAG, Node, uuid, _, chai) {
+
+(function(DAG, Node, uuid, _, chai) {
 
     var expect = chai.expect;
     var assert = chai.assert;
@@ -237,4 +238,4 @@ define(['Collection/DAG', 'Model/Node', 'node-uuid', 'underscore', 'chai'], func
 
     });
 
-});
+})(COMPOSITE.DAG, COMPOSITE.Node, uuid, _, chai)

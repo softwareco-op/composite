@@ -3,8 +3,7 @@
  */
 
 
-define(['jssha', 'lodash'],
-function(jsSHA, _) {
+(function(COMPOSITE, jsSHA, _) {
 
     /*
      * Hasher hashes strings and nodes.
@@ -37,6 +36,7 @@ function(jsSHA, _) {
         return this.hash(string);
     }
 
+    COMPOSITE.Hasher = Hasher;
     return Hasher;
 
-})
+})(COMPOSITE, jsSHA, _);

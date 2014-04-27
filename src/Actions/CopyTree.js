@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-define(['Model/Path', 'Composition/Global', 'Actions/Action', 'lodash'], function(Path, Global, Action, _) {
+(function(COMPOSITE, Path, Global, Action, _) {
 
     function CopyTree(node) {
         _.merge(this, node);
@@ -36,7 +36,7 @@ define(['Model/Path', 'Composition/Global', 'Actions/Action', 'lodash'], functio
         _.map(copies, Global.pipeline, Global.pipeline);
     }
 
-
+    COMPOSITE.CopyTree = CopyTree;
     return CopyTree;
 
-});
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, _);

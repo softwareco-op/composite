@@ -30,5 +30,7 @@
         return _.cloneDeep(object);
     }
 
+    COMPOSITE.Cloner = Cloner;
     return Cloner;
-})(lodash)
+
+})(_)

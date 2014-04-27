@@ -2,9 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-define(
-[],
-function() {
+(function(COMPOSITE) {
 
     /*
      * An Action can be installed on elements.
@@ -46,5 +44,7 @@ function() {
         this.install(node, dag);
     }
 
+    COMPOSITE.Action = Action;
     return Action;
-})
+
+})(COMPOSITE)

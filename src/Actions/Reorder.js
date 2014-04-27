@@ -13,8 +13,6 @@
  * Reorders a child node relative to its peers.
  */
 
-define(
-['Model/Path', 'Composition/Global', 'Actions/Action', 'lodash'],
 function(Path, Global, Action, _) {
 
     /*
@@ -90,4 +88,4 @@ function(Path, Global, Action, _) {
 
     return Reorder;
 
-})
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, _)
