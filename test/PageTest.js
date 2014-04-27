@@ -18,7 +18,7 @@
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/HtmlNode';
+            p0.type = 'HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
@@ -37,12 +37,12 @@
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/HtmlNode';
+            p0.type = 'HtmlNode';
             p0.html['class'] = 'panel2';
             p0.html.tag = 'div';
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/HtmlNode';
+            p2.type = 'HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
@@ -74,12 +74,12 @@
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/HtmlNode';
+            p0.type = 'HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/HtmlNode';
+            p2.type = 'HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
@@ -100,14 +100,14 @@
             var pipeline = page.install();
 
             var p2 = new Node({id: 2, html:{}});
-            p2.type = 'Components/HtmlNode';
+            p2.type = 'HtmlNode';
             p2.html['class'] = 'button';
             p2.html.name = 'Copy Component';
             p2.html.tag = 'button';
             pipeline(p2);
 
             var p0 = new Node({id:0, html:{}})
-            p0.type = 'Components/HtmlNode';
+            p0.type = 'HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
             page.getDAG().addChild(p0, p2);
@@ -124,12 +124,12 @@
             var pipeline = page.install();
 
             var p0 = new Node({id:0, html:{}});
-            p0.type = 'Components/HtmlNode';
+            p0.type = 'HtmlNode';
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
             var node = new Node({id:2, html:{}});
-            node.type = 'Components/Image';
+            node.type = 'Image';
             node.html.tag = 'img';
             node.html.src = 'icons/uparrow.png';
             node.html.alt = 'Testing';
@@ -138,7 +138,7 @@
             page.getDAG().addChild(p0, node);
 
             var p6 = new Node({id:6})
-            p6.type = 'Actions/CopyTree';
+            p6.type = 'CopyTree';
             p6.event = 'onmouseup';
             page.getDAG().addChild(node, p6);
 

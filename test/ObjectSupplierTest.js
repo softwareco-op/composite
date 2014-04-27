@@ -14,7 +14,7 @@
 
         it('loads the desired module', function(done) {
             var node = new Node();
-            node.type = 'Components/HtmlNode';
+            node.type = 'HtmlNode';
             node.name = 'testButton';
 
             var objectSupplier = new ObjectSupplier();

@@ -38,12 +38,12 @@ function(InputField, Page, Node, DAG, chai, sinon) {
             node.html.type = 'text';
             node.html.name = 'testName';
             node.value = 'test content';
-            node.type = 'Components/InputField';
+            node.type = 'InputField';
             node.children = [2];
 
             var node2 = new Node({id: '2', html:{}});
             node2.parent = 1;
-            node2.type = 'Actions/StoreValue';
+            node2.type = 'StoreValue';
             node2.event = 'onchange';
 
             var input = pipeline(node);

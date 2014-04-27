@@ -99,12 +99,12 @@
     Page.prototype.getNewBallot = function(pipeline, parent, html, blankBallot, ballotBox) {
         html.tag = 'img';
         var image = new Node({html:html});
-        image.type = 'Components/Image';
+        image.type = 'Image';
         this.dag.addChild(parent, image);
         image = pipeline(image);
 
         var p6 = new Node();
-        p6.type = 'Actions/CopyTree';
+        p6.type = 'CopyTree';
         p6.event = 'onmouseup';
         p6.sourcePath = blankBallot;
         p6.destinationPath = ballotBox;
@@ -152,12 +152,12 @@
     Page.prototype.getVote = function(pipeline, parent, id, html, container, amount) {
         html.tag = 'img';
         var image = new Node({id:id, html:html});
-        image.type = 'Components/Image';
+        image.type = 'Image';
         this.dag.addChild(parent, image);
         image = pipeline(image);
 
         var p8 = new Node()
-        p8.type = 'Actions/Reorder';
+        p8.type = 'Reorder';
         p8.event = 'onmouseup';
         p8.amount = amount;
         p8.container = container;
@@ -170,7 +170,7 @@
     Page.prototype.getPanel = function(pipeline, parent, html, id) {
         html.tag = 'div'
         var p0 = new Node({id:id, html:html});
-        p0.type = 'Components/Div';
+        p0.type = 'Div';
         this.dag.addChild(parent, p0);
         return pipeline(p0);
     }
@@ -178,12 +178,12 @@
     Page.prototype.getCopyTree = function(pipeline, parent, id, html, source, destination) {
         html.tag = 'img';
         var image = new Node({id:id, html:html});
-        image.type = 'Components/Image';
+        image.type = 'Image';
         this.dag.addChild(parent, image);
         image = pipeline(image);
 
         var p6 = new Node();
-        p6.type = 'Actions/CopyTree';
+        p6.type = 'CopyTree';
         p6.event = 'onmouseup';
         p6.sourcePath = source;
         p6.destinationPath = destination;
@@ -195,14 +195,14 @@
     Page.prototype.getInputField = function(pipeline, parent, id, html) {
         html.tag = 'input';
         var p3 = new Node({id:id, html:html});
-        p3.type = 'Components/InputField';
+        p3.type = 'InputField';
         p3.value = '';
         this.dag.addChild(parent, p3);
         var inputField = pipeline(p3);
 
         var p7 = new Node();
         p7.parent = id;
-        p7.type = 'Actions/StoreValue';
+        p7.type = 'StoreValue';
         p7.event = 'onchange';
         this.dag.addChild(p3, p7);
         var storeValue = pipeline(p7);

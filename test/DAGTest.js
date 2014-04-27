@@ -160,19 +160,19 @@
             var dag = new DAG()
 
             var p0 = new Node({id:0});
-            p0.type = 'Components/Div';
+            p0.type = 'Div';
             p0.class = 'panel';
             dag.add(p0);
 
             var p2 = new Node();
-            p2.type = 'Components/Button';
+            p2.type = 'Button';
             p2.name = 'Copy Component';
             p2.text = 'Copy Component';
             dag.addChild(p0, p2);
             dag.add(p2);
 
             var p6 = new Node();
-            p6.type = 'Actions/CopyTree';
+            p6.type = 'CopyTree';
             p6.event = 'click';
             dag.addChild(p2, p6);
             dag.add(p6);
@@ -199,19 +199,19 @@
             var dag = new DAG()
 
             var p0 = new Node({id:0});
-            p0.type = 'Components/Div';
+            p0.type = 'Div';
             p0.class = 'panel';
             dag.add(p0);
 
             var p2 = new Node();
-            p2.type = 'Components/Button';
+            p2.type = 'Button';
             p2.name = 'Copy Component';
             p2.text = 'Copy Component';
             dag.addChild(p0, p2);
             dag.add(p2);
 
             var p6 = new Node();
-            p6.type = 'Actions/CopyTree';
+            p6.type = 'CopyTree';
             p6.event = 'click';
             dag.addChild(p2, p6);
             dag.add(p6);
