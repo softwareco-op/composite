@@ -13,7 +13,7 @@
  * Reorders a child node relative to its peers.
  */
 
-(function(Path, Action, _) {
+(function(COMPOSITE, Path, Action, _) {
 
     /*
      * Reorder's a child node relative to its peers.
@@ -89,4 +89,5 @@
     COMPOSITE.Reorder = Reorder;
     return Reorder;
 
-})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, _)
+
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Action, _)

@@ -26,11 +26,15 @@
     }
 
     Page.prototype.install = function() {
+        var self = this;
 
-        var pipeline = _.compose(_.bind(this.add, this),
-                                 _.bind(this.dag.add, this.dag),
-                                 _.bind(this.unique.add, this.unique),
-                                 _.bind(this.objectSupplier.add, this.objectSupplier));
+        var pipeline = function(node) {
+            node = self.objectSupplier.add(node);
+            node = self.unique.add(node);
+            node = self.dag.add(node);
+            return self.add(node);
+        }
+
         COMPOSITE.pipeline = pipeline;
         return pipeline;
     }

@@ -8,15 +8,7 @@
  **/
 (function(COMPOSITE, HtmlNode, GlobalAction, CopyTree, StoreValue, Reorder) {
 
-    function ObjectSupplier() {
-        this.componentMap = {
-            'Components/HtmlNode' : function {return COMPOSITE.HtmlNode},
-            'Actions/GlobalAction' : function {return COMPOSITE.GlobalAction},
-            'Actions/CopyTree' : function {return COMPOSITE.CopyTree},
-            'Actions/StoreValue' : function {return COMPOSITE.StoreValue},
-            'Actions/Reorder' : function {return COMPOSITE.Reorder}
-        }
-    }
+    function ObjectSupplier() {}
 
     /*
      * Construct a module given a valid node
@@ -33,7 +25,7 @@
     ObjectSupplier.prototype.object = function(node) {
         var moduleName = node.type;
 
-        var constructor = this.componentMap[moduleName]();
+        var constructor = COMPOSITE[moduleName];
 
         if (constructor === undefined) {
             throw Error('Invalid module name provided ' + moduleName);

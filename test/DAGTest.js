@@ -190,7 +190,7 @@
 
             assert.notEqual(copy.id, grandparent.id);
             var children = dag.getChildren(copy);
-            assert.equal(children[0].type, 'Components/Button');
+            assert.equal(children[0].type, 'Button');
 
             done();
         })
@@ -231,7 +231,7 @@
 
             assert.notEqual(copy.id, newgrandparent.id);
             var children = dag.getChildren(copy);
-            assert.equal(children[0].type, 'Components/Button');
+            assert.equal(children[0].type, 'Button');
 
             done();
         })

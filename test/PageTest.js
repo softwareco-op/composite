@@ -9,6 +9,34 @@
 
     var assert = chai.assert;
 
+    var panel = function(pipeline, dag, id) {
+        var p0 = new Node({id:id, html:{}})
+        p0.type = 'HtmlNode';
+        p0.html['class'] = 'panel';
+        p0.html.tag = 'div';
+        if (pipeline) {p0 = pipeline(p0)}
+
+        var p1 = new Node();
+        p1.type = 'DisplayChildren';
+        p1.event = 'onrender';
+        dag.addChild(p0, p1);
+        if (pipeline) {p1 = pipeline(p1)}
+
+        return p0;
+    }
+
+    var button = function(pipeline, dag, parent, id) {
+        var p2 = new Node({id: id, html:{}});
+        p2.type = 'HtmlNode';
+        p2.html['class'] = 'button';
+        p2.html.name = 'Copy Component';
+        p2.html.tag = 'button';
+        dag.addChild(parent, p2);
+        if (pipeline) {p2 = pipeline(p2)}
+
+        return p2;
+    }
+
     describe('Page', function() {
 
         it('can add nodes to the page', function(done) {
@@ -22,7 +50,9 @@
             p0.html['class'] = 'panel';
             p0.html.tag = 'div';
 
+
             pipeline(p0);
+
 
             assert.equal(div.outerHTML, '<div><div id="0" class="panel"></div></div>');
 
@@ -33,31 +63,19 @@
             var div = document.createElement('div');
 
             var page = new Page(div, document, 0);
-
             var pipeline = page.install();
+            var dag = page.getDAG();
 
-            var p0 = new Node({id:0, html:{}})
-            p0.type = 'HtmlNode';
-            p0.html['class'] = 'panel2';
-            p0.html.tag = 'div';
+            var p0 = panel(pipeline, dag, 0);
+            var p2 = button(pipeline, dag, p0, 2);
 
-            var p2 = new Node({id: 2, html:{}});
-            p2.type = 'HtmlNode';
-            p2.html['class'] = 'button';
-            p2.html.name = 'Copy Component';
-            p2.html.tag = 'button';
-            page.getDAG().addChild(p0, p2);
-
-            page.setRootNodeID(p0.id);
-            pipeline(p0);
-            pipeline(p2);
             try {
                 pipeline(p2);
             } catch (error) {
                 console.log(error.message);
             }
 
-            var expected = '<div><div id="{id1}" class="panel2"><button id="2" class="button" name="Copy Component"></button></div></div>';
+            var expected = '<div><div id="{id1}" class="panel"><button id="2" class="button" name="Copy Component"></button></div></div>';
             expected = expected.replace(/{id1}/g, p0.id);
             expected = expected.replace(/{id2}/g, p2.id);
 
@@ -69,25 +87,13 @@
 
         it('can add multiple nodes to the page', function(done) {
             var div = document.createElement('div');
+
             var page = new Page(div, document, 0);
-
             var pipeline = page.install();
+            var dag = page.getDAG();
 
-            var p0 = new Node({id:0, html:{}})
-            p0.type = 'HtmlNode';
-            p0.html['class'] = 'panel';
-            p0.html.tag = 'div';
-
-            var p2 = new Node({id: 2, html:{}});
-            p2.type = 'HtmlNode';
-            p2.html['class'] = 'button';
-            p2.html.name = 'Copy Component';
-            p2.html.tag = 'button';
-            page.getDAG().addChild(p0, p2);
-
-            page.setRootNodeID(p0.id);
-            pipeline(p0);
-            pipeline(p2);
+            var p0 = panel(pipeline, dag, 0);
+            var p2 = button(pipeline, dag, p0, 2);
 
             assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component"></button></div></div>');
             done();
@@ -96,21 +102,13 @@
         it('can handle out of order loading', function(done) {
             var div = document.createElement('div');
             var page = new Page(div, document, 0);
-
             var pipeline = page.install();
+            var dag = page.getDAG();
 
-            var p2 = new Node({id: 2, html:{}});
-            p2.type = 'HtmlNode';
-            p2.html['class'] = 'button';
-            p2.html.name = 'Copy Component';
-            p2.html.tag = 'button';
+            var p0 = panel(null, dag, 0);
+            var p2 = button(null, dag, p0, 2);
+
             pipeline(p2);
-
-            var p0 = new Node({id:0, html:{}})
-            p0.type = 'HtmlNode';
-            p0.html['class'] = 'panel';
-            p0.html.tag = 'div';
-            page.getDAG().addChild(p0, p2);
             pipeline(p0);
 
             assert.equal(div.outerHTML, '<div><div id="0" class="panel"><button id="2" class="button" name="Copy Component"></button></div></div>');

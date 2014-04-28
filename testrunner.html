@@ -1,16 +1,65 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>TESTRUNNER backbone-gcl</title>
+  <title>testrunner - composite</title>
   <link rel="stylesheet" href="bower_components/mocha/mocha.css" />
 </head>
 <body>
   <div id="testdiv"></div>
   <div id="mocha"></div>
+
+  <!-- load our depenencies (underscore-like util library, hashing library, and uuid generation library -->
+  <script type="text/javascript" src="node_modules/lodash/dist/lodash.js"></script>
+  <script type="text/javascript" src="bower_components/jssha/src/sha256.js"></script>
+  <script type="text/javascript" src="bower_components/node-uuid/uuid.js"></script>
+
+  <!-- create our namespace -->
+  <script type="text/javascript" src="src/Composition/Namespace.js"></script>
+
+  <!-- data structure and things -->
+  <script type="text/javascript" src="src/Model/Node.js"></script>
+  <script type="text/javascript" src="src/Model/Hasher.js"></script>
+  <script type="text/javascript" src="src/Model/Cloner.js"></script>
+  <script type="text/javascript" src="src/Collection/DAG.js"></script>
+  <script type="text/javascript" src="src/Model/Path.js"></script>
+  <script type="text/javascript" src="src/UI/HTML.js"></script>
+  <script type="text/javascript" src="src/Components/HtmlNode.js"></script>
+  <script type="text/javascript" src="src/Actions/Action.js"></script>
+  <script type="text/javascript" src="src/Actions/GlobalAction.js"></script>
+  <script type="text/javascript" src="src/Actions/CopyTree.js"></script>
+  <script type="text/javascript" src="src/Actions/StoreValue.js"></script>
+  <script type="text/javascript" src="src/Actions/Reorder.js"></script>
+  <script type="text/javascript" src="src/Actions/DisplayChildren.js"></script>
+
+  <script type="text/javascript" src="src/Model/Unique.js"></script>
+  <script type="text/javascript" src="src/Model/ObjectSupplier.js"></script>
+  <script type="text/javascript" src="src/UI/Page.js"></script>
+  
+  
+  <!-- testing libraries -->
   <script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
+  <script type="text/javascript" src="bower_components/chai/chai.js"></script>
+  <script type="text/javascript" src="node_modules/sinon/lib/sinon.js"></script>
+
   <script type="text/javascript">
    mocha.setup('bdd');
   </script>
-  <script data-main="test/test.config.js" src="bower_components/requirejs/require.js"></script>
+
+  <!-- tests -->
+  <script type="text/javascript" src="test/ModTest.js"></script>
+  <script type="text/javascript" src="test/ClonerTest.js"></script>
+  <script type="text/javascript" src="test/HasherTest.js"></script>
+  <script type="text/javascript" src="test/DAGTest.js"></script>
+  <script type="text/javascript" src="test/PathTest.js"></script>
+  <script type="text/javascript" src="test/ObjectSupplierTest.js"></script>
+  <script type="text/javascript" src="test/HTMLTest.js"></script>
+  <script type="text/javascript" src="test/PageTest.js"></script>
+  
+
+  <script>
+    onload = function() {
+    var runner = mocha.run();
+    };
+  </script>
 </body>
 </html>
