@@ -127,7 +127,7 @@
             p0.html.tag = 'div';
 
             var node = new Node({id:2, html:{}});
-            node.type = 'Image';
+            node.type = 'HtmlNode';
             node.html.tag = 'img';
             node.html.src = 'icons/uparrow.png';
             node.html.alt = 'Testing';
