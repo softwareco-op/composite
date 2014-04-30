@@ -48,18 +48,6 @@
     }
 
     Page.prototype.add = function(node) {
-        var self = this;
-        var parent = this.dag.getParent(node);
-
-        if (node.object.add !== undefined) {
-            node.object.add(node, this.dag, this.document);
-        }
-
-        if (parent !== undefined) {
-            if (parent.object.update !== undefined) {
-                parent.object.update(parent, this.dag, this.document);
-            }
-        }
 
         if (node.id === self.root) {
             while (self.div.hasChildNodes()) {

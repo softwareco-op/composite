@@ -36,6 +36,10 @@
         return el[node.event];
     }
 
+    Action.prototype.uninstall = function(node, dag) {
+
+    }
+
     /*
      * Add this action to the parent.
      */

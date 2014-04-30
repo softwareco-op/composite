@@ -4,11 +4,14 @@
 
 (function(COMPOSITE, DAG) {
 
-    function DAGUpdater(dag) {
+    /*
+     * DAGNotify notifies neighboring nodes when a node is added to the DAG.
+     */
+    function DAGNotify(dag) {
         this.dag = dag || new DAG();
     }
 
-    DAGUpdater.prototype.install = function(pipeline) {
+    DAGNotify.prototype.install = function(pipeline) {
         var self = this;
 
         var updaterPipeline = function(node) {
@@ -20,19 +23,22 @@
         return pipeline;
     }
 
-    DAGUpdater.prototype.add = function(node) {
+    DAGNotify.prototype.add = function(node) {
         var self = this;
         var parent = this.dag.getParent(node);
 
-        if (node.object.add !== undefined) {
+        if (node.object && node.object.add !== undefined) {
             node.object.add(node, this.dag, this.document);
         }
 
-        if (parent !== undefined) {
-            if (parent.object.update !== undefined) {
-                parent.object.update(parent, this.dag, this.document);
-            }
+        if (parent && parent.object && parent.object.update !== undefined) {
+            parent.object.update(parent, this.dag, this.document);
         }
+
+        return node;
     }
+
+    COMPOSITE.DAGNotify = DAGNotify;
+    return DAGNotify;
 
 })(COMPOSITE, COMPOSITE.DAG)
