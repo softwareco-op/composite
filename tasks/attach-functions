@@ -1,0 +1,12 @@
+understanding function attachment
+
+Functions nodes such as Actions need to attach to dom objects, in order to take effect.
+Function nodes such as pipeline functions need to attache to each other, in order to act as a pipe
+There is the node relationship and the runtime relationship.
+The node relationship is typically parent/child.  The child attaches to the parent's runtime object or the dom object under the runtime object.
+Since the attachment point is variable, the child node needs to describe where to attach its functionality
+Typical locations are node.object.el.onmouseup, node.object.el.click, node.object.add
+The attachment point has been described differently depending on if the attachment point is the el dom element or the node object.
+This should be simplified.  Instead describe that attachment point as a path e.g. 'node.object.el.onmouseup', 'node.object.add'
+
+
