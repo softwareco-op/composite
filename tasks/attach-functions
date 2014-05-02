@@ -1,5 +1,11 @@
 understanding function attachment
 
+The goal is to have something happens when an event on an interface occurs
+The event typically originates from a user interface, but may also originate from a network interface.
+In some cases when an event occurs, objects with functions attached at a specific point will be called.  This is the contract used in the browser and so composite
+needs to support this mode of operation.  Socket.io allows the user to pass in a function to call on a named event.  
+
+
 Functions nodes such as Actions need to attach to dom objects, in order to take effect.
 Function nodes such as pipeline functions need to attache to each other, in order to act as a pipe
 There is the node relationship and the runtime relationship.
@@ -8,5 +14,38 @@ Since the attachment point is variable, the child node needs to describe where t
 Typical locations are node.object.el.onmouseup, node.object.el.click, node.object.add
 The attachment point has been described differently depending on if the attachment point is the el dom element or the node object.
 This should be simplified.  Instead describe that attachment point as a path e.g. 'node.object.el.onmouseup', 'node.object.add'
+
+Specifics
+
+ServerPage could be instantiated within a node.  The url would be in the node.
+NodeSocket and ServerPage could be combined.  I think what is in ServerPage will become redundant and the separation won't be needed.
+This depends on node function chaining.
+
+Method A.
+If two nodes have a parent child relationship and the child attaches a function to the parent object, then the two nodes are said to be chained.
+A child can create a chain function by,
+1. storing the original function, pf, in the child
+2. creating a new function, cf
+3. the new function replaces the original function on the parent.
+4. the new function can doSomething, then pass the result on to pf.  This is called urgent chaining.
+5. the new function can call pf, the doSomething with the result from pf.
+
+A child can remove a chain by,
+1. placing pf back on the parent object.
+2. anything chained to the child function IS  NOW BROKEN, because they are chained to cf, which is getting removed.
+3. therefore this WILL NOT WORK.
+
+Method B.
+If two nodes have a parent child relationship and the child attaches a function to the output of the parent object, then the two nodes ares said to be chained.
+A child can create a chain function by,
+1. attaching a function cf, to parent.output
+2. cf is run when the parent function calls parent.output(node)
+3. the child process node, then calls its child.output if it exists.
+4. this WILL NOT WORK for multiple children because they will each replace parent.output.  Chaining like Method A. would result in the removal complication.
+
+A child removes itself from the chain by,
+1. setting parent.output = child.output.
+
+
 
 
