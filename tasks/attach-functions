@@ -22,6 +22,7 @@ NodeSocket and ServerPage could be combined.  I think what is in ServerPage will
 This depends on node function chaining.
 
 Method A.
+--------
 If two nodes have a parent child relationship and the child attaches a function to the parent object, then the two nodes are said to be chained.
 A child can create a chain function by,
 1. storing the original function, pf, in the child
@@ -36,6 +37,7 @@ A child can remove a chain by,
 3. therefore this WILL NOT WORK.
 
 Method B.
+---------
 If two nodes have a parent child relationship and the child attaches a function to the output of the parent object, then the two nodes ares said to be chained.
 A child can create a chain function by,
 1. attaching a function cf, to parent.output
@@ -46,6 +48,53 @@ A child can create a chain function by,
 A child removes itself from the chain by,
 1. setting parent.output = child.output.
 
+Method C.
+---------
+If two nodes have a parent child relationship and the parent calls the perform function passing the result of its computation to each childs perform, then the two nodes ares said to be chained.
+A parent can create a chain function by,
+1. defining a perform function
+2. getting its children
+3. if they have a perform function, child.object.perform, then pass the result to their perform function
+
+A child removes itself from the chain by,
+1. Setting its children to the parent children.
+
+
+Use Method C.
+
+Dom Adapter
+-----------
+Calling install will connect the adapter to the dom object via callback function.
+The callback function will pass the dom element and event to it children's add function.
+Note this means add() can accept types other than node for some functions.  I think this is healthy. Nodes that take something other than a node should
+explicitly state that fact in their jsdoc.  They are relatively rare functional nodes that transform other system types to nodes.
+Typically, their will be only one child node, and it will take the dom element as input, though it is possible to attach multiple nodes to a Dom Adapter.
+They will tend to transform existing nodes and then send the result through the pipeline.  The pipeline can be retrieved by looking it up in the DAG.
+
+Action is an adapter that attaches a function to a dom object at el[node.event].
+Could this be more general? Yes, a path could be specified where the function should attach
+This would make for a shorter solution. Alternatively, a new class could be created that would attach to a different point of a node.
+
+
+
+Socket Adapater
+---------------
+Calling install will connect the adapter to the socket via callback function.
+The callback function will pass the node to its children via the add function.  These should all be node objects.
+
+Disk endpoint
+-------------
+The disk endpoint is a functional node that stores the nodes to disk in the order received.
+
+Disk node buffer:
+-----------------
+The disk node buffer is a functional node that pushes nodes to a pipeline of children, starting at the top of its buffer file, and working towards the end of the buffer file.
+At startup, the pipeline will be generated and then the disk node buffer placed at the front of the pipeline.  Once installed the disk node buffer will stream
+nodes into the pipleline.  It then records any nodes that are added to the end of the file. 
+
+Optimization (perhaps do this first):
+A dag should be able to be constructed from a file by loading a list of nodes in JSON format into the DAG.  
+A dag should be able to be stored to disk by simply turning the DAG backing object to JSON and then saving to disk.
 
 
 

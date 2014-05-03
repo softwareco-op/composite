@@ -7,9 +7,7 @@
     /*
      * An Action can be installed on elements.
      */
-    function Action() {
-
-    }
+    function Action() {}
 
     /*
      * Install this Action on the parent element.
@@ -34,10 +32,6 @@
 
         el[node.event] = callback;
         return el[node.event];
-    }
-
-    Action.prototype.uninstall = function(node, dag) {
-
     }
 
     /*
