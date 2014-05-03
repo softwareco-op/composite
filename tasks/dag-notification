@@ -1,0 +1,19 @@
+Understanding DAG notification
+
+DAG notification is the process of notifying parent and child nodes that a new node has been added to the dag.  This process is
+necessary because nodes may arrive out of order, and when they do, they need to be notified so they can complete their transient
+installation operations, such as attaching themselves to a parent nodes dom object.
+
+It would be nice if I could depend on the nodes to always exist.
+It would be nice if I could say that you can't depend on parent or child nodes to install, but this is impossible for dom objects.  
+Unless it is not. What if the dom object also had the event to bind to and send along to children? Then their wouldn't need to be an installation step!
+Div rendering depends on an onrender event, but what if it attached onrender to a pipeline, then it wouldn't need attachment either.
+
+HtmlNode then has the problem of having multiple events occuring on the dom element and object, but only one set of child nodes.  So child nodes are
+passed events that are not meant for them.  child nodes could have keys they accept, like neuron receptor sites.  So some children have render keys, others have onmouseup, etc...
+
+when a child is added to the dag, it needs to notify the parent to rerender.  This could be a call from the child to the parent to render, or an update call.  The update call
+is more general.
+
+It would be expedient to allow the child to bind functions to the parent and get rid of the need for special child keys.
+

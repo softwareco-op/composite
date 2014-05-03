@@ -97,4 +97,16 @@ A dag should be able to be constructed from a file by loading a list of nodes in
 A dag should be able to be stored to disk by simply turning the DAG backing object to JSON and then saving to disk.
 
 
+Task Order:
+-----------
+0. Create node pipeline
+0.a. test the bootstrapping of a new pipeline from object supplier to DAG creation to unique and so on
+0.b. ObjectSupplier is a functional node and the only functional node created in code.  Subsequent nodes will be created by ObjectSupplier.
+0.c. If COMPOSITE.DAG exists, ObjectSupplier will check for childrens and pass on nodes to children.
+1. Implement Method C.
+1.a. ObjectSupplier may inherit from a Method C. class
+1.a.1. Method C. refers to COMPOSITE.DAG
+
+2. Create DOM adapter.
+2.a. test that events trigger an add further down the pipeline
 
