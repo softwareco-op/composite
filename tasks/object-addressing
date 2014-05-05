@@ -1,0 +1,4 @@
+Objects should have a url, which is easily possible.  The url can be http://localhost/object/some-object-id
+Objects should have an ip, which is actually many IPs because there may be many copies of the object across differnt systems.  But should they be abstracted to a single ip address?  
+The system should never stop.  It is critical the design allows extension without being taken down and restarted.
+Just play it grand.  To move with the future, always play your systems more grand than they seem to be right now.  -Alan Kay paraphrasing E Power Biggs

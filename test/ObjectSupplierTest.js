@@ -6,25 +6,48 @@
 /**
  * Tests ObjectSupplier functionality
  **/
-(function(ObjectSupplier, Node, chai, sinon) {
+(function(ObjectSupplier, FunctionNode, DAGUtil, chai, sinon) {
 
     var assert = chai.assert;
 
     describe('ObjectSupplier', function() {
 
         it('loads the desired module', function(done) {
-            var node = new Node();
-            node.type = 'HtmlNode';
-            node.name = 'testButton';
+            var node = {
+                type: 'HtmlNode',
+                name: 'testButton'
+            }
 
             var objectSupplier = new ObjectSupplier();
-            objectSupplier.object(node);
+            objectSupplier.add(node);
             var name = node.name;
             assert.equal(name, 'testButton');
             assert.isTrue(node.object !== undefined);
             done();
         });
 
+        it('can bootstrap a pipeline', function(done) {
+            var objectSupplier = new ObjectSupplier();
+
+            var dagNode = {
+                id : 'dag',
+                type : 'DAG'
+            }
+
+            var objectSupplierNode = {
+                id : 'objectSupplier',
+                type : 'ObjectSupplier'
+            }
+
+            DAGUtil.addChild(objectSupplierNode, dagNode);
+
+            dagNode = objectSupplier.add(dagNode);
+            objectSupplierNode = objectSupplier.add(objectSupplierNode);
+
+            objectSupplierNode.functionNode.add(dagNode);
+            objectSupplierNode.functionNode.add(objectSupplierNode);
+
+        })
     })
 
-})(COMPOSITE.ObjectSupplier, COMPOSITE.Node, chai, sinon);
+})(COMPOSITE.ObjectSupplier, COMPOSITE.FunctionNode, COMPOSITE.DAGUtil, chai, sinon);

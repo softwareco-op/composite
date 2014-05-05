@@ -9,7 +9,7 @@
      *
      * @constructor
      */
-    function FunctionNode() {}
+    function FunctionNode(node) { this.node = node }
     COMPOSITE.FunctionNode = FunctionNode;
 
     /*
@@ -20,19 +20,21 @@
      */
     FunctionNode.prototype.add = function(node) {
 
-        node = this.perform(node);
+        if (this.node.object && this.node.object.add) {
+            node = this.node.object.add(node);
+        }
 
-        if (!COMPOSITE.DAG) {
+        if (!COMPOSITE.dag) {
             return;
         }
 
-        var children = COMPOSITE.DAG.getChildren(this);
+        var children = COMPOSITE.dag.getChildren(this.node);
 
         for (var i = 0 ; i < children.length ; i++) {
             var child = children[i]
 
-            if (child.add) {
-                child.add(node);
+            if (child.functionNode) {
+                child.functionNode.add(node);
             }
         }
 

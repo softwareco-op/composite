@@ -4,7 +4,7 @@
 
 
 
-(function(Node, Hasher, chai, sinon) {
+(function(Hasher, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -23,7 +23,7 @@
 
         it('can hash a model', function(done) {
 
-            var node = new Node({name: 'a test field name'});
+            var node = {name: 'a test field name'};
 
             var hasher = new Hasher("SHA-256");
 
@@ -35,4 +35,4 @@
         });
     });
 
-})(COMPOSITE.Node, COMPOSITE.Hasher, chai, sinon)
+})(COMPOSITE.Hasher, chai, sinon)

@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(Path, Node, DAG, chai, sinon) {
+(function(Path, DAG, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -18,9 +18,9 @@
 
         it('can traverse the tree', function(done) {
             var dag = new DAG();
-            var parent = new Node({id:0});
-            var child = new Node({id:1, parent:0});
-            var grandchild = new Node({id:2, parent:1});
+            var parent = {id:0};
+            var child = {id:1, parent:0};
+            var grandchild = {id:2, parent:1};
 
             dag.add(parent);
             dag.add(child);
@@ -44,4 +44,4 @@
 
     })
 
-})(COMPOSITE.Path, COMPOSITE.Node, COMPOSITE.DAG, chai, sinon)
+})(COMPOSITE.Path, COMPOSITE.DAG, chai, sinon)

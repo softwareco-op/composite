@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(FunctionNode, DAG, COMPOSITE, _, chai, sinon) {
+(function(FunctionNode, DAG, DAGUtil, COMPOSITE, _, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -21,7 +21,7 @@
         it('does not fail when there is a dag and no children', function(done) {
             var dag = new DAG();
 
-            COMPOSITE.DAG = dag;
+            COMPOSITE.dag = dag;
 
             var functionNode = new FunctionNode();
 
@@ -37,7 +37,7 @@
         it('calls children functions', function(done) {
             var dag = new DAG();
 
-            COMPOSITE.DAG = dag;
+            COMPOSITE.dag = dag;
 
             var functionNode = new FunctionNode();
             var me = dag.add(functionNode);
@@ -53,7 +53,8 @@
                 done()
             }
 
-            dag.addChild(me, child);
+            DAGUtil.addChild(me, child);
+            dag.addAll([me, child]);
 
             functionNode.add({});
 
@@ -61,4 +62,4 @@
 
     })
 
-})(COMPOSITE.FunctionNode, COMPOSITE.DAG, COMPOSITE, _, chai, sinon)
+})(COMPOSITE.FunctionNode, COMPOSITE.DAG, COMPOSITE.DAGUtil, COMPOSITE, _, chai, sinon)

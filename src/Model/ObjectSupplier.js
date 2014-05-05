@@ -6,12 +6,17 @@
 /**
  * ObjectSupplier converts nodes to transient Javascript objects.
  **/
-(function(COMPOSITE, HtmlNode, GlobalAction, CopyTree, StoreValue, Reorder) {
+(function(COMPOSITE, FunctionNode, _) {
 
+    /*
+     * ObjectSupplier creates objects from nodes.
+     */
     function ObjectSupplier() {}
+    _.extend(ObjectSupplier.prototype, FunctionNode.prototype)
 
     /*
      * Construct a module given a valid node
+     *
      * @param {Backbone.Model} model containing an available type.
      */
     ObjectSupplier.prototype.add = function(node) {
@@ -20,6 +25,7 @@
 
     /*
      * Construct an object given a valid node
+     *
      * @param {Node} node containing an available type.
      */
     ObjectSupplier.prototype.object = function(node) {
@@ -32,6 +38,7 @@
         }
 
         node.object = new constructor(node);
+        node.functionNode = new FunctionNode(node);
 
         return node;
     }
@@ -39,4 +46,4 @@
     COMPOSITE.ObjectSupplier = ObjectSupplier;
     return ObjectSupplier;
 
-})(COMPOSITE, COMPOSITE.HtmlNode,COMPOSITE.GlobalAction,COMPOSITE.CopyTree,COMPOSITE.StoreValue,COMPOSITE.Reorder)
+})(COMPOSITE, COMPOSITE.FunctionNode, _)
