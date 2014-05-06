@@ -44,9 +44,10 @@
             dagNode = objectSupplier.add(dagNode);
             objectSupplierNode = objectSupplier.add(objectSupplierNode);
 
-            objectSupplierNode.functionNode.add(dagNode);
-            objectSupplierNode.functionNode.add(objectSupplierNode);
+            dagNode.bin.mux.add(dagNode);
+            objectSupplierNode.bin.mux.add(objectSupplierNode);
 
+            done();
         })
     })
 

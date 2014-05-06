@@ -6,29 +6,30 @@
 /**
  * ObjectSupplier converts nodes to transient Javascript objects.
  **/
-(function(COMPOSITE, FunctionNode, _) {
+(function(COMPOSITE, Mux, _) {
 
     /*
      * ObjectSupplier creates objects from nodes.
      */
     function ObjectSupplier() {}
-    _.extend(ObjectSupplier.prototype, FunctionNode.prototype)
+    COMPOSITE.ObjectSupplier = ObjectSupplier;
 
     /*
-     * Construct a module given a valid node
+     * Construct the object represented by the given valid node.
      *
-     * @param {Backbone.Model} model containing an available type.
+     * @param {Object} node containing an available type.
      */
     ObjectSupplier.prototype.add = function(node) {
-        return this.object(node);
+        return this.toObject(node);
     }
 
     /*
      * Construct an object given a valid node
      *
-     * @param {Node} node containing an available type.
+     * @param {Object} node containing an available type.
+     * @return {Object} node with programs installed.
      */
-    ObjectSupplier.prototype.object = function(node) {
+    ObjectSupplier.prototype.toObject = function(node) {
         var moduleName = node.type;
 
         var constructor = COMPOSITE[moduleName];
@@ -38,12 +39,11 @@
         }
 
         node.object = new constructor(node);
-        node.functionNode = new FunctionNode(node);
+        var mux = new Mux(node);
 
         return node;
     }
 
-    COMPOSITE.ObjectSupplier = ObjectSupplier;
     return ObjectSupplier;
 
-})(COMPOSITE, COMPOSITE.FunctionNode, _)
+})(COMPOSITE, COMPOSITE.Mux, _)

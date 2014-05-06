@@ -31,7 +31,7 @@
      * @return {string} hash value of JSONified node.
      */
     Hasher.prototype.hashNode = function(node) {
-        var toHash = _.omit(node, 'object');
+        var toHash = _.omit(node, COMPOSITE.Transient);
         var string = JSON.stringify(toHash);
         return this.hash(string);
     }

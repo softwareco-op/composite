@@ -10,6 +10,7 @@
     function DAGNotify(dag) {
         this.dag = dag || new DAG();
     }
+    COMPOSITE.DAGNotify = DAGNotify;
 
     DAGNotify.prototype.install = function(pipeline) {
         var self = this;
@@ -47,7 +48,6 @@
         return node;
     }
 
-    COMPOSITE.DAGNotify = DAGNotify;
     return DAGNotify;
 
 })(COMPOSITE, COMPOSITE.DAG)

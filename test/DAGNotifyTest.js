@@ -12,7 +12,7 @@
             var dagNotify = new DAGNotify();
             var node = {}
             dagNotify.add(node);
-            
+
             var parent = dagNotify.dag.add({});
             node.parent = parent.id;
             dagNotify.add(node);

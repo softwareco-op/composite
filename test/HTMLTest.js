@@ -2,14 +2,14 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(HTML, Node, chai, sinon) {
+(function(HTML, chai, sinon) {
 
     var assert = chai.assert;
 
     describe('HTML', function() {
 
         it('converts tag nodes to html elements', function(done) {
-            var node = new Node({html:{}});
+            var node = {html:{}};
             node.parent = 1;
             node.id = 'testId';
             node.html['class'] = 'myclass';
@@ -25,7 +25,7 @@
         })
 
         it('converts a node to html element', function(done) {
-            var node = new Node({html:{}});
+            var node = {html:{}};
             node.parent = 1;
             node.id = 'testId';
             node.html['class'] = 'myclass';
@@ -42,4 +42,4 @@
 
     })
 
-})(COMPOSITE.HTML, COMPOSITE.Node, chai, sinon)
+})(COMPOSITE.HTML, chai, sinon)

@@ -3,14 +3,15 @@
  */
 
 
-(function(_) {
+(function(COMPOSITE, _) {
     /*
      * Used to clone objects
      */
     function Cloner() {}
+    COMPOSITE.Cloner = Cloner;
 
     Cloner.prototype.stripNode = function(node) {
-        return _.omit(node, 'object');
+        return _.omit(node, COMPOSITE.Transient);
     }
 
     Cloner.prototype.cloneNode = function(node) {
@@ -30,7 +31,6 @@
         return _.cloneDeep(object);
     }
 
-    COMPOSITE.Cloner = Cloner;
     return Cloner;
 
-})(_)
+})(COMPOSITE, _)

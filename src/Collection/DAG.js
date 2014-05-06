@@ -6,13 +6,13 @@
 (function(COMPOSITE, DAGUtil, _) {
 
     /*
-     * DAG is directed acyclic graph.  DAG is a singleton in the COMPOSITE module at COMPOSITE.dag.
+     * DAG is a directed acyclic graph of nodes.  DAG is also represented in the graph of nodes as a node.
      * @constructor
      */
     function DAG(node) {
         this.collection = {}
-        this.add(node || {})
-        COMPOSITE.dag = this;
+        this.node = node || {id: 'dag'}
+        COMPOSITE[this.node.id] = this;
     }
     COMPOSITE.DAG = DAG;
 
