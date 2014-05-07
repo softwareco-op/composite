@@ -36,7 +36,6 @@
 
         if (constructor === undefined) {
             return node;
-            throw Error('Invalid module name provided ' + moduleName);
         }
 
         node.object = new constructor(node);

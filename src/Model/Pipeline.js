@@ -12,6 +12,17 @@
          * @return a pipeline containing an object supplier with a DAG attached
          */
         inMemoryDag : function(nodes) {
+            var memoryDag = this.memoryDag();
+            var last = this.tail(COMPOSITE.dag, memoryDag);
+            for (var i = 0 ; i < nodes.length ; i++) {
+                DAGUtil.addChild(last, nodes[i]);
+                memoryDag.bin.mux.add(nodes[i]);
+            }
+
+            return memoryDag;
+        },
+
+        memoryDag : function() {
             var objectSupplier = new ObjectSupplier();
 
             var dagNode = {
@@ -32,14 +43,32 @@
             dagNode.bin.mux.add(dagNode);
             objectSupplierNode.bin.mux.add(objectSupplierNode);
 
-            var last = dagNode;
-            for (var i = 0 ; i < nodes.length ; i++) {
-                DAGUtil.addChild(last, nodes[i]);
-                objectSupplierNode.bin.mux.add(nodes[i]);
-            }
-
             return objectSupplierNode;
+        },
+
+        /*
+         * A pipeline that ensures a node is not a duplicate (i.e. exists in the dag)
+         */
+        uniqueMemoryDag : function() {
+            var unique = {
+                id : 'unique',
+                type : 'Unique'
+            };
+
+            var pipeline = this.memoryDag();
+
+            DAGUtil.addChild(unique, pipeline);
+            return pipeline.bin.mux.add(unique);
+        },
+
+        tail : function(dag, pipeline) {
+            var children = dag.getChildren(pipeline);
+            if (children.length === 0) {
+                return pipeline;
+            }
+            return this.tail(dag, children[0]);
         }
+
     }
 
 })(COMPOSITE.ObjectSupplier, COMPOSITE.DAGUtil)

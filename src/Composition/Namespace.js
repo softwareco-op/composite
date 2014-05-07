@@ -4,6 +4,7 @@
 
 (function() {
 
+
     //Are we in the browser?
     if (window !== 'undefined') {
         window.COMPOSITE = {};
