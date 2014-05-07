@@ -9,7 +9,7 @@
 (function(COMPOSITE, Mux, _) {
 
     /*
-     * ObjectSupplier creates objects from nodes.
+     * ObjectSupplier constructs objects from nodes.
      */
     function ObjectSupplier() {}
     COMPOSITE.ObjectSupplier = ObjectSupplier;
@@ -26,7 +26,7 @@
     /*
      * Construct an object given a valid node
      *
-     * @param {Object} node containing an available type.
+     * @param {Object} node possibly containing a valid type.
      * @return {Object} node with programs installed.
      */
     ObjectSupplier.prototype.toObject = function(node) {
@@ -35,6 +35,7 @@
         var constructor = COMPOSITE[moduleName];
 
         if (constructor === undefined) {
+            return node;
             throw Error('Invalid module name provided ' + moduleName);
         }
 

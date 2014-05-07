@@ -2,36 +2,43 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE, DAGNotify, chai, sinon) {
+(function(COMPOSITE, DAGNotify, Pipeline, DAGUtil, chai, sinon) {
 
     var assert = chai.assert;
 
     describe('DAGNotify', function() {
 
         it('handles empty dag', function(done) {
-            var dagNotify = new DAGNotify();
-            var node = {}
-            dagNotify.add(node);
+            var dagNotify = {
+                id : 'dagNotify',
+                type : 'DAGNotify'
+            }
 
-            var parent = dagNotify.dag.add({});
+            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
+
+            var node = {}
+            dagNotify.object.add(node);
+
+            var parent = DAGUtil.validateNode({});
             node.parent = parent.id;
-            dagNotify.add(node);
+            dagNotify.object.add(node);
 
             done();
         })
 
         it('notifies the node object', function(done) {
-            var dagNotify = new DAGNotify();
+            var dagNotify = {
+                id : 'dagNotify',
+                type : 'DAGNotify'
+            }
+
+            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
 
             var callback = sinon.spy();
-            var object = {add:callback}
+            var object = {addNode:callback}
             var node = {object:object}
 
-            node = dagNotify.dag.add(node);
-
-            assert.isFalse(callback.called);
-
-            dagNotify.add(node);
+            node = inMemoryDag.bin.mux.add(node);
 
             assert.isTrue(callback.called);
 
@@ -39,58 +46,58 @@
         })
 
         it('notifies the parent', function(done) {
-            var dagNotify = new DAGNotify();
+            var dagNotify = {
+                id : 'dagNotify',
+                type : 'DAGNotify'
+            }
+
+            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
 
             var callback = sinon.spy();
-            var node = {object:{add:callback}}
+            var node = {object:{addNode:callback}}
 
-            var parent = dagNotify.dag.add({});
-            node.parent = parent.id;
+            var parent = inMemoryDag.bin.mux.add({});
             var parentAdd = sinon.spy();
             var parentUpdate = sinon.spy();
             parent.object = {add: parentAdd, addChild: parentUpdate}
 
-            node = dagNotify.dag.add(node);
+            node.parent = parent.id;
+            node = inMemoryDag.bin.mux.add(node);
 
-
-            dagNotify.add(node);
             assert.isTrue(callback.called);
-            assert.isFalse(parentAdd.calledOnce);
-            dagNotify.add(parent);
-            assert.isTrue(parentAdd.calledOnce);
             assert.isTrue(parentUpdate.calledOnce);
 
             done();
         })
 
         it('notifies the children', function(done) {
-            var dagNotify = new DAGNotify();
+            var dagNotify = {
+                id : 'dagNotify',
+                type : 'DAGNotify'
+            }
+
+            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
+
+
+            var parent = DAGUtil.validateNode({});
+            var parentAdd = sinon.spy();
+            var parentUpdate = sinon.spy();
+            parent.object = {addNode: parentAdd, addChild: parentUpdate}
 
             var callback = sinon.spy();
             var addParent = sinon.spy();
-            var node = {object:{add:callback, addParent: addParent}}
-
-            var parent = dagNotify.dag.add({});
+            var node = {object:{addNode:callback, addParent: addParent}}
             node.parent = parent.id;
-            var parentAdd = sinon.spy();
-            var addChild = sinon.spy();
-            parent.object = {add: parentAdd, addChild: addChild}
+            node = inMemoryDag.bin.mux.add(node);
 
-            node = dagNotify.dag.add(node);
-            dagNotify.dag.addChild(parent, node);
-
-
-            dagNotify.add(node);
             assert.isTrue(callback.called);
             assert.isFalse(parentAdd.calledOnce);
             assert.isFalse(addParent.called);
-            dagNotify.add(parent);
+            inMemoryDag.bin.mux.add(parent);
             assert.isTrue(parentAdd.calledOnce);
-            assert.isTrue(addChild.calledOnce);
-            assert.isTrue(addParent.called);
             done();
         })
 
     })
 
-})(COMPOSITE, COMPOSITE.DAGNotify, chai, sinon)
+})(COMPOSITE, COMPOSITE.DAGNotify, COMPOSITE.Pipeline, COMPOSITE.DAGUtil, chai, sinon)
