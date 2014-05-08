@@ -11,6 +11,7 @@
         this.socket = socket;
         this.cloner = new Cloner();
     }
+    COMPOSITE.NodeSocket = NodeSocket;
 
     /*
      * Transport a node
@@ -32,7 +33,7 @@
         });
     }
 
-    COMPOSITE.NodeSocket = NodeSocket;
+
     return NodeSocket;
 
 })(COMPOSITE, COMPOSITE.Cloner)

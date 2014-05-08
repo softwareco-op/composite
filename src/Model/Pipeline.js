@@ -8,7 +8,7 @@
          * Constructs a pipeline using an object supplier and a DAG.  Additional nodes
          * are appended to the end of the pipeline.
          *
-         * @param {Array} nodes containing nodes to append to the end of the pipeline.
+         * @param {Array} nodes array containing nodes to append to the end of the pipeline.
          * @return a pipeline containing an object supplier with a DAG attached
          */
         inMemoryDag : function(nodes) {
@@ -55,10 +55,12 @@
                 type : 'Unique'
             };
 
-            var pipeline = this.memoryDag();
+            return this.prepend(unique, this.memoryDag());
+        },
 
-            DAGUtil.addChild(unique, pipeline);
-            return pipeline.bin.mux.add(unique);
+        prepend : function(node, pipeline) {
+            DAGUtil.addChild(node, pipeline);
+            return pipeline.bin.mux.add(node);
         },
 
         tail : function(dag, pipeline) {

@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE) {
+(function(COMPOSITE, DAGUtil) {
 
     /*
      * Unique tests if a node exists in a datastructure
@@ -16,6 +16,7 @@
      */
     Unique.prototype.add = function(node) {
         if (COMPOSITE.dag.exists(node)) {
+            node = DAGUtil.validateNode(node);
             var dagNode = COMPOSITE.dag.get(node.id);
             if (dagNode.hash === node.hash) {
                 throw new Error('node already in memory: ' + node.id);
@@ -27,4 +28,4 @@
     COMPOSITE.Unique = Unique;
     return Unique;
 
-})(COMPOSITE)
+})(COMPOSITE, COMPOSITE.DAGUtil)

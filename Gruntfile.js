@@ -10,8 +10,7 @@ module.exports = function(grunt) {
               reporter: 'spec',
               clearRequireCache: true
           },
-          //src:['test/NodeSocketTest.js','test/ServerTest']
-          src:['test/ServerTest.js']
+          src:['test/NodeSocketTest.js','test/ServerTest']
       }
     },
     copy: {
@@ -87,7 +86,7 @@ module.exports = function(grunt) {
     watch: {
       jsFiles: {
         files: ['**/*.js', 'testrunner.html'],
-        tasks: ['jshint', 'connect', 'shell:ci']
+        tasks: ['jshint', 'serverTest']
       }
     }
   });

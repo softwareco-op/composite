@@ -13,6 +13,7 @@
         http = require('http');
         express = require('express');
         socketio = require('socket.io');
+        events = require('events');
     }
 
 
@@ -23,14 +24,14 @@
      *
      * @constructor
      */
-    function HttpServer(port, eventBus, servePath) {
+    function HttpServer(port, servePath) {
         this.port = port;
         this.servePath = servePath;
-        this.eventBus = eventBus;
+        this.eventBus = new events.EventEmitter();
         this.socketList = [];
         this.running = false;
     }
-
+    COMPOSITE.HttpServer = HttpServer;
 
 
     /**

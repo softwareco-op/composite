@@ -7,17 +7,19 @@
     "test": "test"
   },
   "dependencies": {
+    "amdefine": "~0.1.0",
     "assert": "~0.4.9",
-    "grunt": "~0.4.4",
-    "requirejs": "~2.1.11",
-    "underscore": "~1.5.2",
     "backbone.io": "~0.4.1",
-    "express": "~3.5.0",
-    "socket.io": "~0.9.16",
     "eventemitter2": "~0.4.13",
-    "socket.io-client": "~0.9.16",
+    "express": "~3.5.0",
+    "grunt": "~0.4.4",
+    "jssha": "^1.5.0",
     "lodash": "~2.4.1",
-    "amdefine": "~0.1.0"
+    "requirejs": "~2.1.11",
+    "socket.io": "~0.9.16",
+    "socket.io-client": "~0.9.16",
+    "underscore": "~1.5.2",
+    "uuid": "^1.4.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

@@ -1,28 +1,16 @@
 /*
  * (C) 2014 SoftwareCo-oP
  */
-
-
-
+global.COMPOSITE = {}
 var path = require('path');
 var servePath = path.dirname(path.dirname(__dirname));
-var Node = require('../src/Model/Node');
-var NodeSocket = require('../src/Server/NodeSocket');
-var socketioclient = require('socket.io-client');
-var HttpNodePipeline = require('Server/HttpNodePipeline');
+require('../src/Server/NodeDeps');
 
+
+(function(Pipeline, NodeSocket) {
 describe('NodeSocketTest', function() {
 
-    var assert;
-    var NodeSocket;
-    var Node;
-    var socketioclient;
-    var HttpServer;
-    var NodeBuffer;
-    var HttpNodePipeline;
-    var events;
-
-    var pipeline;
+    var socketioclient = require('socket.io-client');
 
     var setup = function(modules, done) {
         console.log(arguments);
@@ -39,47 +27,56 @@ describe('NodeSocketTest', function() {
 
     it('can start the server', function(done) {
         var testPort = 3001;
-        var httpNodePipeline = new HttpNodePipeline(servePath, testPort);
-        pipeline = httpNodePipeline.install();
-        httpNodePipeline.io.on('connection', function(socket) {
+        var httpNode = {
+            servePath : servePath,
+            port : testPort,
+            type : 'HttpNodePipeline'
+        }
+
+        var pipeline = Pipeline.prepend(httpNode, Pipeline.uniqueMemoryDag());
+
+        httpNode.object.io.on('connection', function(socket) {
             socket.on('node', function(node) {
                 try {
-                    var nodeOut = pipeline(node);
+                    var nodeOut = pipeline.bin.mux.add(node);
                 } catch (error) {
-
+                    console.log('got the copy ' + node)
                 }
                 if (node.id === 2) {
                     done();
                 }
-
             })
         })
+
         var socket = socketioclient.connect('http://localhost:' + testPort);
         var nodeSocket = new NodeSocket(socket);
-        var node = new Node({id:1});
-        var node2 = new Node({id:2});
+        var node = {id:1};
+        var node2 = {id:2};
         nodeSocket.add(node);
         nodeSocket.add(node);
         nodeSocket.add(node2);
-
     });
 
-    it('nodes are broadcasted', function(done) {
+    it('nodes are rebroadcasted', function(done) {
         var testPort = 3002;
-        var httpNodePipeline = new HttpNodePipeline(servePath, testPort);
-        pipeline = httpNodePipeline.install();
-        httpNodePipeline.routeNodesToPipeline();
+        var httpNode = {
+            servePath : servePath,
+            port : testPort,
+            type : 'HttpNodePipeline'
+        }
+        var pipeline = Pipeline.prepend(httpNode, Pipeline.uniqueMemoryDag());
+        httpNode.object.routeNodesToPipeline();
         var socket = socketioclient.connect('http://localhost:' + testPort);
         var socket2 = socketioclient.connect('http://localhost:' + testPort);
-        socket2.on('node', function(clientNode) {
+        socket.on('node', function(clientNode) {
             if (clientNode.id === 2) {
                 done();
             }
         });
         var nodeSocket = new NodeSocket(socket);
         var nodeSocket2 = new NodeSocket(socket2);
-        var node = new Node({id:1});
-        var node2 = new Node({id:2});
+        var node = {id:1};
+        var node2 = {id:2};
         nodeSocket2.add(node);
         nodeSocket2.add(node);
         nodeSocket2.add(node2);
@@ -140,3 +137,4 @@ describe('NodeSocketTest', function() {
     })
 
 })
+})(COMPOSITE.Pipeline, COMPOSITE.NodeSocket)
