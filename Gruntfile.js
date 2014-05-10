@@ -10,13 +10,13 @@ module.exports = function(grunt) {
               reporter: 'spec',
               clearRequireCache: true
           },
-          src:['test/NodeSocketTest.js','test/ServerTest']
+          src:['test/test.server.js']
       }
     },
     copy: {
       dist: {
         files: [
-          {src: ['backbone-gcl.js'], dest: './', cwd:'lib/', expand: true} 
+          {src: ['backbone-gcl.js'], dest: './', cwd:'lib/', expand: true}
         ]
       }
     },
@@ -51,6 +51,14 @@ module.exports = function(grunt) {
             stderr: true,
             failOnError:true
         }
+      },
+      'server': {
+          command: 'node test/test.server.js',
+          options: {
+              stdout: true,
+              stderr: true,
+              failOnError:true
+          }
       }
     },
     nodemon: {
@@ -86,7 +94,7 @@ module.exports = function(grunt) {
     watch: {
       jsFiles: {
         files: ['**/*.js', 'testrunner.html'],
-        tasks: ['jshint', 'serverTest']
+        tasks: ['jshint', 'shell:server']
       }
     }
   });

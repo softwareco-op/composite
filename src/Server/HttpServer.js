@@ -13,7 +13,6 @@
         http = require('http');
         express = require('express');
         socketio = require('socket.io');
-        events = require('events');
     }
 
 
@@ -24,10 +23,9 @@
      *
      * @constructor
      */
-    function HttpServer(port, servePath) {
-        this.port = port;
-        this.servePath = servePath;
-        this.eventBus = new events.EventEmitter();
+    function HttpServer(node) {
+        this.port = node.port;
+        this.servePath = node.servePath;
         this.socketList = [];
         this.running = false;
     }
@@ -54,7 +52,6 @@
         this.app = express();
         this.server = http.createServer(this.app);
         this.io = socketio.listen(this.server, options);
-        var eventBus = this.eventBus;
         this.server.listen(this.port);
         this.app.use(express.static(this.servePath));
         this.io.on('connection', this.onConnection());
@@ -78,7 +75,6 @@
                 console.log('socket closed');
                 socketList.splice(socketlist.indexOf(socket), 1);
             });
-            self.eventBus.emit('connection', socket);
         };
     }
 
