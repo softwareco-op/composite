@@ -10,9 +10,7 @@ var mocha = require('mocha');
 var m = new mocha();
 m.addFile('./test/DAGTest.js')
 m.addFile('./test/HttpTest.js')
-
-//m.addFile('./test/HttpServereTst.js');
-//m.addFile('./test/NodeSocketTest.js');
+//m.addFile('./test/HttpServerTest.js')
 
 m.reporter('spec').ui('tdd').run();
 

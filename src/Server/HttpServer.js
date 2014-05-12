@@ -31,20 +31,10 @@
     }
     COMPOSITE.HttpServer = HttpServer;
 
-
-    /**
-     * @return {Object} the http server instance.
-     */
-    HttpServer.prototype.getServer = function() {
-        return this.server;
-    }
-
-
-
     /**
      * Start the server listening on the port defined in the constructor
      */
-    HttpServer.prototype.startService = function(options) {
+    HttpServer.prototype.listen = function(options) {
         if (this.running === true) {
             console.log("http server already running!");
             return this.io;
@@ -81,14 +71,14 @@
 
 
     HttpServer.prototype.stopService = function() {
-        this.io.close();
+        this.server.close();
         this.socketList.forEach(function(socket) {
-            socket.destroy();
+            socket.disconnect(true);
         });
         this.running = false;
     }
 
 
-    return COMPOSITE;
+    return COMPOSITE.HttpServer;
 
 })(COMPOSITE || {});
