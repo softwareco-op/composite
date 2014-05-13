@@ -63,6 +63,12 @@
             return pipeline.bin.mux.add(node);
         },
 
+        append : function(dag, node, pipeline) {
+            var tail = this.tail(dag, pipeline);
+            DAGUtil.addChild(tail, node);
+            return pipeline.bin.mux.add(node);
+        },
+
         tail : function(dag, pipeline) {
             var children = dag.getChildren(pipeline);
             if (children.length === 0) {

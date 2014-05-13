@@ -1,6 +1,10 @@
 global.uuid = require('uuid');
 jsSHA = require('jssha');
 global._ = require('lodash');
+global.http = require('http');
+global.express = require('express');
+global.WebSocketServer = require('ws').Server;
+global.WebSocket = require('ws');
 
 require('../../src/Model/Transient')
 require('../../src/Model/Mux')
@@ -25,6 +29,6 @@ require('../../src/Model/Pipeline')
 
 require('../../src/UI/Page')
 
-require('../../src/Server/HttpServer');
-require('../../src/Server/HttpNodePipeline');
 require('../../src/Server/NodeSocket');
+require('../../src/Server/WsStaticServer');
+require('../../src/Server/WsPipeline');
