@@ -29,7 +29,7 @@
 
             myWs.on('message', function(node) {
                 node = JSON.parse(node);
-                WsPipeline.object.close();
+                WsPipeline.object.end();
                 assert.equal(node.id, 'testNode');
                 assert.isDefined(COMPOSITE.dag.get('testNode'));
                 assert.isUndefined(COMPOSITE.dag.get('testNode2'));

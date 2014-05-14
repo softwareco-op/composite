@@ -7,6 +7,7 @@
     "test": "test"
   },
   "dependencies": {
+    "JSONStream": "^0.8.2",
     "amdefine": "~0.1.0",
     "assert": "~0.4.9",
     "backbone.io": "~0.4.1",

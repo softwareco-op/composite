@@ -32,3 +32,4 @@ require('../../src/UI/Page')
 require('../../src/Server/NodeSocket');
 require('../../src/Server/WsStaticServer');
 require('../../src/Server/WsPipeline');
+require('../../src/Server/FileBuffer');

@@ -46,7 +46,7 @@
         })
     }
 
-    WsPipeline.prototype.close = function() {
+    WsPipeline.prototype.end = function() {
         this.wsStaticServer.close();
     }
 

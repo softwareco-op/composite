@@ -11,7 +11,6 @@
     COMPOSITE.NodeWriter = NodeWriter;
 
     NodeWriter.prototype.add = function(node) {
-        this.writeStream
     }
 
     return NodeWriter;
