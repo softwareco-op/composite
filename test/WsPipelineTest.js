@@ -4,6 +4,8 @@
 
 (function(COMPOSITE, Pipeline, chai, sinon) {
 
+    var WebSocket = require('ws');
+
     var assert = chai.assert;
 
     describe('WsPipeline', function() {

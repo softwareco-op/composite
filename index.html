@@ -8,8 +8,21 @@
   </head>
 
   <body>
+
+
+    <!-- load our depenencies (underscore-like util library, hashing library, and uuid generation library -->
+    <script type="text/javascript" src="node_modules/lodash/dist/lodash.js"></script>
+    <script type="text/javascript" src="bower_components/jssha/src/sha256.js"></script>
+    <script type="text/javascript" src="bower_components/node-uuid/uuid.js"></script>
+
+    <!-- create our namespace -->
+    <script type="text/javascript" src="src/Composition/Namespace.js"></script>
+
+    <!-- initialize the JSLoader -->
+    <script type="text/javascript" src="src/Composition/JSLoader.js"></script>
+    <script type="text/javascript" src="src/Composition/Modules.js"></script>
+
     <div id="composition"></div>
-    <script data-main="src/Composition/main" src="./bower_components/requirejs/require.js"></script>
   </body>
 
 </html>

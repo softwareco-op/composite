@@ -2,7 +2,11 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE, http, express, WebSocketServer, WebSocket) {
+(function(COMPOSITE) {
+
+    var express = require('express');
+    var http = require('http');
+    var WebSocketServer = require('ws').Server;
 
     /*
      * A websocket server that serves static content
@@ -15,12 +19,14 @@
     COMPOSITE.WsStaticServer = WsStaticServer;
 
     WsStaticServer.prototype.listen = function(onListen) {
+
         this.app = express();
+        this.app.use(express.static(this.path));
         this.server = http.createServer(this.app);
 
         var self = this;
         this.server.listen(this.port, function() {
-            self.wss = new WebSocketServer({server : self.server, path:self.wsPath});
+            self.wss = new WebSocketServer({server : self.app, path:self.wsPath});
             onListen(self.wss);
         })
     }
@@ -32,4 +38,4 @@
 
     return WsStaticServer;
 
-})(COMPOSITE, http, express, WebSocketServer, WebSocket)
+})(COMPOSITE)

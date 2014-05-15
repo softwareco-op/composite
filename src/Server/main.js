@@ -1,12 +1,11 @@
 global.COMPOSITE = {}
-var requirejs = require('requirejs');
+
 var path = require('path');
 var servePath = path.dirname(path.dirname(__dirname));
-events = require('events');
-require('./HttpNodePipeline');
+//var servePath = __dirname;
+require('../../src/Server/NodeDeps');
 
-(function(HttpNodePipeline) {
-    var httpNodePipeline = new HttpNodePipeline(servePath, 3000);
-    httpNodePipeline.install();
-    httpNodePipeline.routeNodesToPipeline();
-})(COMPOSITE.HttpNodePipeline)
+(function(Pipeline) {
+    console.log(servePath);
+    Pipeline.bufferedServer(3001, servePath, 'nodeStream.json');
+})(COMPOSITE.Pipeline)

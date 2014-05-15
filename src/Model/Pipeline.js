@@ -58,6 +58,23 @@
             return this.prepend(unique, this.memoryDag());
         },
 
+        bufferedServer : function(port, servePath, bufferFilename) {
+            var WsPipeline = {
+                type : 'WsPipeline',
+                id : 'wsPipeline',
+                port : port,
+                path : servePath,
+                wsPath : '/node'
+            }
+            var FileBuffer = {
+                id : 'fileBuffer',
+                type : 'FileBuffer',
+                file : bufferFilename
+            }
+            this.prepend(FileBuffer, this.uniqueMemoryDag())
+            this.prepend(WsPipeline, FileBuffer)
+        },
+
         prepend : function(node, pipeline) {
             DAGUtil.addChild(node, pipeline);
             return pipeline.bin.mux.add(node);
