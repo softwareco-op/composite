@@ -117,20 +117,21 @@
             var options = { port : port, path : servePath, wsPath : '/ws'}
             var server = new WsStaticServer(options);
             server.listen(function(wss) {
+                var myWs = new WebSocket('ws://localhost:' + port + '/ws');
+                myWs.on('open', function() {
+                    //myWs.send('hi');
+                    console.log('connected');
+                });
+                myWs.on('error', function(err) {
+                    console.log(err);
+                })
+
                 wss.on('connection', function(ws) {
                     server.close();
                     done();
                 })
             });
 
-            var myWs = new WebSocket('ws://localhost:' + port + '/ws');
-            myWs.on('open', function() {
-                //myWs.send('hi');
-                console.log('connected');
-            });
-            myWs.on('error', function(err) {
-                console.log(err);
-            })
         })
 
     })

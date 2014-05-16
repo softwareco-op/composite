@@ -75,6 +75,10 @@
             this.prepend(WsPipeline, FileBuffer)
         },
 
+        webPage : function() {
+            return this.uniqueMemoryDag();
+        },
+
         prepend : function(node, pipeline) {
             DAGUtil.addChild(node, pipeline);
             return pipeline.bin.mux.add(node);

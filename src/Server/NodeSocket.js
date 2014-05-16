@@ -7,9 +7,10 @@
     /*
      * NodeSocket transports nodes.
      */
-    function NodeSocket(socket) {
-        this.socket = socket;
+    function NodeSocket(options) {
+        this.url = socket.options;
         this.cloner = new Cloner();
+        this.pipe();
     }
     COMPOSITE.NodeSocket = NodeSocket;
 
@@ -19,20 +20,27 @@
      */
     NodeSocket.prototype.add = function(node) {
         var toSend = this.cloner.stripNode(node);
-        this.socket.emit('node', toSend);
+        this.socket.send(JSON.stringify(toSend));
         return node;
     }
 
     /*
-     * Install this on a node pipeline
-     * @param {Function} pipeline to send nodes through.
+     * Start piping
      */
-    NodeSocket.prototype.install = function(pipeline) {
-        this.socket.on('node', function(node) {
-            pipeline(node);
-        });
+    NodeSocket.prototype.pipe = function() {
+        var self = this;
+        this.socket = new WebSocket(this.url);
+        this.socket.on('open', function() {
+            this.socket.on('message', function(node) {
+                var toPipe = JSON.parse(node);
+                self.bin.mux.add(toPipe);
+            });
+        })
     }
 
+    NodeSocket.prototype.end = function() {
+        this.socket.close();
+    }
 
     return NodeSocket;
 

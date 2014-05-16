@@ -26,7 +26,7 @@
 
         var self = this;
         this.server.listen(this.port, function() {
-            self.wss = new WebSocketServer({server : self.app, path:self.wsPath});
+            self.wss = new WebSocketServer({server : self.server, path:self.wsPath});
             onListen(self.wss);
         })
     }
