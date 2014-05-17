@@ -7,8 +7,9 @@
     /*
      * NodeSocket transports nodes.
      */
-    function NodeSocket(options) {
-        this.url = socket.options;
+    function NodeSocket(node) {
+        this.node = node
+        this.url = node.url;
         this.cloner = new Cloner();
         this.pipe();
     }
@@ -20,7 +21,11 @@
      */
     NodeSocket.prototype.add = function(node) {
         var toSend = this.cloner.stripNode(node);
-        this.socket.send(JSON.stringify(toSend));
+        try {
+            this.socket.send(JSON.stringify(toSend));
+        } catch (error) {
+            console.error("trying to send to a busted web socket.  maybe it's not open yet");
+        }
         return node;
     }
 
@@ -31,9 +36,9 @@
         var self = this;
         this.socket = new WebSocket(this.url);
         this.socket.on('open', function() {
-            this.socket.on('message', function(node) {
+            self.socket.on('message', function(node) {
                 var toPipe = JSON.parse(node);
-                self.bin.mux.add(toPipe);
+                self.node.bin.mux.add(toPipe);
             });
         })
     }

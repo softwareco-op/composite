@@ -5,7 +5,7 @@
 /*
  * An HTML Page renderer.
  */
-(function(COMPOSITE, Node, ObjectSupplier, DAG, Unique, _) {
+(function(COMPOSITE, ObjectSupplier, DAG, Unique, _) {
 
     /**
      * Constructs a page(let) consisting of a composition of nodes.

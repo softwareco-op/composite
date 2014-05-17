@@ -33,6 +33,16 @@
 
             done();
         });
+
+        it('can hash an object multiple times and result is the same', function(done) {
+            var node = {name: 'a test field name'};
+            var hasher = new Hasher("SHA-256");
+            node.hash = hasher.hashNode(node);
+            var hash2 = hasher.hashNode(node);
+            assert.equal(hash2, node.hash);
+            done();
+        })
+
     });
 
 })(COMPOSITE.Hasher, chai, sinon)

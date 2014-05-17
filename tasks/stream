@@ -5,3 +5,4 @@ A key difference is the use of events instead of function calls to chain togethe
 Some dag functions pass the data to a stream that is asynchrounous, so the result can not be forwarded along the function dag, notably the result of streaming to disk.
 
 The Pipeline API is not as clean as nodes.  It could be improved  with more consistency, append, prepend.
+When unit testing, adding the ability to listen for nodes in the pipeline would be useful.

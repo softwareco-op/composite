@@ -18,6 +18,6 @@ m.addFile('./test/FileTest.js');
 m.addFile('./test/FileBufferTest.js');
 m.addFile('./test/WsPipelineTest.js');
 m.addFile('./test/REPLTest.js');
-
+m.addFile('./test/NodeSocketTest.js');
 m.reporter('spec').ui('tdd').run();
 
