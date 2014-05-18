@@ -25,5 +25,7 @@ _addJS("src/Model/Pipeline.js", 'body')
 
 _addJS("src/Test/TestNode.js", 'body')
 
+_addJS("src/Server/SocketUtil.js", 'body')
+
 _addJS("src/UI/Page.js", 'body')
 _addJS("src/Composition/Main.js", 'body')

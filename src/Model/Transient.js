@@ -3,5 +3,5 @@
  */
 
 (function(COMPOSITE) {
-    COMPOSITE.Transient = ['hash', 'object', 'bin']
+    COMPOSITE.Transient = ['hash', 'object', 'bin', 'var']
 })(COMPOSITE)

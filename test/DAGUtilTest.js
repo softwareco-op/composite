@@ -73,6 +73,36 @@
             done();
         })
 
+        it('can search for nodes', function(done) {
+            var dag = new DAG();
+            var parent = {id: 1, type: 'node'};
+            var child = {id: 2, color: 'blue', type: 'node'};
+            DAGUtil.addChild(parent,child);
+            dag.add(parent);
+            dag.add(child);
+
+            var predicate = function(node) {
+                return (node.color === 'blue');
+            }
+
+            var matches = DAGUtil.searchSubTree(dag, parent, predicate, 10);
+
+            assert.equal(matches.length, 1);
+            assert.equal(matches[0].color, 'blue');
+
+            predicate = function(node) {
+                return (node.type === 'node');
+            }
+
+            var matches = DAGUtil.searchSubTree(dag, parent, predicate, 10);
+
+            assert.equal(matches.length, 2);
+            assert.equal(matches[0].type, 'node');
+            assert.equal(matches[1].type, 'node');
+
+            done();
+        })
+
 
     })
 

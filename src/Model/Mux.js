@@ -11,7 +11,8 @@
      */
     function Mux(node) {
         this.node = node
-        this.node.bin = this.node.bin || {mux: this}
+        this.node.bin = this.node.bin || {}
+        this.node.bin.mux = this;
     }
     COMPOSITE.Mux = Mux;
 
@@ -27,11 +28,11 @@
             node = this.node.object.add(node);
         }
 
-        if (!COMPOSITE.dag) {
+        if (!this.node.bin.dag) {
             return;
         }
 
-        var children = COMPOSITE.dag.getChildren(this.node);
+        var children = this.node.bin.dag.getChildren(this.node);
 
         for (var i = 0 ; i < children.length ; i++) {
             var child = children[i]

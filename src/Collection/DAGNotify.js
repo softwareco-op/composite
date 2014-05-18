@@ -7,8 +7,8 @@
     /*
      * DAGNotify notifies neighboring nodes when a node is added to the DAG.
      */
-    function DAGNotify() {
-        this.dag = COMPOSITE.dag;
+    function DAGNotify(node) {
+        this.node = node;
     }
     COMPOSITE.DAGNotify = DAGNotify;
 
@@ -26,8 +26,8 @@
 
     DAGNotify.prototype.add = function(node) {
         var self = this;
-        var parent = this.dag.getParent(node);
-        var children = this.dag.getChildren(node);
+        var parent = this.node.bin.dag.getParent(node);
+        var children = this.node.bin.dag.getChildren(node);
 
         if (node.object && node.object.addNode !== undefined) {
             node.object.addNode(node, this.dag, this.document);

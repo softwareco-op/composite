@@ -5,9 +5,9 @@
 (function(COMPOSITE, WsStaticServer, Cloner) {
 
     /*
-     * WsPipeline sends http traffic to a pipeline
+     * ServerSocket sends http traffic to a pipeline
      */
-    function WsPipeline(node) {
+    function ServerSocket(node) {
         this.servePath = node.servePath;
         this.port = node.port;
         this.wsPath = node.wsPath;
@@ -15,12 +15,12 @@
         this.cloner = new Cloner();
         this.pipe();
     }
-    COMPOSITE.WsPipeline = WsPipeline;
+    COMPOSITE.ServerSocket = ServerSocket;
 
     /*
      * Start the http server and create the node pipeline.
      */
-    WsPipeline.prototype.pipe = function() {
+    ServerSocket.prototype.pipe = function() {
         this.wsStaticServer = new WsStaticServer(this.node);
 
         var self = this;
@@ -32,6 +32,8 @@
                 ws.on('message', function(node) {
                     node = JSON.parse(node);
                     try {
+                        node.var = node.var || {}
+                        node.var.socket = ws;
                         var nodeOut = self.node.bin.mux.add(node);
                         var toSend = JSON.stringify(self.cloner.stripNode(nodeOut));
                         for (var client in wss.clients) {
@@ -46,10 +48,10 @@
         })
     }
 
-    WsPipeline.prototype.end = function() {
+    ServerSocket.prototype.end = function() {
         this.wsStaticServer.close();
     }
 
-    return WsPipeline;
+    return ServerSocket;
 
 })(COMPOSITE, COMPOSITE.WsStaticServer, COMPOSITE.Cloner)

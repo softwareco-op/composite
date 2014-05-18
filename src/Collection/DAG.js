@@ -9,10 +9,8 @@
      * DAG is a directed acyclic graph of nodes.  DAG is also represented in the graph of nodes as a node.
      * @constructor
      */
-    function DAG(node) {
+    function DAG() {
         this.collection = {}
-        this.node = node || {id: 'dag'}
-        COMPOSITE[this.node.id] = this;
     }
     COMPOSITE.DAG = DAG;
 
@@ -24,11 +22,15 @@
     }
 
     /**
-     * Add a node to this DAG
+     * Add a node to this DAG.  Add a link to this dag in the var directory of the node.
      * @param {Node} node to add
      */
     DAG.prototype.add = function(node) {
         DAGUtil.validateNode(node);
+
+        node.bin = node.bin || {};
+        node.bin.dag = this;
+
         this.collection[node.id] = node;
         return node;
     }

@@ -144,6 +144,38 @@
             this.addChild(destinationWithCopy, copies[0])
             copies.unshift(destinationWithCopy);
             return copies;
+        },
+
+        /*
+         * Search the dag for nodes that evaluate true for the
+         * predicate.
+         *
+         * @param {DAG} dag to search
+         * @param {Object} start is where searching begins
+         * @param {Function} predicate is a function that can be true for some nodes,
+         * all nodes, or no nodes in the dag.
+         * @param {Number} depth to transverse in the dag. If less than zero, there is no depth limit.
+         *
+         * @return {Array} an array of objects that match the predicate.
+         */
+        searchSubTree : function(dag, start, predicate, depth) {
+            var matches = []
+
+            if (depth === 0) {
+                return matches;
+            }
+
+            if (predicate(start)) {
+                matches.push(start);
+            }
+
+            var children = dag.getChildren(start);
+
+            for (var i = 0 ; i < children.length ; i++) {
+                matches = matches.concat(this.searchSubTree(dag, children[i], predicate, depth - 1));
+            }
+
+            return matches;
         }
 
     }

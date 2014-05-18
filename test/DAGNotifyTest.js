@@ -14,7 +14,7 @@
                 type : 'DAGNotify'
             }
 
-            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
+            var inMemoryDag = Pipeline.append(dagNotify, Pipeline.memoryDag());
 
             var node = {}
             dagNotify.object.add(node);
@@ -32,7 +32,7 @@
                 type : 'DAGNotify'
             }
 
-            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
+            var inMemoryDag = Pipeline.append(dagNotify, Pipeline.memoryDag());
 
             var callback = sinon.spy();
             var object = {addNode:callback}
@@ -51,7 +51,7 @@
                 type : 'DAGNotify'
             }
 
-            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
+            var inMemoryDag = Pipeline.append(dagNotify, Pipeline.memoryDag());
 
             var callback = sinon.spy();
             var node = {object:{addNode:callback}}
@@ -76,8 +76,7 @@
                 type : 'DAGNotify'
             }
 
-            var inMemoryDag = Pipeline.inMemoryDag([dagNotify]);
-
+            var inMemoryDag = Pipeline.append(dagNotify, Pipeline.memoryDag());
 
             var parent = DAGUtil.validateNode({});
             var parentAdd = sinon.spy();

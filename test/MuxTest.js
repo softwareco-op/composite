@@ -25,13 +25,14 @@
         it('does not fail when there is a dag and no children', function(done) {
             var dag = new DAG();
 
-            COMPOSITE.dag = dag;
-
             var node = {
                 object: {
                     add :function() {
                         done();
                     }
+                },
+                bin: {
+                    dag : dag
                 }
             }
 
@@ -45,14 +46,15 @@
         it('calls children functions', function(done) {
             var dag = new DAG();
 
-            COMPOSITE.dag = dag;
-
             var spy = sinon.spy();
             var node = {
                 object: {
                     add :function() {
                         spy();
                     }
+                },
+                bin: {
+                    dag : dag
                 }
             }
             var mux = new Mux(node);
@@ -63,6 +65,9 @@
                         assert.isTrue(spy.calledOnce);
                         done()
                     }
+                },
+                bin: {
+                    dag : dag
                 }
             }
             var mux2 = new Mux(childNode);

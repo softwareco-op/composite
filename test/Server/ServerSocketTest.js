@@ -8,18 +8,18 @@
 
     var assert = chai.assert;
 
-    describe('WsPipeline', function() {
+    describe('ServerSocket', function() {
 
         it('it can route messages through pipeline', function(done) {
-            var WsPipeline = {
-                type : 'WsPipeline',
-                port : 3000,
+            var ServerSocket = {
+                type : 'ServerSocket',
+                port : 5000,
                 path : servePath,
                 wsPath : '/node'
             }
-            Pipeline.prepend(WsPipeline, Pipeline.uniqueMemoryDag())
+            Pipeline.prepend(ServerSocket, Pipeline.uniqueMemoryDag())
 
-            var myWs = new WebSocket('ws://localhost:3000/node');
+            var myWs = new WebSocket('ws://localhost:5000/node');
 
             var testNode = {
                 id : 'testNode'
@@ -31,10 +31,10 @@
 
             myWs.on('message', function(node) {
                 node = JSON.parse(node);
-                WsPipeline.object.end();
+                ServerSocket.object.end();
                 assert.equal(node.id, 'testNode');
-                assert.isDefined(COMPOSITE.dag.get('testNode'));
-                assert.isUndefined(COMPOSITE.dag.get('testNode2'));
+                assert.isDefined(ServerSocket.bin.dag.get('testNode'));
+                assert.isUndefined(ServerSocket.bin.dag.get('testNode2'));
                 done();
             });
 

@@ -4,24 +4,10 @@
 
 (function(ObjectSupplier, DAGUtil) {
     COMPOSITE.Pipeline = {
+
         /*
          * Constructs a pipeline using an object supplier and a DAG.  Additional nodes
-         * are appended to the end of the pipeline.
-         *
-         * @param {Array} nodes array containing nodes to append to the end of the pipeline.
-         * @return a pipeline containing an object supplier with a DAG attached
          */
-        inMemoryDag : function(nodes) {
-            var memoryDag = this.memoryDag();
-            var last = this.tail(COMPOSITE.dag, memoryDag);
-            for (var i = 0 ; i < nodes.length ; i++) {
-                DAGUtil.addChild(last, nodes[i]);
-                memoryDag.bin.mux.add(nodes[i]);
-            }
-
-            return memoryDag;
-        },
-
         memoryDag : function() {
             var objectSupplier = new ObjectSupplier();
 
@@ -41,7 +27,7 @@
             objectSupplierNode = objectSupplier.add(objectSupplierNode);
 
             dagNode.bin.mux.add(dagNode);
-            objectSupplierNode.bin.mux.add(objectSupplierNode);
+            dagNode.bin.mux.add(objectSupplierNode);
 
             return objectSupplierNode;
         },
@@ -58,10 +44,13 @@
             return this.prepend(unique, this.memoryDag());
         },
 
+        /*
+         * A pipeline with a bound socket, file buffer and in memory dag
+         */
         bufferedServer : function(port, servePath, bufferFilename) {
             var WsPipeline = {
-                type : 'WsPipeline',
-                id : 'wsPipeline',
+                type : 'ServerSocket',
+                id : 'serverSocket',
                 port : port,
                 path : servePath,
                 wsPath : '/node'
@@ -72,24 +61,43 @@
                 file : bufferFilename
             }
             this.prepend(FileBuffer, this.uniqueMemoryDag())
-            this.prepend(WsPipeline, FileBuffer)
+            return this.prepend(WsPipeline, FileBuffer)
         },
 
         webPage : function() {
             return this.uniqueMemoryDag();
         },
 
+        /*
+         * Prepend a function to a pipeline.
+         * @param {Object} node representing a function
+         * @param {Object} pipeline to prepend node.
+         * @return {Object} the head of the pipeline
+         */
         prepend : function(node, pipeline) {
             DAGUtil.addChild(node, pipeline);
             return pipeline.bin.mux.add(node);
         },
 
-        append : function(dag, node, pipeline) {
-            var tail = this.tail(dag, pipeline);
+        /*
+         * Append a function to a pipeline.
+         * @param {Object} node representing a function
+         * @param {Object} pipeline to append node.
+         * @param {Object} pipeline.dag where the pipeline resides.
+         * @return {Object} the head of the pipeline
+         */
+        append : function(node, pipeline) {
+            var tail = this.tail(pipeline.bin.dag, pipeline);
             DAGUtil.addChild(tail, node);
-            return pipeline.bin.mux.add(node);
+            pipeline.bin.mux.add(node);
+            return pipeline;
         },
 
+        /*
+         * Return the last function in a pipeline.
+         * If there are branches, always uses the first child path.
+         * @return {Object} function node at the end of the pipeline.
+         */
         tail : function(dag, pipeline) {
             var children = dag.getChildren(pipeline);
             if (children.length === 0) {

@@ -7,7 +7,8 @@
     }
 
     global.it = function(clause, fn) {
-        process.stdout.write(clause + ' : ');
+        console.log(clause);
+        console.log('-');
 
         var timeout = function() {
             console.log('timed out!');
@@ -20,6 +21,7 @@
             console.log('passed');
         }
 
+        //should wait till last test is done before performing
         fn(done);
     }
 

@@ -2,33 +2,44 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(WsStaticServer, chai, sinon) {
+
+require('../../src/Server/NodeDeps.js');
+//require('../../src/Test/UnitTest.js');
+var chai = require('chai');
+var path = require('path');
+//var servePath = process.cwd();
+var request = require('supertest');
+
+(function(WsStaticServer, chai) {
 
     var http = require('http');
     var WebSocketServer = require('ws').Server;
+    var Server = require('http').Server;
     var WebSocket = require('ws');
     var express = require('express');
 
     var assert = chai.assert;
+    var port = 6000;
 
     describe('Http', function() {
 
         it('can bind and release a port', function(done) {
             var server = Server();
-            server.listen(3000);
+            server.listen(port);
             server.close();
 
 
             var server2 = Server();
-            server2.listen(3000);
+            server2.listen(port);
             server2.close();
 
             done();
         })
 
         it('can detect when the port is in use', function(done) {
+            port++
             var server = Server();
-            server.listen(3000);
+            server.listen(port);
 
             var server2 = Server();
             server2.on('error', function(error) {
@@ -36,7 +47,7 @@
                 done();
             })
 
-            server2.listen(3000);
+            server2.listen(port);
         })
 
         it('can serve static content', function(done) {
@@ -49,7 +60,7 @@
             app.use(express.static(servePath));
 
             request(app)
-                .get('/HttpTest.js')
+                .get('/main.js')
                 .expect('Content-Type', 'application/javascript')
                 .expect(200)
                 .end(function(err, res){
@@ -59,7 +70,8 @@
         })
 
         it('can create a websocket', function(done) {
-            wss = new WebSocketServer({port : 3333});
+            port++
+            var wss = new WebSocketServer({port : port});
             wss.on('connection', function(ws) {
                 ws.on('message', function(message) {
                     assert.equal('hi', message);
@@ -68,7 +80,7 @@
                 })
                 ws.send('something');
             })
-            var myWs = new WebSocket('ws://localhost:3333');
+            var myWs = new WebSocket('ws://localhost:' + port);
             myWs.on('open', function() {
                 myWs.send('hi');
             })
@@ -76,9 +88,10 @@
         })
 
         it('ws can use a http server', function(done) {
+            port++
             var server = Server();
 
-            server.listen(3000, function() {
+            server.listen(port, function() {
                 wss = new WebSocketServer({server : server, path:'/ws'});
                 wss.on('connection', function(ws) {
                     wss.close();
@@ -87,18 +100,19 @@
                 })
             });
 
-            var myWs = new WebSocket('ws://localhost:3000/ws');
+            var myWs = new WebSocket('ws://localhost:' + port + '/ws');
             myWs.on('open', function() {
                 myWs.send('hi');
             });
         })
 
         it('ws can use a http server with express app', function(done) {
+            port++;
             var app = express();
             var server = http.createServer(app);
 
-            server.listen(3000, function() {
-                wss = new WebSocketServer({server : server, path:'/ws'});
+            server.listen(port, function() {
+                var wss = new WebSocketServer({server : server, path:'/ws'});
                 wss.on('connection', function(ws) {
                     wss.close();
                     server.close();
@@ -106,14 +120,14 @@
                 })
             });
 
-            var myWs = new WebSocket('ws://localhost:3000/ws');
+            var myWs = new WebSocket('ws://localhost:' + port + '/ws');
             myWs.on('open', function() {
                 myWs.send('hi');
             });
         })
 
         it('can be combined into a WsStaticServer', function(done) {
-            var port = 3005;
+            port++
             var options = { port : port, path : servePath, wsPath : '/ws'}
             var server = new WsStaticServer(options);
             server.listen(function(wss) {
@@ -135,4 +149,4 @@
 
     })
 
-})(COMPOSITE.WsStaticServer, chai, sinon)
+})(COMPOSITE.WsStaticServer, chai)
