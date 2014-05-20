@@ -4,5 +4,10 @@ streams are conceptually similar to a composite function dag
 A key difference is the use of events instead of function calls to chain together functional nodes in the pipeline
 Some dag functions pass the data to a stream that is asynchrounous, so the result can not be forwarded along the function dag, notably the result of streaming to disk.
 
+Compare to Node stream API
 The Pipeline API is not as clean as nodes.  It could be improved  with more consistency, append, prepend.
 When unit testing, adding the ability to listen for nodes in the pipeline would be useful.
+
+Benefits of stream model:
+Functionality can be built up without the burden of generating classes and wrapping class after delegate class.  Instead append a simple functional unit to a pipeline.
+

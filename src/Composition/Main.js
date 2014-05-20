@@ -3,7 +3,7 @@
 */
 
 
-(function(Pipeline) {
+(function(COMPOSITE, Pipeline) {
 
     function Main() {}
     COMPOSITE.Main = Main;
@@ -21,4 +21,6 @@
         webPage.bin.mux.add(request);
     }
 
-})(COMPOSITE.Pipeline);
+    return Main;
+
+})(COMPOSITE, COMPOSITE.Pipeline);

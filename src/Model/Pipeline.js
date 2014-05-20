@@ -45,23 +45,30 @@
         },
 
         /*
-         * A pipeline with a bound socket, file buffer and in memory dag
+         * A pipeline with a bound socket, file buffer, in memory dag and DAGReplier
          */
         bufferedServer : function(port, servePath, bufferFilename) {
-            var WsPipeline = {
+            var ServerSocket = {
                 type : 'ServerSocket',
                 id : 'serverSocket',
                 port : port,
                 path : servePath,
                 wsPath : '/node'
             }
+
             var FileBuffer = {
                 id : 'fileBuffer',
                 type : 'FileBuffer',
                 file : bufferFilename
             }
-            this.prepend(FileBuffer, this.uniqueMemoryDag())
-            return this.prepend(WsPipeline, FileBuffer)
+
+            var DAGReplier = {
+                type : 'DAGReplier'
+            }
+
+            this.append(DAGReplier, this.uniqueMemoryDag())
+            this.prepend(FileBuffer, DAGReplier)
+            return this.prepend(ServerSocket, FileBuffer)
         },
 
         webPage : function() {
@@ -75,8 +82,10 @@
          * @return {Object} the head of the pipeline
          */
         prepend : function(node, pipeline) {
+            var head = this.head(pipeline.bin.dag, pipeline);
             DAGUtil.addChild(node, pipeline);
-            return pipeline.bin.mux.add(node);
+            head.bin.mux.add(node);
+            return head;
         },
 
         /*
@@ -87,10 +96,11 @@
          * @return {Object} the head of the pipeline
          */
         append : function(node, pipeline) {
+            var head = this.head(pipeline.bin.dag, pipeline);
             var tail = this.tail(pipeline.bin.dag, pipeline);
             DAGUtil.addChild(tail, node);
-            pipeline.bin.mux.add(node);
-            return pipeline;
+            head.bin.mux.add(node);
+            return head;
         },
 
         /*
@@ -104,6 +114,19 @@
                 return pipeline;
             }
             return this.tail(dag, children[0]);
+        },
+
+        /*
+         * Return the first function in a pipeline.
+         * @return {Object} function node at the head of the pipeline.
+         */
+        head : function(dag, pipeline) {
+            var parent = dag.getParent(pipeline)
+            if (parent === undefined) {
+                return pipeline;
+            } else {
+                return this.head(dag, parent);
+            }
         }
 
     }

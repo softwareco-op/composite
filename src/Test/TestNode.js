@@ -10,7 +10,7 @@
     COMPOSITE.TestNode = TestNode;
 
     TestNode.prototype.add = function(node) {
-        this.testFunction(node);
+        return this.testFunction(node);
     }
 
     return TestNode;

@@ -12,7 +12,7 @@ var assert = chai.assert;
 
     describe('ClientSocketTest', function() {
 
-        it('can start the server', function(done) {
+        it('can send to the server', function(done) {
             var ServerSocket = {
                 type : 'ServerSocket',
                 port : 4000,
@@ -24,7 +24,6 @@ var assert = chai.assert;
                 type : 'TestNode',
                 testFunction : function(node) {
                     if (node.myval === '3') {
-
                         done()
                     }
                 }
@@ -42,9 +41,10 @@ var assert = chai.assert;
                 var testNode = {myval : '3'}
                 pipe.bin.mux.add(testNode)
                 ClientSocket.object.end();
+                setTimeout(function() { ServerSocket.object.end() }, 100);
             })
 
-            setTimeout(function() { ServerSocket.object.end() }, 100);
+
 
 
         });

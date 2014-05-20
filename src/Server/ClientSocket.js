@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE, SocketUtil) {
+(function(COMPOSITE, SocketUtil, Pipeline) {
 
     /*
      * ClientSocket transports nodes.
@@ -32,7 +32,10 @@
         this.socket.on('open', function() {
             self.socket.on('message', function(node) {
                 var toPipe = JSON.parse(node);
-                self.node.bin.mux.add(toPipe);
+                if (self.head === undefined) {
+                    self.head = Pipeline.head(self.node.bin.dag, self.node)
+                }
+                self.head.bin.mux.add(toPipe);
             });
         })
     }
@@ -43,4 +46,4 @@
 
     return ClientSocket;
 
-})(COMPOSITE, COMPOSITE.SocketUtil)
+})(COMPOSITE, COMPOSITE.SocketUtil, COMPOSITE.Pipeline)
