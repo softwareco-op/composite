@@ -56,6 +56,12 @@
                 wsPath : '/node'
             }
 
+            var PropertyFilter = {
+                type : 'PropertyFilter',
+                property : 'type',
+                whiteList : ['HtmlNode']
+            }
+
             var FileBuffer = {
                 id : 'fileBuffer',
                 type : 'FileBuffer',
@@ -68,7 +74,10 @@
 
             this.append(DAGReplier, this.uniqueMemoryDag())
             this.prepend(FileBuffer, DAGReplier)
-            return this.prepend(ServerSocket, FileBuffer)
+            this.prepend(PropertyFilter, FileBuffer);
+            DAGUtil.addChild(ServerSocket, PropertyFilter);
+            FileBuffer.bin.mux.add(ServerSocket);
+            return ServerSocket;
         },
 
         webPage : function() {

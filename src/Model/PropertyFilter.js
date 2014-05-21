@@ -46,7 +46,6 @@
         }
 
         throw new Error('object.' + property + ' is ' + object[property] + ' is not on the white list so filtering.');
-
     }
 
     return PropertyFilter;

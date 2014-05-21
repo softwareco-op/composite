@@ -8,10 +8,11 @@ require('../../src/Server/NodeDeps');
 (function(Pipeline) {
     console.log(servePath);
     try {
-        Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
+        var pipe = Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
+        pipe.bin.mux.add({id:0, message:'hello world'});
     } catch (error) {
         console.log('in catch');
-        console.debug(error);
+        console.log(error);
     }
 
 })(COMPOSITE.Pipeline)
