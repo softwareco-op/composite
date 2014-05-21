@@ -82,7 +82,54 @@ if (typeof module !== 'undefined' && module.exports) {
             } catch (error) {
                 done();
             }
+        })
 
+        it('denies black list items', function(done) {
+            var options = {
+                property : 'type',
+                blackList : ['Weebles', 'ClientSocket']
+            }
+
+            var propertyFilter = new PropertyFilter(options);
+
+            try {
+                propertyFilter.add({type : 'ClientSocket'});
+                done('should have thrown an error');
+            } catch (error) {
+                done();
+            }
+        })
+
+        it('allows white list items', function(done) {
+            var options = {
+                property : 'type',
+                whiteList : ['Feebles', 'HtmlNodes']
+            }
+
+            var propertyFilter = new PropertyFilter(options);
+
+            try {
+                propertyFilter.add({type : 'HtmlNodes'});
+                done();
+            } catch (error) {
+                done('should not have thrown an error');
+            }
+        })
+
+        it('denies non white list items', function(done) {
+            var options = {
+                property : 'type',
+                whiteList : ['Feebles', 'HtmlNodes']
+            }
+
+            var propertyFilter = new PropertyFilter(options);
+
+            try {
+                propertyFilter.add({type : 'HtmlNodeses'});
+                done('should have thrown an error');
+            } catch (error) {
+                done();
+            }
         })
 
     })

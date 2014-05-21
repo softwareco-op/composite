@@ -27,13 +27,13 @@
 
         if (object[property] === undefined && filterUndefined) {
             throw new Error('object.' + property + ' is undefined.');
+        } else if (object[property] === undefined) {
+            return object;
         }
 
         if (object[property] === null && filterNull) {
             throw new Error('object.' + property + ' is null.');
-        }
-
-        if (whiteList !== undefined && whiteList.indexOf(object[property]) >= 0) {
+        } else if (object[property] === null) {
             return object;
         }
 
@@ -41,7 +41,11 @@
             throw new Error('object.' + property + ' is ' + object[property] + ' is on the blacklist so filtering.');
         }
 
-        return object;
+        if (whiteList !== undefined && whiteList.indexOf(object[property]) >= 0) {
+            return object;
+        }
+
+        throw new Error('object.' + property + ' is ' + object[property] + ' is not on the white list so filtering.');
 
     }
 
