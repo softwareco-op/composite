@@ -20,6 +20,7 @@ _addJS("src/Actions/Reorder.js", 'body')
 _addJS("src/Actions/DisplayChildren.js", 'body')
 
 _addJS("src/Model/Unique.js", 'body')
+_addJS("src/Model/PropertyFilter.js", 'body')
 _addJS("src/Model/ObjectSupplier.js", 'body')
 _addJS("src/Model/Pipeline.js", 'body')
 

@@ -7,6 +7,12 @@ require('../../src/Server/NodeDeps');
 
 (function(Pipeline) {
     console.log(servePath);
-    Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
+    try {
+        Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
+    } catch (error) {
+        console.log('in catch');
+        console.debug(error);
+    }
+
 })(COMPOSITE.Pipeline)
 

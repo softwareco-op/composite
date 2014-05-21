@@ -72,7 +72,17 @@
         },
 
         webPage : function() {
-            return this.uniqueMemoryDag();
+            var host = window.location.host;
+
+            var ClientSocket = {
+                type : 'ClientSocket',
+                url : 'ws://' + host + '/node',
+                browser : true
+            }
+
+            var pipe = this.append(ClientSocket, this.uniqueMemoryDag());
+
+            return pipe;
         },
 
         /*
@@ -83,9 +93,9 @@
          */
         prepend : function(node, pipeline) {
             var head = this.head(pipeline.bin.dag, pipeline);
-            DAGUtil.addChild(node, pipeline);
+            DAGUtil.addChild(node, head);
             head.bin.mux.add(node);
-            return head;
+            return node;
         },
 
         /*

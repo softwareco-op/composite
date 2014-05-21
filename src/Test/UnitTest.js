@@ -16,9 +16,14 @@
 
         var timeoutId = setTimeout(timeout, 2000);
 
-        var done = function() {
+        var done = function(error) {
             clearTimeout(timeoutId);
-            console.log('passed');
+            if (error === undefined) {
+                console.log('passed');
+            } else {
+                console.log(error);
+                console.log('failed');
+            }
         }
 
         //should wait till last test is done before performing

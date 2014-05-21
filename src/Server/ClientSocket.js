@@ -29,15 +29,26 @@
     ClientSocket.prototype.pipe = function() {
         var self = this;
         this.socket = new WebSocket(this.url);
-        this.socket.on('open', function() {
-            self.socket.on('message', function(node) {
-                var toPipe = JSON.parse(node);
-                if (self.head === undefined) {
-                    self.head = Pipeline.head(self.node.bin.dag, self.node)
-                }
-                self.head.bin.mux.add(toPipe);
-            });
-        })
+        if (this.node.browser) {
+            this.socket.onmessage = function(event) {
+                self.forwardMessage(event.data);
+            }
+        } else {
+            this.socket.on('open', function() {
+                self.socket.on('message', function(data) {
+                    self.forwardMessage(data);
+                });
+            })
+        }
+    }
+
+    ClientSocket.prototype.forwardMessage = function(data) {
+        var self = this;
+        var toPipe = JSON.parse(data);
+        if (self.head === undefined) {
+            self.head = Pipeline.head(self.node.bin.dag, self.node)
+        }
+        self.head.bin.mux.add(toPipe);
     }
 
     ClientSocket.prototype.end = function() {
