@@ -20,9 +20,11 @@
             clearTimeout(timeoutId);
             if (error === undefined) {
                 console.log('passed');
+                console.log('');
             } else {
                 console.log(error);
                 console.log('failed');
+                console.log('');
             }
         }
 
