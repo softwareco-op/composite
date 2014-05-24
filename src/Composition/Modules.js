@@ -28,6 +28,7 @@ _addJS("src/Test/TestNode.js", 'body')
 
 _addJS("src/Server/SocketUtil.js", 'body')
 _addJS("src/Server/DAGReplier.js", 'body')
+_addJS("src/IO/JSONReader.js", 'body')
 
 _addJS("src/UI/Page.js", 'body')
 _addJS("src/Composition/Main.js", 'body')

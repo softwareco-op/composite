@@ -1,0 +1,4 @@
+Stream refactor tasks
+
+Use node stream API
+Change dag to use hash for ids

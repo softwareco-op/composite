@@ -1,0 +1,3 @@
+To bootstrap an instance, first a kernel pipeline is created.  This kernel pipeline might contain simply an Object loader, or more complex like an ObjectLoader and a DAG.
+Next, a file loader node is sent throught the kernel pipeline.  This file loader will open a file, or stream a file from a server into the kernel.
+The head of the file typically contains node modules to setup the rest of the kernel pipeline, and subsequently the rest of the data.  This is convention though, it is also valid for the data to come first and then the node modules.  Or to have no extra node modules at all.

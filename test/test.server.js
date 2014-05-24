@@ -19,4 +19,5 @@ m.addFile('./test/Server/FileBufferTest.js');
 m.addFile('./test/Server/ServerSocketTest.js');
 m.addFile('./test/Server/ClientSocketTest.js');
 m.addFile('./test/Server/DAGReplierTest.js');
+m.addFile('./test/IO/JSONReaderTest.js');
 m.reporter('spec').ui('tdd').run();

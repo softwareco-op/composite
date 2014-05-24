@@ -45,6 +45,19 @@
         },
 
         /*
+         * A pipeline that notifies nodes that they have been added to the dag.
+         */
+        DAGNotify : function() {
+            var dagNotify = {
+                id : 'dagNotify',
+                type : 'DAGNotify'
+            }
+
+            var inMemoryDag = this.append(dagNotify, this.uniqueMemoryDag());
+            return inMemoryDag;
+        },
+
+        /*
          * A pipeline with a bound socket, file buffer, in memory dag and DAGReplier
          */
         bufferedServer : function(port, servePath, bufferFilename) {
@@ -72,7 +85,7 @@
                 type : 'DAGReplier'
             }
 
-            this.append(DAGReplier, this.uniqueMemoryDag())
+            this.append(DAGReplier, this.DAGNotify())
             this.prepend(FileBuffer, DAGReplier)
             this.prepend(PropertyFilter, FileBuffer);
             DAGUtil.addChild(ServerSocket, PropertyFilter);

@@ -29,7 +29,11 @@
         }
 
         //should wait till last test is done before performing
-        fn(done);
+        try {
+            fn(done);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 })()

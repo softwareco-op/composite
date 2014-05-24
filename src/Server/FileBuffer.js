@@ -36,7 +36,6 @@
         process.on('SIGINT', function() {
             self.end();
         })
-
     }
 
     /*
@@ -58,21 +57,7 @@
             self.fs.end();
         })
 
-        var jsonReadFinish = new RSVP.Promise(function(resolve, reject) {
-            self.jsonRead.on('finish', function() {
-                resolve(true);
-            })
-            self.jsonRead.end();
-        })
-
-        var fileReadFinish = new RSVP.Promise(function(resolve, reject) {
-            self.fileRead.on('finish', function() {
-                resolve(true);
-            })
-            self.fileRead.end();
-        })
-
-        RSVP.all([jsonFinish, fileFinish, jsonReadFinish, fileReadFinish]).then(function() {
+        RSVP.all([jsonFinish, fileFinish]).then(function() {
             console.log('all done');
             //process.exit()
         })

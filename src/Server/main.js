@@ -11,18 +11,16 @@ require('../../src/Server/NodeDeps');
 (function(Pipeline) {
     console.log(servePath);
     try {
-        var pipe = Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
-        this.jsonRead = JSONStream.parse('*');
-        this.fileRead = fs.createReadStream(this.file);
-        this.jsonRead.on('data', function(node) {
-            pipe.bin.mux.add(node);
-        })
-        this.fileRead.pipe(this.jsonRead)
-
+//        var pipe = Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
+        var pipe = Pipeline.DAGNotify();
+        var reader = {
+                type : 'JSONReader',
+                file : 'bufferedServer.json'
+        }
+        pipe.bin.mux.add(reader);
     } catch (error) {
         console.log('in catch');
         console.log(error);
     }
 
 })(COMPOSITE.Pipeline)
-
