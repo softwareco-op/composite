@@ -1,0 +1,32 @@
+[
+{
+    "id" : "ballotBox",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "div",
+        "class" : "ballotBox"
+    },
+    "children" : ["ballot"]
+},
+{
+    "id" : "ballot",
+    "parent" : "ballotBox",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "div",
+        "class" : "ballot"
+    },
+    "children" : ["username"]
+},
+{
+    "id" : "username",
+    "parent" : "ballot",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "input",
+        "name":"username",
+        "type":"text",
+        "class":"username"
+    }
+}
+]

@@ -1,0 +1,31 @@
+[
+{
+    "id"   : "dagReplier",
+    "parent" : "fileBuffer",
+    "type" : "DAGReplier",
+    "children" : ["dagNotify"]
+},
+{
+    "id"   : "fileBuffer",
+    "parent" : "propertyFilter",
+    "type" : "FileBuffer",
+    "file" : "compositeStream.json",
+    "children" : ["dagReplier"]
+},
+{
+    "id" : "serverSocket",
+    "type" : "ServerSocket",
+    "port" : "3000",
+    "path" : "/home/seth/composite",
+    "wsPath" : "/node",
+    "children" : ["propertyFilter"]
+},
+{
+    "id" : "propertyFilter",
+    "parent" : "serverSocket",
+    "type" : "PropertyFilter",
+    "property" : "type",
+    "whiteList" : ["HtmlNode"],
+    "children" : ["fileBuffer"]
+}
+]

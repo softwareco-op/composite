@@ -13,11 +13,18 @@ require('../../src/Server/NodeDeps');
     try {
 //        var pipe = Pipeline.bufferedServer(3000, servePath, 'nodeStream.json');
         var pipe = Pipeline.DAGNotify();
-        var reader = {
+        var kernel = {
                 type : 'JSONReader',
                 file : 'bufferedServer.json'
         }
-        pipe.bin.mux.add(reader);
+        pipe.bin.mux.add(kernel);
+
+        var application = {
+            type: 'JSONReader',
+            file: 'ballot.json'
+        }
+
+        pipe.bin.mux.add(application);
     } catch (error) {
         console.log('in catch');
         console.log(error);
