@@ -49,6 +49,10 @@
          * @param {Object} child to remove from parent.
          */
         unlinkChild : function(parent, child) {
+            if (parent === null) {
+                return parent;
+            }
+
             var index = _.indexOf(parent.children, child.id);
             if (index < 0) {
                 return false;

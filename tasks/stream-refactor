@@ -3,3 +3,4 @@ Stream refactor tasks
 Use node stream API
 Change dag to use hash for ids
 Make sockets not send to a busted socket by using event model.
+Make the correct useage of stream api eg. on('readable')

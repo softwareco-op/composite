@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(Pipeline, DAG, DAGUtil, chai, sinon) {
+(function(Pipeline, DAG, DAGUtil, TestNode, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -24,6 +24,23 @@
             done();
         })
 
+        it('removes a function from the pipeline', function(done) {
+            var pipeline = Pipeline.DAGNotify();
+
+            Pipeline.remove('objectSupplier', pipeline);
+
+            var testNode = {
+                type : 'TestNode',
+                testFunction : function(node) {
+                    done("I shouldn't have been called!");
+                }
+            }
+
+            pipeline.bin.mux.add(testNode);
+
+            done();
+        })
+
     })
 
-})(COMPOSITE.Pipeline, COMPOSITE.DAG, COMPOSITE.DAGUtil, chai, sinon)
+})(COMPOSITE.Pipeline, COMPOSITE.DAG, COMPOSITE.DAGUtil, COMPOSITE.TestNode, chai, sinon)

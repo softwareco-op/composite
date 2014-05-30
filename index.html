@@ -9,6 +9,7 @@
 
   <body>
 
+    <div id="composite"></div>
 
     <!-- load our depenencies (underscore-like util library, hashing library, and uuid generation library -->
     <script type="text/javascript" src="node_modules/lodash/dist/lodash.js"></script>
@@ -41,10 +42,12 @@
     <script type="text/javascript" src="src/Actions/DisplayChildren.js"></script>
 
     <script type="text/javascript" src="src/Model/Unique.js"></script>
+    <script type="text/javascript" src="src/Model/PropertyFilter.js"></script>
     <script type="text/javascript" src="src/Model/ObjectSupplier.js"></script>
     <script type="text/javascript" src="src/Model/Pipeline.js"></script>
 
     <script type="text/javascript" src="src/UI/Page.js"></script>
+    <script type="text/javascript" src="src/Components/Pagelet.js"></script>    
 
     <script type="text/javascript" src="src/Server/SocketUtil.js"></script>
     <script type="text/javascript" src="src/Server/ClientSocket.js"></script>
@@ -55,7 +58,7 @@
       main.perform();
     </script>
 
-    <div id="composition"></div>
+
   </body>
 
 </html>

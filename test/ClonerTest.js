@@ -3,7 +3,7 @@
  */
 
 
-(function(Cloner, HtmlNode, _, chai, sinon) {
+(function(Cloner, ObjectSupplier, _, chai, sinon) {
 
     var assert = chai.assert;
 
@@ -11,7 +11,14 @@
 
         it('it clones objects', function(done) {
             var cloner = new Cloner();
-            var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
+            var button = {
+                type: 'HtmlNode',
+                html: {
+                    name: 'testHtmlNode',
+                    text: 'Hello'
+                }
+            }
+
 
             var clone = cloner.clone(button);
             var clone2 = _.clone(button);
@@ -24,7 +31,13 @@
 
         it('json clone is performant?', function(done) {
             var cloner = new Cloner();
-            var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
+            var button = {
+                type: 'HtmlNode',
+                html: {
+                    name: 'testHtmlNode',
+                    text: 'Hello'
+                }
+            }
 
             var clone = cloner.clone(button);
             for (var i = 0 ; i < 10000 ; i++) {
@@ -40,7 +53,13 @@
 
         it('deep clone is performant?', function(done) {
             var cloner = new Cloner();
-            var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
+            var button = {
+                type: 'HtmlNode',
+                html: {
+                    name: 'testHtmlNode',
+                    text: 'Hello'
+                }
+            }
 
             var clone = cloner.clone(button);
             for (var i = 0 ; i < 10000 ; i++) {
@@ -56,7 +75,14 @@
 
         it('deepClone works as expected', function(done) {
             var cloner = new Cloner();
-            var button = new HtmlNode({name: 'testHtmlNode', text: 'Hello'});
+            var button = {
+                type: 'HtmlNode',
+                html: {
+                    name: 'testHtmlNode',
+                    text: 'Hello'
+                }
+            }
+
             button.nest = [1,2,3]
             var clone = cloner.clone(button);
             var clone2 = cloner.clone(clone);
@@ -76,4 +102,4 @@
 
     })
 
-})(COMPOSITE.Cloner , COMPOSITE.HtmlNode, _, chai, sinon)
+})(COMPOSITE.Cloner , COMPOSITE.ObjectSupplier, _, chai, sinon)

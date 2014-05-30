@@ -58,41 +58,8 @@
         },
 
         /*
-         * A pipeline with a bound socket, file buffer, in memory dag and DAGReplier
+         * A pipeline that renders nodes into a pagelet.
          */
-        bufferedServer : function(port, servePath, bufferFilename) {
-            var ServerSocket = {
-                type : 'ServerSocket',
-                id : 'serverSocket',
-                port : port,
-                path : servePath,
-                wsPath : '/node'
-            }
-
-            var PropertyFilter = {
-                type : 'PropertyFilter',
-                property : 'type',
-                whiteList : ['HtmlNode']
-            }
-
-            var FileBuffer = {
-                id : 'fileBuffer',
-                type : 'FileBuffer',
-                file : bufferFilename
-            }
-
-            var DAGReplier = {
-                type : 'DAGReplier'
-            }
-
-            this.append(DAGReplier, this.DAGNotify())
-            this.prepend(FileBuffer, DAGReplier)
-            this.prepend(PropertyFilter, FileBuffer);
-            DAGUtil.addChild(ServerSocket, PropertyFilter);
-            FileBuffer.bin.mux.add(ServerSocket);
-            return ServerSocket;
-        },
-
         webPage : function() {
             var host = window.location.host;
 
@@ -102,7 +69,14 @@
                 browser : true
             }
 
-            var pipe = this.append(ClientSocket, this.uniqueMemoryDag());
+            var Pagelet = {
+                type : 'Pagelet',
+                divName : 'composite',
+                root : 'ballotBox'
+            }
+
+            var pipe = this.append(Pagelet, this.DAGNotify());
+            pipe = this.append(ClientSocket, pipe);
 
             return pipe;
         },
@@ -133,6 +107,38 @@
             DAGUtil.addChild(tail, node);
             head.bin.mux.add(node);
             return head;
+        },
+
+        /*
+         * Remove a function from the pipeline.
+         *
+         * @param {Object} node representing a function
+         * @param {Object} pipeline to remove the node from.
+         * @param {Object} pipeline.dag where the pipeline resides.
+         * @return {Object} the head of the pipeline
+         *
+         */
+        remove : function(nodeId, pipeline) {
+            var dag = pipeline.bin.dag;
+            var node = pipeline.bin.dag.get(nodeId);
+            var children = dag.getChildren(node);
+            var parent = dag.getParent(node);
+
+            DAGUtil.unlinkChild(parent, node);
+
+            for (var i = 0 ; i < children.length ; i++) {
+                DAGUtil.setChild(parent, children[i]);
+            }
+
+            dag.remove(node);
+
+            if (children.length === 1 ) {
+                return this.head(dag, children[0]);
+            } else if (children.length > 1) {
+                throw new Error('removing ' + nodeId + ' would create a pipeline with ' + children.length + ' heads');
+            }
+
+            throw new Error('removing ' + nodeId + ' would create an empty pipeline.');
         },
 
         /*

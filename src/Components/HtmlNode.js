@@ -8,9 +8,19 @@
     // A simple html tag constructed from a node.
     //
     // @constructor
-    // @param {Node} node representing a html tag.
+    // @param {Object} node representation of a html tag.
     //
-    function HtmlNode(node) {}
+    function HtmlNode(node) {
+        this.node = node;
+        if ( node.document ) {
+            this.dom = node.document;
+        } else if ( typeof document == 'undefined') {
+            this.dom = null;
+        } else {
+            this.dom = document;
+        }
+    }
+    COMPOSITE.HtmlNode = HtmlNode;
 
     //
     // Renders the button
@@ -19,31 +29,41 @@
     // @param {Document} dom to use for rendering
     // @return {Element} dom element representing the button
     //
-    HtmlNode.prototype.render = function(node, dag, dom) {
-        this.el = this.el || HTML.nodeToElement(node, dom);
+    HtmlNode.prototype.render = function(node) {
+        this.el = this.el || HTML.nodeToElement(node, this.dom);
         if (this.el.onrender) {
-            this.el.onrender(node, dag);
+            this.el.onrender(node, this.node.bin.dag);
         }
         return this.el;
     }
 
-    HtmlNode.prototype.add = function(node, dag, dom) {
+    HtmlNode.prototype.update = function(node) {
+        this.render(node);
+
         //Let any children know we are here.
-        var children = dag.getChildren(node);
+        var children = this.node.bin.dag.getChildren(node);
         if (children === undefined) {return;}
+
+        while (this.el && this.el.hasChildNodes()) {
+            this.el.removeChild(self.div.lastChild);
+        }
+
+        var self = this;
         children.map(function(child) {
             if (child === undefined) {return;}
-            child.object.update(child, dag, dom);
+            child.object.render(child);
+            self.el.appendChild(child.object.el);
         })
-
-        this.render(node, dag, dom);
     }
 
-    HtmlNode.prototype.update = function(node, dag, dom) {
-        this.render(node, dag, dom);
+    HtmlNode.prototype.addChild = function() {
+        this.update(this.node);
     }
 
-    COMPOSITE.HtmlNode = HtmlNode;
+    HtmlNode.prototype.addNode = function() {
+        this.update(this.node);
+    }
+
     return HtmlNode;
 
 })(COMPOSITE, COMPOSITE.HTML);

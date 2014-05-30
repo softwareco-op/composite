@@ -10,6 +10,8 @@
     /*
      * Reads a stream and pipes the result to a pipeline.
      * Can use DAGNotify to feed a pipeline upon passing through the pipeline.
+     * @param {string} options.file to read
+     * @param {Function} options.onEnd to call after piping the file.
      */
     function JSONReader(options) {
         this.options = options;
@@ -25,6 +27,14 @@
         this.jsonStream.on('data', function(object) {
             pipe(object);
         })
+
+        var self = this;
+        if (this.options.onEnd) {
+            this.jsonStream.on('end', function() {
+                self.options.onEnd();
+            })
+        }
+
         this.readStream.resume();
     }
 
@@ -33,7 +43,7 @@
         //this.readStream.end();
     }
 
-    JSONReader.prototype.addNode = function() {
+    JSONReader.prototype.resume = function() {
         var self = this;
         var fn = function(node) {
             var head = Pipeline.head(self.options.bin.dag, self.options.bin.dag.node);
