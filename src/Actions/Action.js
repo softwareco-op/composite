@@ -37,9 +37,9 @@
     /*
      * Add this action to the parent.
      */
-    Action.prototype.add = function(node, dag, dom) {
-        this.dag = dag;
-        this.install(node, dag);
+    Action.prototype.addNode = function() {
+        this.dag = this.node.bin.dag;
+        this.install(this.node, this.dag);
     }
 
     COMPOSITE.Action = Action;

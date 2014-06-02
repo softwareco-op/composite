@@ -35,7 +35,7 @@
                         node.var = node.var || {}
                         node.var.socket = ws;
                         var nodeOut = self.node.bin.mux.add(node);
-                        var toSend = JSON.stringify(self.cloner.stripNode(nodeOut));
+                             var toSend = JSON.stringify(self.cloner.stripNode(nodeOut));
                         for (var client in wss.clients) {
                             wss.clients[client].send(toSend);
                         }

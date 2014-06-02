@@ -44,11 +44,12 @@
         var children = this.node.bin.dag.getChildren(node);
         if (children === undefined) {return;}
 
+        var self = this;
+
         while (this.el && this.el.hasChildNodes()) {
-            this.el.removeChild(self.div.lastChild);
+            this.el.removeChild(self.el.lastChild);
         }
 
-        var self = this;
         children.map(function(child) {
             if (child === undefined) {return;}
             child.object.render(child);

@@ -16,7 +16,7 @@
         "tag" : "div",
         "class" : "ballot"
     },
-    "children" : ["username"]
+    "children" : ["username", "newBallotButton", "choices"]
 },
 {
     "id" : "username",
@@ -28,5 +28,79 @@
         "type":"text",
         "class":"username"
     }
+},
+{
+    "id" : "newBallotButton",
+    "parent" : "ballot",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "copy",
+        "src" : "icons/add.png",
+        "alt" : "New Ballot"
+    },
+    "children" : ["copyTree"]
+},
+{
+    "id" : "copyTree",
+    "parent" : "newBallotButton",
+    "type" : "CopyTree",
+    "event" : "onmouseup",
+    "source" : "../../"
+    "destination" : "../../../"
+},
+{
+    "id" : "choices",
+    "parent" : "ballot",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "div",
+        "class" : "choices"
+    },
+    "children" : ["choice"]
+},
+{
+    "id" : "choice",
+    "parent" : "choices",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "div",
+        "class" : "choice"
+    },
+    "children" : ["choiceName", "moveUp", "moveDown"]
+},
+{
+    "id" : "choiceName",
+    "parent" : "choice",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "input",
+        "name":"choice",
+        "type":"text",
+        "class":"choiceName"
+    }
+},
+{
+    "id" : "moveUp",
+    "parent" : "choice",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "moveUp",
+        "src" : "icons/uparrow.png",
+        "alt" : "Up Arrow"
+    }
+},
+{
+    "id" : "moveDown",
+    "parent" : "choice",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "moveDown",
+        "src" : "icons/downarrow.png",
+        "alt" : "Down Arrow"
+    }
 }
+
 ]
