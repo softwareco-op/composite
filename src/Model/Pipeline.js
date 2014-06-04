@@ -78,6 +78,7 @@
             var pipe = this.append(Pagelet, this.DAGNotify());
             pipe = this.append(ClientSocket, pipe);
 
+            pipe.bin.dag.alias('head', 'unique');
             return pipe;
         },
 

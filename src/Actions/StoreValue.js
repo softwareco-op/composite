@@ -12,7 +12,8 @@
         var toChange = this.dag.clone(input);
         toChange.value = input.object.el.value;
         this.dag.validateNode(toChange);
-        return Global.pipeline(toChange);
+        var head = dag.get('head');
+        head.bin.mux.add(toChange);
     }
 
     COMPOSITE.StoreValue = StoreValue;

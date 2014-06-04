@@ -13,10 +13,16 @@
  * Reorders a child node relative to its peers.
  */
 
-(function(COMPOSITE, Path, Action, _) {
+(function(COMPOSITE, Path, Action, DAGUtil, _) {
 
     /*
      * Reorder's a child node relative to its peers.
+     *
+     * @param {object} node contains configuration parameters.
+     * @param {object} node.container of items to be reordered, or null.  If null,
+     * the parent of this node will be the container
+     * @param {object} node.item to reorder.
+     * @param {number} node.amount to move the item.
      */
     function Reorder(node) {
         this.node = node;
@@ -24,27 +30,15 @@
     _.extend(Reorder.prototype, Action.prototype);
 
     /*
-     * Move a node in the dag.  If node doesn't have a target container and item, then use a default
-     * parent and grandparent relative to this node.  Otherwise, move the item within the container specified
+     * Move a node in the dag.  Moves the item within the container specified
      * by the node.
      */
     Reorder.prototype.perform = function(node, dag) {
-        console.log('performing');
         var container = node.container;
         var item = node.item;
 
-        if (node.container !== undefined) {
-            container = dag.clone(Path.getNode(dag, node, node.container));
-        } else {
-            parent = dag.getParent(node);
-            container = dag.clone(dag.getParent(parent));
-        }
-
-        if (node.item === undefined) {
-            item = dag.getParent(dag.getParent(node));
-        } else {
-            item = Path.getNode(dag, node, node.item);
-        }
+        container = DAGUtil.clone(Path.getNode(dag, node, node.container));
+        item = Path.getNode(dag, node, node.item);
 
         var children = container.children;
         if (children === undefined || item === undefined) {
@@ -52,9 +46,13 @@
             return;
         }
 
-
         this.move(children, item.id, this.node.amount);
-        COMPOSITE.pipeline(dag.validateNode(container));
+
+        var head = dag.get('head');
+
+        DAGUtil.validateNode(container);
+
+        head.bin.mux.add(container);
     }
 
     /*
@@ -90,4 +88,4 @@
     return Reorder;
 
 
-})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Action, _)
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Action, COMPOSITE.DAGUtil, _)

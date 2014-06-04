@@ -19,9 +19,15 @@ if (typeof module !== 'undefined' && module.exports) {
     describe('CopyTree', function() {
 
         it('can make relative copies', function(done) {
+            var spy = sinon.spy();
+
             var node = {
+                id : 'head',
                 sourcePath : '../',
-                destinationPath : '.'
+                destinationPath : '.',
+                bin : {
+                    mux: {add : spy}
+                }
             }
 
             var copyTree = new CopyTree(node);
@@ -34,11 +40,65 @@ if (typeof module !== 'undefined' && module.exports) {
 
             DAGUtil.addChild(parent, child)
 
+            dag.add(node);
             dag.add(parent);
             dag.add(child);
 
 
             copyTree.perform(child, dag);
+
+            assert.isTrue(spy.calledThrice);
+
+            assert.equal(spy.getCall(0).args[0].name, 'child');
+            assert.equal(spy.getCall(1).args[0].name, 'parent');
+            assert.equal(spy.getCall(2).args[0].name, 'child');
+
+            done();
+        })
+
+        it('can install on a dom element', function(done) {
+            var spy = sinon.spy();
+
+            var node = {
+                id : 'head',
+                name : 'copyTree',
+                sourcePath : '../',
+                destinationPath : '.',
+                event : 'onTestEvent',
+                bin : {
+                    mux: {add : spy}
+                }
+            }
+
+            var copyTree = new CopyTree(node);
+
+            var dag = new DAG();
+
+            var previousCallback = sinon.spy();
+
+            var parent = {
+                'name' : 'parent',
+                'object' : {
+                    el : {
+                        'onTestEvent' : previousCallback
+                    }
+                }
+            }
+
+            DAGUtil.addChild(parent, node)
+
+            dag.add(parent);
+            dag.add(node);
+
+            copyTree.addNode();
+
+            parent.object.el.onTestEvent()
+
+            assert.isTrue(previousCallback.calledOnce);
+            assert.isTrue(spy.calledThrice);
+            assert.equal(spy.getCall(0).args[0].name, 'copyTree');
+            assert.equal(spy.getCall(1).args[0].name, 'parent');
+            assert.equal(spy.getCall(2).args[0].name, 'copyTree');
 
             done();
         })

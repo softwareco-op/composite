@@ -17,7 +17,6 @@ _addJS("src/Actions/GlobalAction.js", 'body')
 _addJS("src/Actions/CopyTree.js", 'body')
 _addJS("src/Actions/StoreValue.js", 'body')
 _addJS("src/Actions/Reorder.js", 'body')
-_addJS("src/Actions/DisplayChildren.js", 'body')
 
 _addJS("src/Model/Unique.js", 'body')
 _addJS("src/Model/PropertyFilter.js", 'body')

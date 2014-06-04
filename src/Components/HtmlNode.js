@@ -51,9 +51,10 @@
         }
 
         children.map(function(child) {
-            if (child === undefined) {return;}
-            child.object.render(child);
-            self.el.appendChild(child.object.el);
+            if (child && child.object && child.object.render) {
+                child.object.render(child);
+                self.el.appendChild(child.object.el);
+            }
         })
     }
 

@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-(function(COMPOSITE, Path, Global, Action, DAGUtil, _) {
+(function(COMPOSITE, Path, Global, Action, DAGUtil, Pipeline, _) {
 
     function CopyTree(node) {
         this.node = node;
@@ -11,35 +11,28 @@
 
     /*
      * Copies a tree from a source to a destination.
+     * Sends the copy to the default head pipeline
+     *
      */
     CopyTree.prototype.perform = function(node, dag) {
         var copies;
 
-        var source;
-        if (this.node.source) {
-            source = dag.get(node.source);
-        } else if (this.node.sourcePath) {
-            source = Path.getNode(dag, node, this.node.sourcePath);
-        } else {
-            var parent = dag.getParent(node);
-            source = dag.getParent(parent);
-        }
+        var source = Path.getNode(dag, node, this.node.sourcePath);
 
-        var destination;
-        if (this.node.destination) {
-            destination = dag.get(node.destination);
-        } else if (this.node.destinationPath) {
-            destination = Path.getNode(dag, node, this.node.destinationPath);
-        } else {
-            destination = source;
-        }
+
+        var destination = Path.getNode(dag, node, this.node.destinationPath);
 
         copies = DAGUtil.copyTreeTo(dag, source, destination);
 
-        _.map(copies, Global.pipeline, Global.pipeline);
+        var head = dag.get('head');
+
+        for (var i = 0 ; i < copies.length ; i++) {
+            head.bin.mux.add(copies[i]);
+        }
+
     }
 
     COMPOSITE.CopyTree = CopyTree;
     return CopyTree;
 
-})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, COMPOSITE.DAGUtil, _);
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, COMPOSITE.DAGUtil, COMPOSITE.Pipeline, _);

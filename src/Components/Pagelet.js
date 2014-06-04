@@ -22,7 +22,7 @@
 
         if (node.id === this.root) {
             while (this.div.hasChildNodes()) {
-                this.div.removeChild(self.div.lastChild);
+                this.div.removeChild(this.div.lastChild);
             }
 
             this.div.appendChild(node.object.el);

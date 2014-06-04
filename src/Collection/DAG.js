@@ -36,9 +36,19 @@
         return node;
     }
 
+    /*
+     * Add a list of nodes to the dag.
+     */
     DAG.prototype.addAll = function(nodes) {
         var self = this;
         return nodes.map(function(node) { self.add(node) });
+    }
+
+    /*
+     * Create a node alias
+     */
+    DAG.prototype.alias = function(alias, id) {
+        this.collection[alias] = this.collection[id];
     }
 
     /*

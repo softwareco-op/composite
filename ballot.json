@@ -27,7 +27,13 @@
         "name":"username",
         "type":"text",
         "class":"username"
-    }
+    },
+    "children" : [ "usernameStoreValue" ]
+},
+{
+    "id" : "usernameStoreValue",
+    "parent" : "username",
+    "type" : "StoreValue"
 },
 {
     "id" : "newBallotButton",
@@ -39,15 +45,15 @@
         "src" : "icons/add.png",
         "alt" : "New Ballot"
     },
-    "children" : ["copyTree"]
+    "children" : ["copyBallot"]
 },
 {
-    "id" : "copyTree",
+    "id" : "copyBallot",
     "parent" : "newBallotButton",
     "type" : "CopyTree",
     "event" : "onmouseup",
-    "source" : "../../"
-    "destination" : "../../../"
+    "sourcePath" : "../../",
+    "destinationPath" : "../../../"
 },
 {
     "id" : "choices",
@@ -67,7 +73,27 @@
         "tag" : "div",
         "class" : "choice"
     },
-    "children" : ["choiceName", "moveUp", "moveDown"]
+    "children" : ["newChoiceButton", "choiceName", "moveUpButton", "moveDownButton"]
+},
+{
+    "id" : "newChoiceButton",
+    "parent" : "choice",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "copy",
+        "src" : "icons/add.png",
+        "alt" : "New Choice"
+    },
+    "children" : ["copyChoice"]
+},
+{
+    "id" : "copyChoice",
+    "parent" : "newChoiceButton",
+    "type" : "CopyTree",
+    "event" : "onmouseup",
+    "sourcePath" : "../../",
+    "destinationPath" : "../../../"
 },
 {
     "id" : "choiceName",
@@ -81,7 +107,7 @@
     }
 },
 {
-    "id" : "moveUp",
+    "id" : "moveUpButton",
     "parent" : "choice",
     "type" : "HtmlNode",
     "html" : {
@@ -89,10 +115,20 @@
         "class" : "moveUp",
         "src" : "icons/uparrow.png",
         "alt" : "Up Arrow"
-    }
+    },
+    "children" : ["moveUp"]
 },
 {
-    "id" : "moveDown",
+    "id" : "moveUp",
+    "parent" : "moveUpButton",
+    "type" : "Reorder",
+    "event" : "onmouseup",
+    "container" : "../../../",
+    "item" : "../../",
+    "amount" : -1
+},
+{
+    "id" : "moveDownButton",
     "parent" : "choice",
     "type" : "HtmlNode",
     "html" : {
@@ -100,7 +136,17 @@
         "class" : "moveDown",
         "src" : "icons/downarrow.png",
         "alt" : "Down Arrow"
-    }
+    },
+    "children" : ["moveDown"]
+},
+{
+    "id" : "moveDown",
+    "parent" : "moveDownButton",
+    "type" : "Reorder",
+    "event" : "onmouseup",
+    "container" : "../../../",
+    "item" : "../../",
+    "amount" : 1
 }
 
 ]

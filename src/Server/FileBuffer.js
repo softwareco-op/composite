@@ -59,7 +59,7 @@
 
         RSVP.all([jsonFinish, fileFinish]).then(function() {
             console.log('all done');
-            //process.exit()
+            process.exit()
         })
     }
 
