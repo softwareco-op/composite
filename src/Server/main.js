@@ -26,19 +26,21 @@ require('../../src/Server/NodeDeps');
             application.object.resume();
         }
 
-
         var kernel = {
             type : 'JSONReader',
             file : 'bufferedServer.json',
             onEnd : loadApp
         }
+
         pipe.bin.mux.add(kernel);
         pipe.bin.mux.add(application);
         kernel.object.resume();
 
     } catch (error) {
+
         console.log('in catch');
         console.log(error);
+
     }
 
 })(COMPOSITE.Pipeline)

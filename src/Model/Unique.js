@@ -17,9 +17,12 @@
      */
     Unique.prototype.add = function(node) {
         if (this.node.bin.dag.exists(node)) {
-            node = DAGUtil.validateNode(node);
             var dagNode = this.node.bin.dag.get(node.id);
-            if (dagNode.hash === node.hash) {
+            var dagNodeHash = dagNode.hash;
+
+            node = DAGUtil.validateNode(node);
+
+            if (dagNodeHash === node.hash) {
                 throw new Error('node already in memory: ' + node.id);
             }
         }

@@ -3,7 +3,7 @@
     "id"   : "dagReplier",
     "parent" : "fileBuffer",
     "type" : "DAGReplier",
-    "children" : ["dagNotify"]
+    "children" : ["unique"]
 },
 {
     "id"   : "fileBuffer",
@@ -18,14 +18,6 @@
     "port" : "3000",
     "path" : "/home/seth/composite",
     "wsPath" : "/node",
-    "children" : ["propertyFilter"]
-},
-{
-    "id" : "propertyFilter",
-    "parent" : "serverSocket",
-    "type" : "PropertyFilter",
-    "property" : "type",
-    "whiteList" : ["HtmlNode"],
     "children" : ["fileBuffer"]
 }
 ]

@@ -14,11 +14,9 @@
      */
     StoreValue.prototype.perform = function(node, dag) {
         var input = dag.getParent(node);
-        var toChange = DAGUtil.clone(input);
-        toChange.html.value = input.object.el.value;
-        DAGUtil.validateNode(toChange);
+        input.html.value = input.object.el.value;
         var head = dag.get('head');
-        head.bin.mux.add(toChange);
+        head.bin.mux.add(input);
     }
 
     return StoreValue;
