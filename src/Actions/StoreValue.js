@@ -9,7 +9,7 @@
     COMPOSITE.StoreValue = StoreValue;
 
     /*
-     * Store the value of a dom element (i.e. input field) on the node.  
+     * Store the value of a dom element (i.e. input field) on the node.
      * Storing the value on the node helps persist data.
      */
     StoreValue.prototype.perform = function(node, dag) {

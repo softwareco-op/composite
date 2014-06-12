@@ -42,6 +42,10 @@
         this.install(this.node, this.dag);
     }
 
+    Action.prototype.addParent = function() {
+        this.addNode();
+    }
+
     COMPOSITE.Action = Action;
     return Action;
 
