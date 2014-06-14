@@ -16,7 +16,7 @@
         "tag" : "div",
         "class" : "ballot"
     },
-    "children" : ["username", "newBallotButton", "choices"]
+    "children" : ["username", "newBallotButton", "removeBallotButton", "choices"]
 },
 {
     "id" : "username",
@@ -57,6 +57,17 @@
     "destinationPath" : "../../../"
 },
 {
+    "id" : "removeBallotButton",
+    "parent" : "ballot",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "copy",
+        "src" : "icons/remove.png",
+        "alt" : "Remove Ballot"
+    }
+},
+{
     "id" : "choices",
     "parent" : "ballot",
     "type" : "HtmlNode",
@@ -74,7 +85,7 @@
         "tag" : "div",
         "class" : "choice"
     },
-    "children" : ["newChoiceButton", "choiceName", "moveUpButton", "moveDownButton"]
+    "children" : ["newChoiceButton", "removeChoiceButton", "choiceName", "moveUpButton", "moveDownButton"]
 },
 {
     "id" : "newChoiceButton",
@@ -95,6 +106,17 @@
     "event" : "onmouseup",
     "sourcePath" : "../../",
     "destinationPath" : "../../../"
+},
+{
+    "id" : "removeChoiceButton",
+    "parent" : "choice",
+    "type" : "HtmlNode",
+    "html" : {
+        "tag" : "img",
+        "class" : "copy",
+        "src" : "icons/remove.png",
+        "alt" : "Remove Choice"
+    }
 },
 {
     "id" : "choiceName",

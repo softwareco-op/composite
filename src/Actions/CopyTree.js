@@ -19,7 +19,6 @@
 
         var source = Path.getNode(dag, node, this.node.sourcePath);
 
-
         var destination = Path.getNode(dag, node, this.node.destinationPath);
 
         copies = DAGUtil.copyTreeTo(dag, source, destination);
