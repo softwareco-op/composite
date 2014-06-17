@@ -73,6 +73,23 @@
             done();
         })
 
+        it('removes trees', function(done) {
+            var dag = new DAG();
+            var parent = {id: 1};
+            var child = {id: 2, color: 'blue'};
+            DAGUtil.addChild(parent,child);
+            dag.add(parent);
+            dag.add(child);
+
+            assert.isDefined(dag.get(1));
+            assert.isDefined(dag.get(2));
+
+            DAGUtil.rmTree(dag, parent);
+            assert.isUndefined(dag.get(1));
+            assert.isUndefined(dag.get(2));
+            done()
+        })
+
         it('can search for nodes', function(done) {
             var dag = new DAG();
             var parent = {id: 1, type: 'node'};

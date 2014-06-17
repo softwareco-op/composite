@@ -138,8 +138,9 @@
          *
          * Similar to cp -r source dest/
          *
-         * @param {Node} source to recursively copy
-         * @param {Node} destination to add nodes to.
+         * @param {DAG} dag to copy nodes from.
+         * @param {Object} source node to recursively copy
+         * @param {Object} destination parent node where nodes are attached.
          * @return all copied and modified nodes.
          */
         copyTreeTo : function(dag, source, destination) {
@@ -148,6 +149,25 @@
             this.addChild(destinationWithCopy, copies[0])
             copies.unshift(destinationWithCopy);
             return copies;
+        },
+
+        /*
+         * Removes nodes from the tree.
+         *
+         * Similar to rm -rf source
+         *
+         * @param {DAG} dag to remove nodes from.
+         * @param {Object} source node to recursively remove nodes from.
+         *
+         */
+        rmTree : function(dag, source) {
+            var self = this;
+
+            dag.getChildren(source).map(function(child) {
+                self.rmTree(dag, child);
+            });
+
+            dag.remove(source);
         },
 
         /*

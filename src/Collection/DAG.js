@@ -11,7 +11,8 @@
      */
     function DAG(node) {
         this.node = node;
-        this.collection = {}
+        this.collection = {};
+        this.aliases = {};
     }
     COMPOSITE.DAG = DAG;
 
@@ -49,6 +50,9 @@
      */
     DAG.prototype.alias = function(alias, id) {
         this.collection[alias] = this.collection[id];
+        var aliasList = this.aliases[id] || [];
+        aliasList.push(alias);
+        this.aliases[id] = aliasList;
     }
 
     /*
@@ -57,6 +61,16 @@
      */
     DAG.prototype.remove = function(node) {
         delete this.collection[node.id];
+        var aliasList = this.aliases[node.id];
+
+        if (!aliasList) {
+            return;
+        }
+
+        var self = this;
+        aliasList.map(function(alias) {
+            delete self.collection[alias];
+        });
     }
 
     /**

@@ -13,6 +13,7 @@
     var assert = chai.assert;
 
     describe('DAG', function() {
+
         it('stores nodes', function(done) {
             var pid = uuid.v1();
             var cid = uuid.v1();
@@ -40,6 +41,22 @@
             dag.add(n);
             assert.isTrue(dag.exists(n));
             dag.remove(n);
+            assert.isFalse(dag.exists(n));
+            done();
+        })
+
+        it('removes aliases', function(done) {
+            var n = {}
+            var dag = new DAG();
+            dag.add(n);
+            dag.alias('carthage', n.id);
+
+            assert.isDefined(dag.get('carthage'));
+            assert.equal(dag.get('carthage'), n);
+
+            dag.remove(n);
+
+            assert.isUndefined(dag.get('carthage'));
             assert.isFalse(dag.exists(n));
             done();
         })
