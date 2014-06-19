@@ -2,7 +2,7 @@
 // (C) 2014 SoftwareCo-oP
 ///
 
-(function(COMPOSITE, Path, Global, Action, DAGUtil, Pipeline, _) {
+(function(COMPOSITE, Path, Action, DAGUtil, Pipeline, _) {
 
     function CopyTree(node) {
         this.node = node;
@@ -34,4 +34,4 @@
     COMPOSITE.CopyTree = CopyTree;
     return CopyTree;
 
-})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Global, COMPOSITE.Action, COMPOSITE.DAGUtil, COMPOSITE.Pipeline, _);
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.Action, COMPOSITE.DAGUtil, COMPOSITE.Pipeline, _);

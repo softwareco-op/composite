@@ -65,7 +65,15 @@
         "class" : "copy",
         "src" : "icons/remove.png",
         "alt" : "Remove Ballot"
-    }
+    },
+    "children" : ["removeBallot"]
+},
+{
+    "id" : "removeBallot",
+    "parent" : "removeBallotButton",
+    "type" : "rm",
+    "event" : "onmouseup",
+    "sourcePath" : "../../"
 },
 {
     "id" : "choices",
@@ -116,7 +124,15 @@
         "class" : "copy",
         "src" : "icons/remove.png",
         "alt" : "Remove Choice"
-    }
+    },
+    "children" : ["removeChoice"]
+},
+{
+    "id" : "removeChoice",
+    "parent" : "removeChoiceButton",
+    "type" : "rm",
+    "event" : "onmouseup",
+    "sourcePath" : "../../"
 },
 {
     "id" : "choiceName",

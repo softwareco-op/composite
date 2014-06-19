@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE) {
+(function(COMPOSITE, Path, DAGUtil, Action, _) {
 
     /*
      * rm recursively removes nodes from the DAG.
@@ -12,6 +12,7 @@
     }
     _.extend(rm.prototype, Action.prototype);
 
+
     /*
      * Removes nodes from the DAG.
      *
@@ -20,9 +21,20 @@
     rm.prototype.perform = function(node, dag) {
         var source = Path.getNode(dag, node, this.node.sourcePath);
 
+        var parent = dag.getParent(source);
+
+        DAGUtil.unlinkChild(parent, source);
+
         DAGUtil.rmTree(dag, source);
 
-        source.object.render(source);
+        var head = dag.get('head');
+
+        head.bin.mux.add(parent);
+
+//        source.object.update(source);
     }
 
-})(COMPOSITE, COMPOSITE.Path)
+    COMPOSITE.rm = rm;
+    return rm;
+
+})(COMPOSITE, COMPOSITE.Path, COMPOSITE.DAGUtil, COMPOSITE.Action, _)
