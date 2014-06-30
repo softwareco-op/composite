@@ -3,7 +3,6 @@
  */
 
 require('../../src/Server/NodeDeps.js');
-require('../../src/Test/UnitTest.js');
 var chai = require('chai');
 var assert = chai.assert;
 var fs = require('fs');

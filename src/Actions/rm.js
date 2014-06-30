@@ -30,8 +30,6 @@
         var head = dag.get('head');
 
         head.bin.mux.add(parent);
-
-//        source.object.update(source);
     }
 
     COMPOSITE.rm = rm;

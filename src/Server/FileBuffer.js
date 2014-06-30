@@ -2,7 +2,7 @@
  * (C) 2014 SoftwareCo-oP
  */
 
-(function(COMPOSITE, Cloner) {
+(function(COMPOSITE, Cloner, Process) {
 
     var JSONStream = require('JSONStream');
     var fs = require('fs');
@@ -32,35 +32,28 @@
         this.jsonStream.pipe(this.fileStream);
 
         var self = this;
-        //before we get interrupted, finish the JSON stream and close the file.
-        process.on('SIGINT', function() {
-            self.end();
+
+        Process.on('exit', function(exitPromises) {
+            exitPromises(self.end());
         })
     }
 
     /*
-     * Stop streaming and release system resources.
+     * Stop streaming and release system resources.  Call promise
      */
-    FileBuffer.prototype.end = function() {
+    FileBuffer.prototype.end = function(promise) {
         var self = this;
-        var jsonFinish = new RSVP.Promise(function(resolve, reject) {
-            self.jsonStream.on('finish', function() {
-                resolve(true);
-            })
-            self.jsonStream.end();
-        })
+
+        self.jsonStream.end();
 
         var fileFinish = new RSVP.Promise(function(resolve, reject) {
             self.fileStream.on('finish', function() {
+                console.log('closed FileBuffer');
                 resolve(true);
             })
-            self.fs.end();
         })
 
-        RSVP.all([jsonFinish, fileFinish]).then(function() {
-            console.log('all done');
-            process.exit()
-        })
+        return fileFinish;
     }
 
     FileBuffer.prototype.add = function(node) {
@@ -70,4 +63,4 @@
 
     return FileBuffer;
 
-})(COMPOSITE, COMPOSITE.Cloner)
+})(COMPOSITE, COMPOSITE.Cloner, COMPOSITE.Process)

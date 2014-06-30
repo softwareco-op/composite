@@ -3,7 +3,6 @@
  */
 
 require('../../src/Server/NodeDeps.js');
-require('../../src/Test/UnitTest.js');
 var path = require('path');
 var chai = require('chai');
 var sinon = require('sinon');
@@ -55,6 +54,8 @@ var fs = require('fs');
             var pipe = Pipeline.append(testNode, dagNotify);
 
             pipe.bin.mux.add(jsonReader);
+
+            jsonReader.object.resume();
         })
 
     })

@@ -111,7 +111,7 @@
                 return (node.type === 'node');
             }
 
-            var matches = DAGUtil.searchSubTree(dag, parent, predicate, 10);
+            matches = DAGUtil.searchSubTree(dag, parent, predicate, 10);
 
             assert.equal(matches.length, 2);
             assert.equal(matches[0].type, 'node');
