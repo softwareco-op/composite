@@ -15,7 +15,7 @@ require('../../src/Server/NodeDeps');
 
         var application = {
             type: 'JSONReader',
-            file: 'ballot.json'
+            file: 'compositeStream.json'
         }
 
         //Remove ObjectSupplier.
