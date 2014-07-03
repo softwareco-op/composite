@@ -1,5 +1,9 @@
 (function() {
 
+    if (COMPOSITE.mochaTest) {
+        return;
+    }
+
     global.describe = function(name, fn) {
         console.log(name);
         console.log('-----');

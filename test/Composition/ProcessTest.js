@@ -9,11 +9,20 @@ var chai = require('chai');
 var assert = chai.assert;
 
 
-(function(Process) {
+(function(Process, Pipeline) {
+
+    var fs = require('fs');
+
     describe('Process', function() {
 
         it('intercepts sig int', function(done) {
-            Process.on('exit', function(exitPromises) {
+
+            COMPOSITE.Process.onExit = function() {
+                console.log('everything closed...not exiting')
+                done();
+            };
+
+            COMPOSITE.Process.on('exit', function(exitPromises) {
                 var exitProcess = new RSVP.Promise(function(resolve, reject) {
                     setTimeout(function() {
                         resolve(true);
@@ -27,15 +36,38 @@ var assert = chai.assert;
         })
 
         it('closes streams on sig int', function(done) {
+            COMPOSITE.Process.onExit = function() {
+                console.log('filebuffer closed...not exiting')
+
+                var dagNotify = Pipeline.DAGNotify();
+
+                var testNode = {
+                    type : 'TestNode',
+                    testFunction : function (node) {
+                        if (node.id === 'test') {
+                            fs.unlink('processFileBufferTestObjects.json');
+                            done();
+                        }
+                    }
+                }
+
+                var pipe = Pipeline.append(testNode, dagNotify);
+
+                var testData = {
+                    type: 'JSONReader',
+                    file: 'processFileBufferTestObjects.json'
+                }
+
+                pipe.bin.mux.add(testData);
+
+                testData.object.resume();
+            };
+
             var fileBuffer = {file : 'processFileBufferTestObjects.json'};
             var fb = new COMPOSITE.FileBuffer(fileBuffer);
             fb.add({id : 'test'});
-
             process.emit('SIGINT');
-
-            fs.unlink('processFileBufferTestObjects.json');
-            done();
         })
 
     })
-})(COMPOSITE.Process)
+})(COMPOSITE.Process, COMPOSITE.Pipeline)

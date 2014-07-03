@@ -34,7 +34,8 @@
         var self = this;
 
         Process.on('exit', function(exitPromises) {
-            exitPromises(self.end());
+            var promise = self.end();
+            exitPromises(promise);
         })
     }
 
@@ -44,16 +45,23 @@
     FileBuffer.prototype.end = function(promise) {
         var self = this;
 
-        self.jsonStream.end();
+        var jsonStreamFinish = new RSVP.Promise(function(resolve, reject) {
+            self.jsonStream.on('finish', function() {
+                resolve(true)
+            })
+
+            self.jsonStream.end();
+        })
 
         var fileFinish = new RSVP.Promise(function(resolve, reject) {
             self.fileStream.on('finish', function() {
-                console.log('closed FileBuffer');
                 resolve(true);
             })
+
+            self.fileStream.end();
         })
 
-        return fileFinish;
+        return RSVP.all([jsonStreamFinish, fileFinish]);
     }
 
     FileBuffer.prototype.add = function(node) {
