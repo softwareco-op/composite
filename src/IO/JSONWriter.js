@@ -35,7 +35,7 @@
 
         self.onExit = function(exitPromises) {
             var promise = self.end();
-            exitPromises(promise);
+            Process.beforeShutdownWaitFor.push(promise);
         }
 
         Process.once('exit', self.onExit);

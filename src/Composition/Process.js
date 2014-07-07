@@ -14,6 +14,7 @@
      * areas of the program have shutdown gracefully.
      */
     COMPOSITE.Process = new events.EventEmitter();
+    COMPOSITE.Process.beforeShutdownWaitFor = []
 
     COMPOSITE.Process.onExit = function() {
         console.log('everything shutdown...exiting');
@@ -25,15 +26,9 @@
     }
 
     COMPOSITE.Process.onSignal = function() {
-        var toShutdown = []
+        this.emit('exit');
 
-        var processFn = function (shutdownProcess) {
-            toShutdown.push(shutdownProcess)
-        }
-
-        this.emit('exit', processFn);
-
-        var promise = RSVP.all(toShutdown).then(
+        var promise = RSVP.all(this.beforeShutdownWaitFor).then(
             COMPOSITE.Process.onExit()
         ).catch(function(error) {
             console.log(error);

@@ -29,7 +29,7 @@ var assert = chai.assert;
                     }, 100);
                 });
 
-                exitPromises(exitProcess);
+                Process.beforeShutdownWaitFor.push(exitProcess);
             })
 
             process.emit('SIGINT');
