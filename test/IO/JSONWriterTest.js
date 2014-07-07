@@ -9,13 +9,27 @@ var assert = chai.assert;
 var fs = require('fs');
 var WebSocket = require('ws');
 
-(function(FileBuffer, Pipeline) {
+(function(JSONWriter, Pipeline) {
 
-    describe('FileBuffer', function() {
+    describe('JSONWriter', function() {
+
+        it('closes an empty stream', function(done) {
+            var jsonTestFile = 'fileBufferEmpty.json';
+            var fb = new COMPOSITE.JSONWriter({file : jsonTestFile});
+            fb.end().then(function() {
+                var emptyArray = fs.readFileSync(jsonTestFile, 'utf8');
+                assert.strictEqual(emptyArray, '[\n\n]\n')
+                fs.unlink(jsonTestFile);
+                done();
+            }).catch(function(err) {
+                console.log(err);
+            })
+
+        })
 
         it('can stream to disk', function(done) {
             var fileBuffer = {file : 'fileBufferTestObjects.json'};
-            var fb = new COMPOSITE.FileBuffer(fileBuffer);
+            var fb = new COMPOSITE.JSONWriter(fileBuffer);
             fb.add({id : 'test'});
             fb.end();
 
@@ -50,11 +64,11 @@ var WebSocket = require('ws');
                 done();
             };
             var fileBuffer = {file : 'fileBufferCloseTest.json'};
-            var fb = new FileBuffer(fileBuffer);
+            var fb = new JSONWriter(fileBuffer);
             fb.add({id : 'test'});
             fb.add({id : 'test2'});
             process.emit('SIGINT');
         })
 
     })
-})(COMPOSITE.FileBuffer, COMPOSITE.Pipeline)
+})(COMPOSITE.JSONWriter, COMPOSITE.Pipeline)

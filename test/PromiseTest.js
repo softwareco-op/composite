@@ -3,11 +3,13 @@
  */
 
 
-define(
-['rsvp', 'chai', 'sinon'],
-function(RSVP, chai, sinon) {
+require('../src/Server/NodeDeps.js');
+require('../src/Test/UnitTest.js');
+var RSVP = require('rsvp');
+var chai = require('chai');
+var assert = chai.assert;
 
-    var assert = chai.assert;
+(function() {
 
     describe('Promise', function() {
 
@@ -88,10 +90,34 @@ function(RSVP, chai, sinon) {
                 assert.equal(error, false);
                 done();
             })
-
-
         })
 
+        it('resolves all promises', function(done) {
+            var promise1 = new RSVP.Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve(true)
+                }, 100);
+
+            });
+
+            var promise2 = new RSVP.Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve(true);
+                }, 1500);
+            });
+
+            var promise = RSVP.all([promise1, promise2])
+
+            var promise3 = new RSVP.Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve(true)
+                }, 1000);
+            });
+
+            RSVP.all([promise, promise3]).then(function(result) {
+                done()
+            })
+        })
 
     })
-})
+})()

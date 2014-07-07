@@ -18,11 +18,11 @@ var assert = chai.assert;
         it('intercepts sig int', function(done) {
 
             COMPOSITE.Process.onExit = function() {
-                console.log('everything closed...not exiting')
+                console.log('process closed...not exiting')
                 done();
             };
 
-            COMPOSITE.Process.on('exit', function(exitPromises) {
+            COMPOSITE.Process.once('exit', function(exitPromises) {
                 var exitProcess = new RSVP.Promise(function(resolve, reject) {
                     setTimeout(function() {
                         resolve(true);
@@ -31,6 +31,22 @@ var assert = chai.assert;
 
                 exitPromises(exitProcess);
             })
+
+            process.emit('SIGINT');
+        })
+
+        it('closes an empty stream', function(done) {
+            var testFilename = 'emptyJSONWriterExit.json';
+
+            COMPOSITE.Process.onExit = function() {
+                console.log('JSONWriter closed...not exiting')
+                var emptyArray = fs.readFileSync(testFilename, 'utf8');
+                assert.strictEqual(emptyArray, '[\n\n]\n');
+                fs.unlink(testFilename);
+                done();
+            }
+
+            var jsonWriter = new COMPOSITE.JSONWriter({file : testFilename});
 
             process.emit('SIGINT');
         })
@@ -45,7 +61,7 @@ var assert = chai.assert;
                     type : 'TestNode',
                     testFunction : function (node) {
                         if (node.id === 'test') {
-                            fs.unlink('processFileBufferTestObjects.json');
+                            fs.unlink('processJSONWriterTestObjects.json');
                             done();
                         }
                     }
@@ -55,7 +71,7 @@ var assert = chai.assert;
 
                 var testData = {
                     type: 'JSONReader',
-                    file: 'processFileBufferTestObjects.json'
+                    file: 'processJSONWriterTestObjects.json'
                 }
 
                 pipe.bin.mux.add(testData);
@@ -63,8 +79,8 @@ var assert = chai.assert;
                 testData.object.resume();
             };
 
-            var fileBuffer = {file : 'processFileBufferTestObjects.json'};
-            var fb = new COMPOSITE.FileBuffer(fileBuffer);
+            var jsonWriter = {file : 'processJSONWriterTestObjects.json'};
+            var fb = new COMPOSITE.JSONWriter(jsonWriter);
             fb.add({id : 'test'});
             process.emit('SIGINT');
         })

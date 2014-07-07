@@ -9,12 +9,12 @@ var sinon = require('sinon');
 var assert = chai.assert;
 var fs = require('fs');
 
-(function(Pipeline, JSONReader, FileBuffer) {
+(function(Pipeline, JSONReader, JSONWriter) {
 
     describe('JSONReader', function() {
 
         it('reads JSON from a file', function(done) {
-            var fileBuffer = new FileBuffer({file:'test.json'})
+            var fileBuffer = new JSONWriter({file:'test.json'})
             fileBuffer.add({id:0, message:'hello world'})
             fileBuffer.end();
 
@@ -31,7 +31,7 @@ var fs = require('fs');
         })
 
         it('pipes to a DAGNotify pipeline', function(done) {
-            var fileBuffer = new FileBuffer({file:'test.json'})
+            var fileBuffer = new JSONWriter({file:'test.json'})
             fileBuffer.add({id:0, message:'hello world'})
             fileBuffer.end();
 
@@ -60,4 +60,4 @@ var fs = require('fs');
 
     })
 
-})(COMPOSITE.Pipeline, COMPOSITE.JSONReader, COMPOSITE.FileBuffer)
+})(COMPOSITE.Pipeline, COMPOSITE.JSONReader, COMPOSITE.JSONWriter)

@@ -12,18 +12,18 @@
      * A file buffer that appends objects to a file in JSON format, then reads the
      * file, parses the JSON representation into an object, and passes the object to the muxer.
      */
-    function FileBuffer(node) {
+    function JSONWriter(node) {
         this.node = node;
         this.file = node.file;
         this.cloner = new Cloner();
         this.resume();
     }
-    COMPOSITE.FileBuffer = FileBuffer;
+    COMPOSITE.JSONWriter = JSONWriter;
 
     /*
      * Resume creates the file and JSON streams.
      */
-    FileBuffer.prototype.resume = function() {
+    JSONWriter.prototype.resume = function() {
 
         this.jsonStream = JSONStream.stringify();
         this.fileStream = fs.createWriteStream(this.file, {'flags':'a'});
@@ -33,42 +33,47 @@
 
         var self = this;
 
-        Process.on('exit', function(exitPromises) {
+        self.onExit = function(exitPromises) {
             var promise = self.end();
             exitPromises(promise);
-        })
+        }
+
+        Process.once('exit', self.onExit);
     }
 
     /*
      * Stop streaming and release system resources.  Call promise
      */
-    FileBuffer.prototype.end = function(promise) {
+    JSONWriter.prototype.end = function(promise) {
         var self = this;
+
+        Process.removeListener('exit', self.onExit);
 
         var jsonStreamFinish = new RSVP.Promise(function(resolve, reject) {
             self.jsonStream.on('finish', function() {
                 resolve(true)
+                console.log('dones it');
             })
-
-            self.jsonStream.end();
         })
 
         var fileFinish = new RSVP.Promise(function(resolve, reject) {
             self.fileStream.on('finish', function() {
                 resolve(true);
+                console.log('done it');
             })
-
-            self.fileStream.end();
         })
+
+        self.jsonStream.end();
+        self.fileStream.end();
 
         return RSVP.all([jsonStreamFinish, fileFinish]);
     }
 
-    FileBuffer.prototype.add = function(node) {
+    JSONWriter.prototype.add = function(node) {
         this.jsonStream.write(this.cloner.stripNode(node));
         return node;
     }
 
-    return FileBuffer;
+    return JSONWriter;
 
 })(COMPOSITE, COMPOSITE.Cloner, COMPOSITE.Process)

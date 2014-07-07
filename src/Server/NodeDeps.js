@@ -9,11 +9,11 @@ global._addJS = function(module, location) {
 }
 require('../../src/Composition/Modules');
 
-//Server modules
+//Node modules
 require('../../src/Server/ClientSocket');
 require('../../src/Server/WsStaticServer');
 require('../../src/Server/ServerSocket');
-require('../../src/Server/FileBuffer');
+require('../../src/IO/JSONWriter');
 
 //Platform specific modules
 global.WebSocket = require('ws');

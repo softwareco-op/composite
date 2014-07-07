@@ -38,6 +38,9 @@
         ).catch(function(error) {
             console.log(error);
         });
+
+        toShutdown = [];
+
         return promise;
     }
 

@@ -1,14 +1,14 @@
 [
 {
     "id"   : "dagReplier",
-    "parent" : "fileBuffer",
+    "parent" : "jsonWriter",
     "type" : "DAGReplier",
     "children" : ["unique"]
 },
 {
-    "id"   : "fileBuffer",
+    "id"   : "jsonWriter",
     "parent" : "propertyFilter",
-    "type" : "FileBuffer",
+    "type" : "JSONWriter",
     "file" : "compositeStream.json",
     "children" : ["dagReplier"]
 },
@@ -18,6 +18,6 @@
     "port" : "3000",
     "path" : "/home/seth/composite",
     "wsPath" : "/node",
-    "children" : ["fileBuffer"]
+    "children" : ["jsonWriter"]
 }
 ]

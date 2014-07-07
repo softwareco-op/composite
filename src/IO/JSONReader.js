@@ -25,8 +25,13 @@
         this.readStream.pipe(this.jsonStream)
 
         this.jsonStream.on('data', function(object) {
-            pipe(object);
+            try {
+                pipe(object);
+            } catch (error) {
+                console.log(error);
+            }
         })
+
 
         var self = this;
         if (this.options.onEnd) {

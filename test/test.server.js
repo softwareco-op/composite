@@ -12,7 +12,6 @@ var m = new mocha();
 m.addFile('./test/DAGTest.js');
 m.addFile('./test/Server/HttpTest.js');
 m.addFile('./test/FileTest.js');
-m.addFile('./test/Server/FileBufferTest.js');
 m.addFile('./test/Server/ServerSocketTest.js');
 m.addFile('./test/Server/ClientSocketTest.js');
 m.addFile('./test/Server/DAGReplierTest.js');

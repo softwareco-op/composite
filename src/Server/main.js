@@ -15,7 +15,8 @@ require('../../src/Server/NodeDeps');
 
         var application = {
             type: 'JSONReader',
-            file: 'compositeStream.json'
+            //file: 'compositeStream.json'
+            file: 'ballot.json'
         }
 
         //Remove ObjectSupplier.
@@ -33,8 +34,13 @@ require('../../src/Server/NodeDeps');
         }
 
         pipe.bin.mux.add(kernel);
-        pipe.bin.mux.add(application);
-        kernel.object.resume();
+
+        try {
+            pipe.bin.mux.add(application);
+            kernel.object.resume();
+        } catch (error) {
+            console.log(error);
+        }
 
     } catch (error) {
 
